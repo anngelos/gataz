@@ -1,75 +1,76 @@
-# React + TypeScript + Vite
+# Gataz
+Gataz is a simple 2D platform game built with JavaScript, Vite, React, and Phaser.
+The game was created as a personal challenge and, most importantly, as a fun project for my 4-year-old daughter, who loves games just as much as I do.
+Gataz features two playable characters based on my own cats. Players can move around the levels, jump, and defeat opponents by jumping on top of them. The gameplay is intentionally simple and accessible, focusing on fun rather than complexity.
+This project has two main goals:
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- Create something fun for my daughter to play
+- Improve my programming skills by building a game from scratch
 
-Currently, two official plugins are available:
+Gataz is also an opportunity for me to explore game development, experiment with Phaser, and learn more about game mechanics, physics, animations, level design, and the overall process of creating a playable game.
+It's a small game with a personal story behind it: two cats, one developer, one little gamer, and a lot of fun.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### Tech Stack
 
-## React Compiler
+- JavaScript
+- Vite
+- React
+- Phaser
+- Electron
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+> Gataz is a personal learning project made with love for my daughter and inspired by my two cats.
 
-## Expanding the ESLint configuration
+### Running the project
+Make sure you have the following installed:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- [Node.js](https://nodejs.org/)
+- npm
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Clone the repository and navigate to the project folder:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+git clone git@github.com:anngelos/gataz.git cd gataz
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```JavaScript
+npm install
 ```
+
+To start the project using Vite:
+
+```JavaScript
+npm run dev
+```
+
+Gataz also uses Electron to run the game as a desktop application.
+
+Start the development environment with:
+
+```JavaScript
+npm run electron:dev
+```
+
+This will start the Vite development server and launch the Electron application.
+
+To create a production build:
+
+```JavaScript
+npm run build
+```
+
+The generated files will be placed in the project's build output directory.
+
+### Project Structure
+
+The project is built around the following technologies:
+
+- React — Application and UI structure
+- Phaser — Game engine and gameplay
+- Vite — Development server and build tool
+- Electron — Desktop application runtime
+- JavaScript — Main programming language
+
+### Development
+This project is primarily a learning experience and a personal challenge. Feel free to explore the code, experiment with the game, and make improvements.
+
+Have fun!
