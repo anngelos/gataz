@@ -1,18 +1,27 @@
-import Phaser from 'phaser';
+import Phaser from "phaser";
 
 export class CharacterSelectScene extends Phaser.Scene {
   constructor() {
-    super('CharacterSelectScene');
+    super("CharacterSelectScene");
   }
 
   preload() {
+    // =========================
+    // FUNDO DA SELEÇÃO
+    // =========================
+
+    this.load.image(
+      "character-select-background",
+      "/assets/menu/character-select-background.png",
+    );
+
     // =========================
     // MADELINE
     // =========================
 
     this.load.image(
-      'madeline-face',
-      '/assets/characters/madeline/madeline-face.png'
+      "madeline-face",
+      "/assets/characters/madeline/madeline-face.png",
     );
 
     // =========================
@@ -20,8 +29,8 @@ export class CharacterSelectScene extends Phaser.Scene {
     // =========================
 
     this.load.image(
-      'makena-face',
-      '/assets/characters/makena/makena-face.png'
+      "makena-face",
+      "/assets/characters/makena/makena-face.png",
     );
   }
 
@@ -30,27 +39,38 @@ export class CharacterSelectScene extends Phaser.Scene {
     // FUNDO
     // =========================
 
-    this.cameras.main.setBackgroundColor(
-      '#87CEEB'
+    const background = this.add.image(
+      640,
+      360,
+      "character-select-background",
     );
+
+    background.setDisplaySize(
+      1280,
+      720,
+    );
+
+    background.setDepth(-1);
 
     // =========================
     // TÍTULO
     // =========================
 
-    this.add.text(
-      640,
-      80,
-      'ESCOLHA SUA GATA',
-      {
-        fontFamily: 'Pixelify',
-        fontSize: '56px',
-        fontStyle: 'bold',
-        color: '#ffffff',
-        stroke: '#333333',
-        strokeThickness: 6,
-      }
-    ).setOrigin(0.5);
+    this.add
+      .text(
+        640,
+        80,
+        "ESCOLHA SUA GATA",
+        {
+          fontFamily: "Pixelify",
+          fontSize: "56px",
+          fontStyle: "bold",
+          color: "#ffffff",
+          stroke: "#333333",
+          strokeThickness: 6,
+        },
+      )
+      .setOrigin(0.5);
 
     // =========================
     // CARDS
@@ -73,12 +93,12 @@ export class CharacterSelectScene extends Phaser.Scene {
         cardY,
         cardWidth,
         cardHeight,
-        0xe58b35
+        0xe58b35,
       );
 
     madelineCard.setStrokeStyle(
       5,
-      0xffffff
+      0xffffff,
     );
 
     madelineCard.setInteractive({
@@ -95,12 +115,12 @@ export class CharacterSelectScene extends Phaser.Scene {
         cardY,
         cardWidth,
         cardHeight,
-        0x8a6bbd
+        0x8a6bbd,
       );
 
     makenaCard.setStrokeStyle(
       5,
-      0xffffff
+      0xffffff,
     );
 
     makenaCard.setInteractive({
@@ -115,12 +135,12 @@ export class CharacterSelectScene extends Phaser.Scene {
       this.add.image(
         madelineX,
         335,
-        'madeline-face'
+        "madeline-face",
       );
 
     madelineFace.setDisplaySize(
       200,
-      200
+      200,
     );
 
     // ==================================================
@@ -131,12 +151,12 @@ export class CharacterSelectScene extends Phaser.Scene {
       this.add.image(
         makenaX,
         335,
-        'makena-face'
+        "makena-face",
       );
 
     makenaFace.setDisplaySize(
       200,
-      200
+      200,
     );
 
     // ==================================================
@@ -144,64 +164,72 @@ export class CharacterSelectScene extends Phaser.Scene {
     // ==================================================
 
     const madelineName =
-      this.add.text(
-        madelineX,
-        485,
-        'MADELINE',
-        {
-          fontFamily: 'Pixelify',
-          fontSize: '36px',
-          fontStyle: 'bold',
-          color: '#ffffff',
-          stroke: '#333333',
-          strokeThickness: 5,
-        }
-      ).setOrigin(0.5);
+      this.add
+        .text(
+          madelineX,
+          485,
+          "MADELINE",
+          {
+            fontFamily: "Pixelify",
+            fontSize: "36px",
+            fontStyle: "bold",
+            color: "#ffffff",
+            stroke: "#333333",
+            strokeThickness: 5,
+          },
+        )
+        .setOrigin(0.5);
 
     const makenaName =
-      this.add.text(
-        makenaX,
-        485,
-        'MAKENA',
-        {
-          fontFamily: 'Pixelify',
-          fontSize: '36px',
-          fontStyle: 'bold',
-          color: '#ffffff',
-          stroke: '#333333',
-          strokeThickness: 5,
-        }
-      ).setOrigin(0.5);
+      this.add
+        .text(
+          makenaX,
+          485,
+          "MAKENA",
+          {
+            fontFamily: "Pixelify",
+            fontSize: "36px",
+            fontStyle: "bold",
+            color: "#ffffff",
+            stroke: "#333333",
+            strokeThickness: 5,
+          },
+        )
+        .setOrigin(0.5);
 
     // ==================================================
     // TEXTO DOS BOTÕES
     // ==================================================
 
     const madelineHint =
-      this.add.text(
-        madelineX,
-        545,
-        'CLIQUE PARA JOGAR',
-        {
-          fontFamily: 'Pixelify',
-          fontSize: '18px',
-          fontStyle: 'bold',
-          color: '#ffffff',
-        }
-      ).setOrigin(0.5);
+      this.add
+        .text(
+          madelineX,
+          545,
+          "CLIQUE PARA JOGAR",
+          {
+            fontFamily: "Pixelify",
+            fontSize: "18px",
+            fontStyle: "bold",
+            color: "#ffffff",
+          },
+        )
+        .setOrigin(0.5);
 
     const makenaHint =
-      this.add.text(
-        makenaX,
-        545,
-        'CLIQUE PARA JOGAR',
-        {
-          fontFamily: 'Pixelify',
-          fontSize: '18px',
-          fontStyle: 'bold',
-          color: '#ffffff',
-        }
-      ).setOrigin(0.5);
+      this.add
+        .text(
+          makenaX,
+          545,
+          "CLIQUE PARA JOGAR",
+          {
+            fontFamily: "Pixelify",
+            fontSize: "18px",
+            fontStyle: "bold",
+            color: "#ffffff",
+          },
+        )
+        .setOrigin(0.5);
 
     // ==================================================
     // ELEMENTOS DA MADELINE
@@ -230,25 +258,25 @@ export class CharacterSelectScene extends Phaser.Scene {
     // ==================================================
 
     madelineCard.on(
-      'pointerover',
+      "pointerover",
       () => {
         madelineElements.forEach(
           (element) => {
             element.setScale(1.05);
-          }
+          },
         );
-      }
+      },
     );
 
     madelineCard.on(
-      'pointerout',
+      "pointerout",
       () => {
         madelineElements.forEach(
           (element) => {
             element.setScale(1);
-          }
+          },
         );
-      }
+      },
     );
 
     // ==================================================
@@ -256,25 +284,25 @@ export class CharacterSelectScene extends Phaser.Scene {
     // ==================================================
 
     makenaCard.on(
-      'pointerover',
+      "pointerover",
       () => {
         makenaElements.forEach(
           (element) => {
             element.setScale(1.05);
-          }
+          },
         );
-      }
+      },
     );
 
     makenaCard.on(
-      'pointerout',
+      "pointerout",
       () => {
         makenaElements.forEach(
           (element) => {
             element.setScale(1);
-          }
+          },
         );
-      }
+      },
     );
 
     // ==================================================
@@ -282,19 +310,19 @@ export class CharacterSelectScene extends Phaser.Scene {
     // ==================================================
 
     madelineCard.on(
-      'pointerdown',
+      "pointerdown",
       () => {
         console.log(
-          '🐈 Madeline escolhida!'
+          "🐈 Madeline escolhida!",
         );
 
         this.scene.start(
-          'GameScene',
+          "GameScene",
           {
-            character: 'madeline',
-          }
+            character: "madeline",
+          },
         );
-      }
+      },
     );
 
     // ==================================================
@@ -302,19 +330,142 @@ export class CharacterSelectScene extends Phaser.Scene {
     // ==================================================
 
     makenaCard.on(
-      'pointerdown',
+      "pointerdown",
       () => {
         console.log(
-          '🐈 Makena escolhida!'
+          "🐈 Makena escolhida!",
         );
 
         this.scene.start(
-          'GameScene',
+          "GameScene",
           {
-            character: 'makena',
-          }
+            character: "makena",
+          },
         );
-      }
+      },
+    );
+
+    // ==================================================
+    // BOTÃO VOLTAR
+    // ==================================================
+
+    const voltarVisual =
+      this.add.container(
+        110,
+        665,
+      );
+
+    // =========================
+    // FUNDO DO BOTÃO
+    // =========================
+
+    const voltarBackground =
+      this.add.graphics();
+
+    voltarBackground.fillStyle(
+      0x7b4ab5,
+      1,
+    );
+
+    voltarBackground.fillRoundedRect(
+      -75,
+      -28,
+      150,
+      56,
+      8,
+    );
+
+    // =========================
+    // BORDA BRANCA
+    // =========================
+
+    voltarBackground.lineStyle(
+      3,
+      0xffffff,
+      1,
+    );
+
+    voltarBackground.strokeRoundedRect(
+      -75,
+      -28,
+      150,
+      56,
+      8,
+    );
+
+    // =========================
+    // TEXTO
+    // =========================
+
+    const voltarText =
+      this.add
+        .text(
+          0,
+          0,
+          "VOLTAR",
+          {
+            fontFamily: "Pixelify",
+            fontSize: "28px",
+            fontStyle: "bold",
+            color: "#ffffff",
+          },
+        )
+        .setOrigin(0.5);
+
+    voltarVisual.add([
+      voltarBackground,
+      voltarText,
+    ]);
+
+    // =========================
+    // ÁREA REAL DO MOUSE
+    // =========================
+
+    const voltarZone =
+      this.add.zone(
+        110,
+        665,
+        150,
+        56,
+      );
+
+    voltarZone.setInteractive({
+      useHandCursor: true,
+    });
+
+    // =========================
+    // HOVER - VOLTAR
+    // =========================
+
+    voltarZone.on(
+      "pointerover",
+      () => {
+        voltarVisual.setScale(1.08);
+      },
+    );
+
+    voltarZone.on(
+      "pointerout",
+      () => {
+        voltarVisual.setScale(1);
+      },
+    );
+
+    // =========================
+    // CLICOU EM VOLTAR
+    // =========================
+
+    voltarZone.on(
+      "pointerdown",
+      () => {
+        console.log(
+          "↩️ Voltando ao menu...",
+        );
+
+        this.scene.start(
+          "MenuScene",
+        );
+      },
     );
   }
 }
