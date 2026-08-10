@@ -14,6 +14,15 @@ export class MenuScene extends Phaser.Scene {
       'gataz-menu-background',
       '/assets/menu/gataz-menu-background.png'
     );
+
+    // =========================
+    // LOGO GATAZ
+    // =========================
+
+    this.load.image(
+      'gataz-logo',
+      '/assets/menu/gataz-logo.png'
+    );
   }
 
   create() {
@@ -35,22 +44,19 @@ export class MenuScene extends Phaser.Scene {
     background.setDepth(-1);
 
     // =========================
-    // TÍTULO
+    // LOGO GATAZ
     // =========================
 
-    this.add.text(
+    const logo = this.add.image(
       330,
       150,
-      'GATAZ',
-      {
-        fontFamily: 'Arial',
-        fontSize: '86px',
-        fontStyle: 'bold',
-        color: '#ffffff',
-        stroke: '#333333',
-        strokeThickness: 8,
-      }
-    ).setOrigin(0.5);
+      'gataz-logo'
+    );
+
+    logo.setDisplaySize(
+      430,
+      185
+    );
 
     // =========================
     // SUBTÍTULO
@@ -62,37 +68,84 @@ export class MenuScene extends Phaser.Scene {
       'Uma aventura de duas gatitas',
       {
         fontFamily: 'Arial',
-        fontSize: '25px',
+        fontSize: 25,
         color: '#ffffff',
         stroke: '#333333',
         strokeThickness: 4,
       }
     ).setOrigin(0.5);
 
-    // =========================
+    // ==================================================
     // BOTÃO JOGAR
+    // ==================================================
+
+    const jogarVisual =
+      this.add.container(
+        330,
+        380
+      );
+
+    const jogarBackground =
+      this.add.graphics();
+
+    jogarBackground.fillStyle(
+      0x7b4ab5,
+      1
+    );
+
+    jogarBackground.fillRoundedRect(
+      -100,
+      -40,
+      200,
+      80,
+      8
+    );
+
+    jogarBackground.lineStyle(
+      3,
+      0xffffff,
+      1
+    );
+
+    jogarBackground.strokeRoundedRect(
+      -100,
+      -40,
+      200,
+      80,
+      8
+    );
+
+    const jogarText =
+      this.add.text(
+        0,
+        0,
+        'JOGAR',
+        {
+          fontFamily: 'Arial',
+          fontSize: 44,
+          fontStyle: 'bold',
+          color: '#ffffff',
+        }
+      ).setOrigin(0.5);
+
+    jogarVisual.add([
+      jogarBackground,
+      jogarText,
+    ]);
+
+    // =========================
+    // ÁREA REAL DO MOUSE
     // =========================
 
-    const jogarButton = this.add.text(
-      330,
-      380,
-      'JOGAR',
-      {
-        fontFamily: 'Arial',
-        fontSize: '44px',
-        fontStyle: 'bold',
-        color: '#ffffff',
-        backgroundColor: '#7b4ab5',
-        padding: {
-          left: 50,
-          right: 50,
-          top: 18,
-          bottom: 18,
-        },
-      }
-    ).setOrigin(0.5);
+    const jogarZone =
+      this.add.zone(
+        330,
+        380,
+        200,
+        80
+      );
 
-    jogarButton.setInteractive({
+    jogarZone.setInteractive({
       useHandCursor: true,
     });
 
@@ -100,17 +153,17 @@ export class MenuScene extends Phaser.Scene {
     // HOVER - JOGAR
     // =========================
 
-    jogarButton.on(
+    jogarZone.on(
       'pointerover',
       () => {
-        jogarButton.setScale(1.08);
+        jogarVisual.setScale(1.08);
       }
     );
 
-    jogarButton.on(
+    jogarZone.on(
       'pointerout',
       () => {
-        jogarButton.setScale(1);
+        jogarVisual.setScale(1);
       }
     );
 
@@ -118,7 +171,7 @@ export class MenuScene extends Phaser.Scene {
     // CLICOU EM JOGAR
     // =========================
 
-    jogarButton.on(
+    jogarZone.on(
       'pointerdown',
       () => {
         console.log(
@@ -131,30 +184,77 @@ export class MenuScene extends Phaser.Scene {
       }
     );
 
-    // =========================
+    // ==================================================
     // BOTÃO SOBRE
+    // ==================================================
+
+    const sobreVisual =
+      this.add.container(
+        330,
+        485
+      );
+
+    const sobreBackground =
+      this.add.graphics();
+
+    sobreBackground.fillStyle(
+      0x7b4ab5,
+      1
+    );
+
+    sobreBackground.fillRoundedRect(
+      -100,
+      -35,
+      200,
+      70,
+      8
+    );
+
+    sobreBackground.lineStyle(
+      3,
+      0xffffff,
+      1
+    );
+
+    sobreBackground.strokeRoundedRect(
+      -100,
+      -35,
+      200,
+      70,
+      8
+    );
+
+    const sobreText =
+      this.add.text(
+        0,
+        0,
+        'SOBRE',
+        {
+          fontFamily: 'Arial',
+          fontSize: 34,
+          fontStyle: 'bold',
+          color: '#ffffff',
+        }
+      ).setOrigin(0.5);
+
+    sobreVisual.add([
+      sobreBackground,
+      sobreText,
+    ]);
+
+    // =========================
+    // ÁREA REAL DO MOUSE
     // =========================
 
-    const sobreButton = this.add.text(
-      330,
-      490,
-      'SOBRE',
-      {
-        fontFamily: 'Arial',
-        fontSize: '34px',
-        fontStyle: 'bold',
-        color: '#ffffff',
-        backgroundColor: '#7b4ab5',
-        padding: {
-          left: 45,
-          right: 45,
-          top: 14,
-          bottom: 14,
-        },
-      }
-    ).setOrigin(0.5);
+    const sobreZone =
+      this.add.zone(
+        330,
+        485,
+        200,
+        70
+      );
 
-    sobreButton.setInteractive({
+    sobreZone.setInteractive({
       useHandCursor: true,
     });
 
@@ -162,17 +262,17 @@ export class MenuScene extends Phaser.Scene {
     // HOVER - SOBRE
     // =========================
 
-    sobreButton.on(
+    sobreZone.on(
       'pointerover',
       () => {
-        sobreButton.setScale(1.08);
+        sobreVisual.setScale(1.08);
       }
     );
 
-    sobreButton.on(
+    sobreZone.on(
       'pointerout',
       () => {
-        sobreButton.setScale(1);
+        sobreVisual.setScale(1);
       }
     );
 
@@ -180,7 +280,7 @@ export class MenuScene extends Phaser.Scene {
     // CLICOU EM SOBRE
     // =========================
 
-    sobreButton.on(
+    sobreZone.on(
       'pointerdown',
       () => {
         console.log(
