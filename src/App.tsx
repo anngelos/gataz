@@ -3,6 +3,7 @@ import Phaser from 'phaser';
 import { GameScene } from './game/GameScene';
 import { MenuScene } from './game/MenuScene';
 import { CharacterSelectScene } from './game/CharacterSelectScene';
+import { AboutScene } from './game/AboutScene';
 
 function App() {
   const gameRef = useRef<HTMLDivElement>(null);
@@ -35,6 +36,7 @@ function App() {
     
       scene: [
         MenuScene,
+        AboutScene,
         CharacterSelectScene,
         GameScene,
       ],

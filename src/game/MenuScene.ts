@@ -5,26 +5,46 @@ export class MenuScene extends Phaser.Scene {
     super('MenuScene');
   }
 
+  preload() {
+    // =========================
+    // FUNDO DO MENU
+    // =========================
+
+    this.load.image(
+      'gataz-menu-background',
+      '/assets/menu/gataz-menu-background.png'
+    );
+  }
+
   create() {
     // =========================
     // FUNDO
     // =========================
 
-    this.cameras.main.setBackgroundColor(
-      '#87CEEB'
+    const background = this.add.image(
+      640,
+      360,
+      'gataz-menu-background'
     );
+
+    background.setDisplaySize(
+      1280,
+      720
+    );
+
+    background.setDepth(-1);
 
     // =========================
     // TÍTULO
     // =========================
 
     this.add.text(
-      640,
-      180,
+      330,
+      150,
       'GATAZ',
       {
         fontFamily: 'Arial',
-        fontSize: '96px',
+        fontSize: '86px',
         fontStyle: 'bold',
         color: '#ffffff',
         stroke: '#333333',
@@ -37,12 +57,12 @@ export class MenuScene extends Phaser.Scene {
     // =========================
 
     this.add.text(
-      640,
-      290,
+      330,
+      245,
       'Uma aventura de duas gatitas',
       {
         fontFamily: 'Arial',
-        fontSize: '28px',
+        fontSize: '25px',
         color: '#ffffff',
         stroke: '#333333',
         strokeThickness: 4,
@@ -53,45 +73,44 @@ export class MenuScene extends Phaser.Scene {
     // BOTÃO JOGAR
     // =========================
 
-    const button = this.add.text(
-      640,
-      430,
+    const jogarButton = this.add.text(
+      330,
+      380,
       'JOGAR',
       {
         fontFamily: 'Arial',
-        fontSize: '48px',
+        fontSize: '44px',
         fontStyle: 'bold',
         color: '#ffffff',
         backgroundColor: '#7b4ab5',
         padding: {
           left: 50,
           right: 50,
-          top: 20,
-          bottom: 20,
+          top: 18,
+          bottom: 18,
         },
       }
     ).setOrigin(0.5);
 
-    // Torna clicável
-    button.setInteractive({
+    jogarButton.setInteractive({
       useHandCursor: true,
     });
 
     // =========================
-    // MOUSE SOBRE O BOTÃO
+    // HOVER - JOGAR
     // =========================
 
-    button.on(
+    jogarButton.on(
       'pointerover',
       () => {
-        button.setScale(1.08);
+        jogarButton.setScale(1.08);
       }
     );
 
-    button.on(
+    jogarButton.on(
       'pointerout',
       () => {
-        button.setScale(1);
+        jogarButton.setScale(1);
       }
     );
 
@@ -99,7 +118,7 @@ export class MenuScene extends Phaser.Scene {
     // CLICOU EM JOGAR
     // =========================
 
-    button.on(
+    jogarButton.on(
       'pointerdown',
       () => {
         console.log(
@@ -108,6 +127,68 @@ export class MenuScene extends Phaser.Scene {
 
         this.scene.start(
           'CharacterSelectScene'
+        );
+      }
+    );
+
+    // =========================
+    // BOTÃO SOBRE
+    // =========================
+
+    const sobreButton = this.add.text(
+      330,
+      490,
+      'SOBRE',
+      {
+        fontFamily: 'Arial',
+        fontSize: '34px',
+        fontStyle: 'bold',
+        color: '#ffffff',
+        backgroundColor: '#7b4ab5',
+        padding: {
+          left: 45,
+          right: 45,
+          top: 14,
+          bottom: 14,
+        },
+      }
+    ).setOrigin(0.5);
+
+    sobreButton.setInteractive({
+      useHandCursor: true,
+    });
+
+    // =========================
+    // HOVER - SOBRE
+    // =========================
+
+    sobreButton.on(
+      'pointerover',
+      () => {
+        sobreButton.setScale(1.08);
+      }
+    );
+
+    sobreButton.on(
+      'pointerout',
+      () => {
+        sobreButton.setScale(1);
+      }
+    );
+
+    // =========================
+    // CLICOU EM SOBRE
+    // =========================
+
+    sobreButton.on(
+      'pointerdown',
+      () => {
+        console.log(
+          'ℹ️ Sobre'
+        );
+
+        this.scene.start(
+          'AboutScene'
         );
       }
     );
