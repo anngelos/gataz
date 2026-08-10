@@ -6,6 +6,12 @@ export class MenuScene extends Phaser.Scene {
   }
 
   preload() {
+
+    this.load.text(
+      'pixelify-font',
+      '/fonts/Pixelify.ttf'
+    );
+
     // =========================
     // FUNDO DO MENU
     // =========================
@@ -25,7 +31,12 @@ export class MenuScene extends Phaser.Scene {
     );
   }
 
-  create() {
+  async create() {
+
+    await document.fonts.load(
+      '400 25px "Pixelify"'
+    );
+
     // =========================
     // FUNDO
     // =========================
@@ -67,7 +78,7 @@ export class MenuScene extends Phaser.Scene {
       245,
       'Uma aventura de duas gatitas',
       {
-        fontFamily: 'Arial',
+        fontFamily: 'Pixelify',
         fontSize: 25,
         color: '#ffffff',
         stroke: '#333333',
@@ -121,7 +132,7 @@ export class MenuScene extends Phaser.Scene {
         0,
         'JOGAR',
         {
-          fontFamily: 'Arial',
+          fontFamily: 'Pixelify',
           fontSize: 44,
           fontStyle: 'bold',
           color: '#ffffff',
@@ -230,7 +241,7 @@ export class MenuScene extends Phaser.Scene {
         0,
         'SOBRE',
         {
-          fontFamily: 'Arial',
+          fontFamily: 'Pixelify',
           fontSize: 34,
           fontStyle: 'bold',
           color: '#ffffff',
