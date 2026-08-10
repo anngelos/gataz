@@ -43,7 +43,7 @@ export class CharacterSelectScene extends Phaser.Scene {
       80,
       'ESCOLHA SUA GATA',
       {
-        fontFamily: 'Arial',
+        fontFamily: 'Pixelify',
         fontSize: '56px',
         fontStyle: 'bold',
         color: '#ffffff',
@@ -149,7 +149,7 @@ export class CharacterSelectScene extends Phaser.Scene {
         485,
         'MADELINE',
         {
-          fontFamily: 'Arial',
+          fontFamily: 'Pixelify',
           fontSize: '36px',
           fontStyle: 'bold',
           color: '#ffffff',
@@ -164,7 +164,7 @@ export class CharacterSelectScene extends Phaser.Scene {
         485,
         'MAKENA',
         {
-          fontFamily: 'Arial',
+          fontFamily: 'Pixelify',
           fontSize: '36px',
           fontStyle: 'bold',
           color: '#ffffff',
@@ -183,7 +183,7 @@ export class CharacterSelectScene extends Phaser.Scene {
         545,
         'CLIQUE PARA JOGAR',
         {
-          fontFamily: 'Arial',
+          fontFamily: 'Pixelify',
           fontSize: '18px',
           fontStyle: 'bold',
           color: '#ffffff',
@@ -196,7 +196,7 @@ export class CharacterSelectScene extends Phaser.Scene {
         545,
         'CLIQUE PARA JOGAR',
         {
-          fontFamily: 'Arial',
+          fontFamily: 'Pixelify',
           fontSize: '18px',
           fontStyle: 'bold',
           color: '#ffffff',
