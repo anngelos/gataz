@@ -5,14 +5,34 @@ export class AboutScene extends Phaser.Scene {
     super('AboutScene');
   }
 
+  preload() {
+    // =========================
+    // FUNDO DO SOBRE
+    // =========================
+
+    this.load.image(
+      'about-background',
+      '/assets/menu/about-background.png'
+    );
+  }
+
   create() {
     // =========================
     // FUNDO
     // =========================
 
-    this.cameras.main.setBackgroundColor(
-      '#1b1630'
+    const background = this.add.image(
+      640,
+      360,
+      'about-background'
     );
+
+    background.setDisplaySize(
+      1280,
+      720
+    );
+
+    background.setDepth(-1);
 
     // =========================
     // TÍTULO
@@ -117,31 +137,89 @@ export class AboutScene extends Phaser.Scene {
       }
     ).setOrigin(0.5);
 
-    // =========================
+    // ==================================================
     // BOTÃO VOLTAR
+    // ==================================================
+
+    const voltarVisual =
+      this.add.container(
+        640,
+        650
+      );
+
+    // =========================
+    // FUNDO DO BOTÃO
     // =========================
 
-    const voltarButton =
+    const voltarBackground =
+      this.add.graphics();
+
+    voltarBackground.fillStyle(
+      0x7b4ab5,
+      1
+    );
+
+    voltarBackground.fillRoundedRect(
+      -100,
+      -28,
+      200,
+      56,
+      8
+    );
+
+    // =========================
+    // BORDA BRANCA
+    // =========================
+
+    voltarBackground.lineStyle(
+      3,
+      0xffffff,
+      1
+    );
+
+    voltarBackground.strokeRoundedRect(
+      -100,
+      -28,
+      200,
+      56,
+      8
+    );
+
+    // =========================
+    // TEXTO
+    // =========================
+
+    const voltarText =
       this.add.text(
-        640,
-        650,
+        0,
+        0,
         'VOLTAR',
         {
           fontFamily: 'Pixelify',
-          fontSize: '30px',
+          fontSize: 28,
           fontStyle: 'bold',
           color: '#ffffff',
-          backgroundColor: '#7b4ab5',
-          padding: {
-            left: 40,
-            right: 40,
-            top: 12,
-            bottom: 12,
-          },
         }
       ).setOrigin(0.5);
 
-    voltarButton.setInteractive({
+    voltarVisual.add([
+      voltarBackground,
+      voltarText,
+    ]);
+
+    // =========================
+    // ÁREA REAL DO MOUSE
+    // =========================
+
+    const voltarZone =
+      this.add.zone(
+        640,
+        650,
+        200,
+        56
+      );
+
+    voltarZone.setInteractive({
       useHandCursor: true,
     });
 
@@ -149,28 +227,30 @@ export class AboutScene extends Phaser.Scene {
     // HOVER
     // =========================
 
-    voltarButton.on(
+    voltarZone.on(
       'pointerover',
       () => {
-        voltarButton.setScale(1.08);
+        voltarVisual.setScale(1.08);
       }
     );
 
-    voltarButton.on(
+    voltarZone.on(
       'pointerout',
       () => {
-        voltarButton.setScale(1);
+        voltarVisual.setScale(1);
       }
     );
 
     // =========================
-    // VOLTAR AO MENU
+    // CLICOU EM VOLTAR
     // =========================
 
-    voltarButton.on(
+    voltarZone.on(
       'pointerdown',
       () => {
-        this.scene.start('MenuScene');
+        this.scene.start(
+          'MenuScene'
+        );
       }
     );
   }
