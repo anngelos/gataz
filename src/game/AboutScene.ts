@@ -23,7 +23,7 @@ export class AboutScene extends Phaser.Scene {
       100,
       'SOBRE',
       {
-        fontFamily: 'Arial',
+        fontFamily: 'Pixelify',
         fontSize: '56px',
         fontStyle: 'bold',
         color: '#ffffff',
@@ -41,7 +41,7 @@ export class AboutScene extends Phaser.Scene {
       190,
       'GATAZ',
       {
-        fontFamily: 'Arial',
+        fontFamily: 'Pixelify',
         fontSize: '42px',
         fontStyle: 'bold',
         color: '#ffb347',
@@ -59,7 +59,7 @@ export class AboutScene extends Phaser.Scene {
       'enfrente os inimigos (principalmente a Esporotricose) e ajude\n' +
       'nossas heroínas a chegar até o final!',
       {
-        fontFamily: 'Arial',
+        fontFamily: 'Pixelify',
         fontSize: '26px',
         color: '#ffffff',
         align: 'center',
@@ -78,7 +78,7 @@ export class AboutScene extends Phaser.Scene {
       'e feito para brincar, descobrir\n' +
       'e se aventurar.',
       {
-        fontFamily: 'Arial',
+        fontFamily: 'Pixelify',
         fontSize: '24px',
         color: '#ffffff',
         align: 'center',
@@ -95,7 +95,7 @@ export class AboutScene extends Phaser.Scene {
       520,
       'Boa aventura! ❤️',
       {
-        fontFamily: 'Arial',
+        fontFamily: 'Pixelify',
         fontSize: '30px',
         fontStyle: 'bold',
         color: '#ffffff',
@@ -111,7 +111,7 @@ export class AboutScene extends Phaser.Scene {
       570,
       '@malasart3',
       {
-        fontFamily: 'Arial',
+        fontFamily: 'Pixelify',
         fontSize: '20px',
         color: '#cccccc',
       }
@@ -127,7 +127,7 @@ export class AboutScene extends Phaser.Scene {
         650,
         'VOLTAR',
         {
-          fontFamily: 'Arial',
+          fontFamily: 'Pixelify',
           fontSize: '30px',
           fontStyle: 'bold',
           color: '#ffffff',
