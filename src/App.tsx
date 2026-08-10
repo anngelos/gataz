@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 import Phaser from 'phaser';
 import { GameScene } from './game/GameScene';
+import { MenuScene } from './game/MenuScene';
+import { CharacterSelectScene } from './game/CharacterSelectScene';
 
 function App() {
   const gameRef = useRef<HTMLDivElement>(null);
@@ -31,7 +33,11 @@ function App() {
         },
       },
     
-      scene: GameScene,
+      scene: [
+        MenuScene,
+        CharacterSelectScene,
+        GameScene,
+      ],
     });
 
     return () => {

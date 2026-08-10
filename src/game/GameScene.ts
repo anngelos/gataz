@@ -277,7 +277,7 @@ export class GameScene extends Phaser.Scene {
 
     platforms.create(
       1450,
-      400,
+      480,
       'platform'
     );
 
