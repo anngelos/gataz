@@ -199,21 +199,21 @@ export class MenuScene extends Phaser.Scene {
     // BOTÃO SOBRE
     // ==================================================
 
-    const sobreVisual =
+    const aboutVisual =
       this.add.container(
         330,
         485
       );
 
-    const sobreBackground =
+    const aboutBackground =
       this.add.graphics();
 
-    sobreBackground.fillStyle(
+    aboutBackground.fillStyle(
       0x7b4ab5,
       1
     );
 
-    sobreBackground.fillRoundedRect(
+    aboutBackground.fillRoundedRect(
       -100,
       -35,
       200,
@@ -221,13 +221,13 @@ export class MenuScene extends Phaser.Scene {
       8
     );
 
-    sobreBackground.lineStyle(
+    aboutBackground.lineStyle(
       3,
       0xffffff,
       1
     );
 
-    sobreBackground.strokeRoundedRect(
+    aboutBackground.strokeRoundedRect(
       -100,
       -35,
       200,
@@ -235,7 +235,7 @@ export class MenuScene extends Phaser.Scene {
       8
     );
 
-    const sobreText =
+    const aboutText =
       this.add.text(
         0,
         0,
@@ -248,16 +248,16 @@ export class MenuScene extends Phaser.Scene {
         }
       ).setOrigin(0.5);
 
-    sobreVisual.add([
-      sobreBackground,
-      sobreText,
+    aboutVisual.add([
+      aboutBackground,
+      aboutText,
     ]);
 
     // =========================
     // ÁREA REAL DO MOUSE
     // =========================
 
-    const sobreZone =
+    const aboutZone =
       this.add.zone(
         330,
         485,
@@ -265,7 +265,7 @@ export class MenuScene extends Phaser.Scene {
         70
       );
 
-    sobreZone.setInteractive({
+    aboutZone.setInteractive({
       useHandCursor: true,
     });
 
@@ -273,17 +273,17 @@ export class MenuScene extends Phaser.Scene {
     // HOVER - SOBRE
     // =========================
 
-    sobreZone.on(
+    aboutZone.on(
       'pointerover',
       () => {
-        sobreVisual.setScale(1.08);
+        aboutVisual.setScale(1.08);
       }
     );
 
-    sobreZone.on(
+    aboutZone.on(
       'pointerout',
       () => {
-        sobreVisual.setScale(1);
+        aboutVisual.setScale(1);
       }
     );
 
@@ -291,7 +291,7 @@ export class MenuScene extends Phaser.Scene {
     // CLICOU EM SOBRE
     // =========================
 
-    sobreZone.on(
+    aboutZone.on(
       'pointerdown',
       () => {
         console.log(
