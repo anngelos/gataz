@@ -320,6 +320,7 @@ export class CharacterSelectScene extends Phaser.Scene {
           "GameScene",
           {
             character: "madeline",
+            level: 1,
           },
         );
       },
@@ -340,6 +341,7 @@ export class CharacterSelectScene extends Phaser.Scene {
           "GameScene",
           {
             character: "makena",
+            level: 1,
           },
         );
       },

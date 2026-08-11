@@ -1,6 +1,9 @@
 import Phaser from "phaser";
+import { levels } from "./levels";
 
-type Character = "madeline" | "makena";
+type Character =
+  | "madeline"
+  | "makena";
 
 type PlayerState =
   | "idle"
@@ -17,9 +20,11 @@ export class GameScene extends Phaser.Scene {
 
   private character: Character = "madeline";
 
-  // =========================
+  private level = 1;
+
+  // ==================================================
   // VIDA
-  // =========================
+  // ==================================================
 
   private maxHearts = 3;
 
@@ -34,24 +39,40 @@ export class GameScene extends Phaser.Scene {
   }
 
   // ==================================================
-  // PERSONAGEM ESCOLHIDO
+  // DADOS RECEBIDOS
   // ==================================================
 
-  init(data: { character?: Character }) {
+  init(data: {
+    character?: Character;
+    level?: number;
+  }) {
     this.character =
       data.character ?? "madeline";
+
+    this.level =
+      data.level ?? 1;
 
     console.log(
       `🐈 Personagem escolhido: ${this.character}`
     );
+
+    console.log(
+      `🗺️ Fase atual: ${this.level}`
+    );
   }
+
+  // ==================================================
+  // CARREGAMENTO
+  // ==================================================
 
   preload() {
     // ==================================================
     // MADELINE
     // ==================================================
 
-    if (this.character === "madeline") {
+    if (
+      this.character === "madeline"
+    ) {
       this.load.spritesheet(
         "madeline-idle-sheet",
         "/assets/characters/madeline/madeline-idle.png",
@@ -84,7 +105,9 @@ export class GameScene extends Phaser.Scene {
     // MAKENA
     // ==================================================
 
-    if (this.character === "makena") {
+    if (
+      this.character === "makena"
+    ) {
       this.load.spritesheet(
         "makena-idle-sheet",
         "/assets/characters/makena/makena-idle.png",
@@ -122,14 +145,35 @@ export class GameScene extends Phaser.Scene {
     );
   }
 
+  // ==================================================
+  // CREATE
+  // ==================================================
+
   create() {
+    // ==================================================
+    // CONFIGURAÇÃO DA FASE
+    // ==================================================
+
+    const levelConfig =
+      levels[this.level];
+
+    if (!levelConfig) {
+      console.error(
+        `❌ Fase ${this.level} não encontrada.`
+      );
+
+      return;
+    }
+
     // ==================================================
     // RESET DA VIDA
     // ==================================================
 
-    this.hearts = this.maxHearts;
+    this.hearts =
+      this.maxHearts;
 
-    this.isInvulnerable = false;
+    this.isInvulnerable =
+      false;
 
     // ==================================================
     // ANIMAÇÕES
@@ -143,14 +187,18 @@ export class GameScene extends Phaser.Scene {
 
     this.anims.create({
       key: "esporotricose-idle",
-      frames: this.anims.generateFrameNumbers(
-        "esporotricose-idle-sheet",
-        {
-          start: 0,
-          end: 3,
-        }
-      ),
+
+      frames:
+        this.anims.generateFrameNumbers(
+          "esporotricose-idle-sheet",
+          {
+            start: 0,
+            end: 3,
+          }
+        ),
+
       frameRate: 4,
+
       repeat: -1,
     });
 
@@ -214,14 +262,14 @@ export class GameScene extends Phaser.Scene {
     this.physics.world.setBounds(
       0,
       0,
-      2000,
+      levelConfig.width,
       720
     );
 
     this.cameras.main.setBounds(
       0,
       0,
-      2000,
+      levelConfig.width,
       720
     );
 
@@ -232,57 +280,51 @@ export class GameScene extends Phaser.Scene {
     const platforms =
       this.physics.add.staticGroup();
 
-    platforms.create(
-      640,
-      680,
-      "ground"
-    );
+    levelConfig.platforms.forEach(
+      (platform) => {
+        let texture =
+          "platform";
 
-    platforms.create(
-      400,
-      550,
-      "platform"
-    );
+        if (
+          platform.width === 1280 &&
+          platform.height === 80
+        ) {
+          texture = "ground";
+        }
 
-    platforms.create(
-      750,
-      450,
-      "platform"
-    );
-
-    platforms.create(
-      1100,
-      550,
-      "platform"
-    );
-
-    platforms.create(
-      1450,
-      480,
-      "platform"
+        platforms.create(
+          platform.x,
+          platform.y,
+          texture
+        );
+      }
     );
 
     // ==================================================
-    // INIMIGO
+    // INIMIGOS
     // ==================================================
 
     const enemies =
       this.physics.add.staticGroup();
 
-    const enemy =
-      enemies.create(
-        650,
-        620,
-        "esporotricose-idle-sheet",
-        0
-      ) as Phaser.Physics.Arcade.Sprite;
+    levelConfig.enemies.forEach(
+      (enemyPosition) => {
+        const enemy =
+          enemies.create(
+            enemyPosition.x,
+            enemyPosition.y,
+            "esporotricose-idle-sheet",
+            0
+          ) as Phaser.Physics.Arcade.Sprite;
 
-    enemy.play(
-      "esporotricose-idle"
+        enemy.play(
+          "esporotricose-idle"
+        );
+      }
     );
 
     // ==================================================
-    // PERSONAGEM
+    // TEXTURA DO PERSONAGEM
     // ==================================================
 
     const playerTexture =
@@ -290,10 +332,14 @@ export class GameScene extends Phaser.Scene {
         ? "madeline-idle-sheet"
         : "makena-idle-sheet";
 
+    // ==================================================
+    // PERSONAGEM
+    // ==================================================
+
     this.player =
       this.physics.add.sprite(
-        300,
-        500,
+        levelConfig.playerStart.x,
+        levelConfig.playerStart.y,
         playerTexture,
         0
       );
@@ -343,6 +389,7 @@ export class GameScene extends Phaser.Scene {
     this.physics.add.overlap(
       this.player,
       enemies,
+
       (
         _playerObject: any,
         enemyObject: any
@@ -355,7 +402,9 @@ export class GameScene extends Phaser.Scene {
           enemy
         );
       },
+
       undefined,
+
       this
     );
 
@@ -370,6 +419,10 @@ export class GameScene extends Phaser.Scene {
       0.08
     );
   }
+
+  // ==================================================
+  // UPDATE
+  // ==================================================
 
   update() {
     const speed = 250;
@@ -389,6 +442,7 @@ export class GameScene extends Phaser.Scene {
         true
       );
     }
+
     else if (
       this.cursors.right.isDown
     ) {
@@ -400,6 +454,7 @@ export class GameScene extends Phaser.Scene {
         false
       );
     }
+
     else {
       this.player.setVelocityX(
         0
@@ -437,11 +492,16 @@ export class GameScene extends Phaser.Scene {
   // ==================================================
 
   private createPlayerAnimations() {
+    // ==================================================
+    // MADELINE
+    // ==================================================
+
     if (
       this.character === "madeline"
     ) {
       this.anims.create({
         key: "madeline-idle",
+
         frames:
           this.anims.generateFrameNumbers(
             "madeline-idle-sheet",
@@ -450,12 +510,15 @@ export class GameScene extends Phaser.Scene {
               end: 3,
             }
           ),
+
         frameRate: 4,
+
         repeat: -1,
       });
 
       this.anims.create({
         key: "madeline-run",
+
         frames:
           this.anims.generateFrameNumbers(
             "madeline-run-sheet",
@@ -464,12 +527,15 @@ export class GameScene extends Phaser.Scene {
               end: 3,
             }
           ),
+
         frameRate: 10,
+
         repeat: -1,
       });
 
       this.anims.create({
         key: "madeline-jump",
+
         frames:
           this.anims.generateFrameNumbers(
             "madeline-jump-sheet",
@@ -478,7 +544,9 @@ export class GameScene extends Phaser.Scene {
               end: 3,
             }
           ),
+
         frameRate: 8,
+
         repeat: 0,
       });
 
@@ -491,6 +559,7 @@ export class GameScene extends Phaser.Scene {
 
     this.anims.create({
       key: "makena-idle",
+
       frames:
         this.anims.generateFrameNumbers(
           "makena-idle-sheet",
@@ -499,7 +568,9 @@ export class GameScene extends Phaser.Scene {
             end: 3,
           }
         ),
+
       frameRate: 4,
+
       repeat: -1,
     });
   }
@@ -554,9 +625,13 @@ export class GameScene extends Phaser.Scene {
           0
         );
 
-      heart.setScrollFactor(0);
+      heart.setScrollFactor(
+        0
+      );
 
-      heart.setDepth(1000);
+      heart.setDepth(
+        1000
+      );
 
       this.heartSprites.push(
         heart
@@ -573,20 +648,22 @@ export class GameScene extends Phaser.Scene {
   private updateHeartsDisplay() {
     for (
       let i = 0;
-      i < this.heartSprites.length;
+      i <
+      this.heartSprites.length;
       i++
     ) {
       if (
         i < this.hearts
       ) {
-        this.heartSprites[i].setFrame(
-          0
-        );
+        this.heartSprites[
+          i
+        ].setFrame(0);
       }
+
       else {
-        this.heartSprites[i].setFrame(
-          1
-        );
+        this.heartSprites[
+          i
+        ].setFrame(1);
       }
     }
   }
@@ -664,6 +741,10 @@ export class GameScene extends Phaser.Scene {
       `💔 ${this.character} perdeu um coração! Restam ${this.hearts}.`
     );
 
+    // ==================================================
+    // MORTE
+    // ==================================================
+
     if (
       this.hearts <= 0
     ) {
@@ -672,8 +753,16 @@ export class GameScene extends Phaser.Scene {
       return;
     }
 
+    // ==================================================
+    // INVULNERABILIDADE
+    // ==================================================
+
     this.isInvulnerable =
       true;
+
+    // ==================================================
+    // EMPURRÃO
+    // ==================================================
 
     if (
       this.player.x < enemy.x
@@ -682,6 +771,7 @@ export class GameScene extends Phaser.Scene {
         -300
       );
     }
+
     else {
       this.player.setVelocityX(
         300
@@ -692,13 +782,25 @@ export class GameScene extends Phaser.Scene {
       -200
     );
 
+    // ==================================================
+    // PISCAR
+    // ==================================================
+
     this.tweens.add({
       targets: this.player,
+
       alpha: 0.25,
+
       duration: 100,
+
       yoyo: true,
+
       repeat: 5,
     });
+
+    // ==================================================
+    // FIM DA INVULNERABILIDADE
+    // ==================================================
 
     this.time.delayedCall(
       1000,
@@ -735,7 +837,11 @@ export class GameScene extends Phaser.Scene {
       500,
       () => {
         this.scene.restart({
-          character: this.character,
+          character:
+            this.character,
+
+          level:
+            this.level,
         });
       }
     );
@@ -749,6 +855,10 @@ export class GameScene extends Phaser.Scene {
     const body =
       this.player.body as Phaser.Physics.Arcade.Body;
 
+    // ==================================================
+    // NO AR
+    // ==================================================
+
     if (
       !body.blocked.down
     ) {
@@ -758,6 +868,7 @@ export class GameScene extends Phaser.Scene {
         this.playerState =
           "jump";
       }
+
       else {
         this.playerState =
           "fall";
@@ -765,6 +876,10 @@ export class GameScene extends Phaser.Scene {
 
       return;
     }
+
+    // ==================================================
+    // CORRENDO
+    // ==================================================
 
     if (
       body.velocity.x !== 0
@@ -774,6 +889,10 @@ export class GameScene extends Phaser.Scene {
 
       return;
     }
+
+    // ==================================================
+    // PARADO
+    // ==================================================
 
     this.playerState =
       "idle";
@@ -821,8 +940,8 @@ export class GameScene extends Phaser.Scene {
     animationKey: string
   ) {
     if (
-      this.player.anims.currentAnim?.key !==
-      animationKey
+      this.player.anims.currentAnim
+        ?.key !== animationKey
     ) {
       this.player.play(
         animationKey
