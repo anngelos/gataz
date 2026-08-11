@@ -1,22 +1,28 @@
-import Phaser from 'phaser';
+import Phaser from "phaser";
+
+type Character = "madeline" | "makena";
 
 type PlayerState =
-  | 'idle'
-  | 'walk'
-  | 'jump'
-  | 'fall';
+  | "idle"
+  | "walk"
+  | "jump"
+  | "fall";
 
 export class GameScene extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite;
+
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
 
-  private playerState: PlayerState = 'idle';
+  private playerState: PlayerState = "idle";
+
+  private character: Character = "madeline";
 
   // =========================
-  // VIDA DA MADELINE
+  // VIDA
   // =========================
 
   private maxHearts = 3;
+
   private hearts = 3;
 
   private heartSprites: Phaser.GameObjects.Sprite[] = [];
@@ -24,69 +30,91 @@ export class GameScene extends Phaser.Scene {
   private isInvulnerable = false;
 
   constructor() {
-    super('GameScene');
+    super("GameScene");
+  }
+
+  // ==================================================
+  // PERSONAGEM ESCOLHIDO
+  // ==================================================
+
+  init(data: { character?: Character }) {
+    this.character =
+      data.character ?? "madeline";
+
+    console.log(
+      `🐈 Personagem escolhido: ${this.character}`
+    );
   }
 
   preload() {
-    // =========================
-    // MADELINE - IDLE
-    // =========================
+    // ==================================================
+    // MADELINE
+    // ==================================================
+
+    if (this.character === "madeline") {
+      this.load.spritesheet(
+        "madeline-idle-sheet",
+        "/assets/characters/madeline/madeline-idle.png",
+        {
+          frameWidth: 48,
+          frameHeight: 48,
+        }
+      );
+
+      this.load.spritesheet(
+        "madeline-run-sheet",
+        "/assets/characters/madeline/madeline-run.png",
+        {
+          frameWidth: 48,
+          frameHeight: 48,
+        }
+      );
+
+      this.load.spritesheet(
+        "madeline-jump-sheet",
+        "/assets/characters/madeline/madeline-jump.png",
+        {
+          frameWidth: 48,
+          frameHeight: 48,
+        }
+      );
+    }
+
+    // ==================================================
+    // MAKENA
+    // ==================================================
+
+    if (this.character === "makena") {
+      this.load.spritesheet(
+        "makena-idle-sheet",
+        "/assets/characters/makena/makena-idle.png",
+        {
+          frameWidth: 48,
+          frameHeight: 48,
+        }
+      );
+    }
+
+    // ==================================================
+    // ESPOROTRICOSE
+    // ==================================================
 
     this.load.spritesheet(
-      'madeline-idle-sheet',
-      '/assets/characters/madeline/madeline-idle.png',
+      "esporotricose-idle-sheet",
+      "/assets/characters/enemies/esporotricose/esporotricose-idle.png",
       {
         frameWidth: 48,
         frameHeight: 48,
       }
     );
 
-    // =========================
-    // MADELINE - CORRIDA
-    // =========================
-
-    this.load.spritesheet(
-      'madeline-run-sheet',
-      '/assets/characters/madeline/madeline-run.png',
-      {
-        frameWidth: 48,
-        frameHeight: 48,
-      }
-    );
-
-    // =========================
-    // MADELINE - PULO
-    // =========================
-
-    this.load.spritesheet(
-      'madeline-jump-sheet',
-      '/assets/characters/madeline/madeline-jump.png',
-      {
-        frameWidth: 48,
-        frameHeight: 48,
-      }
-    );
-
-    // =========================
-    // ESPOROTRICOSE - IDLE
-    // =========================
-
-    this.load.spritesheet(
-      'esporotricose-idle-sheet',
-      '/assets/characters/enemies/esporotricose/esporotricose-idle.png',
-      {
-        frameWidth: 48,
-        frameHeight: 48,
-      }
-    );
-
-    // =========================
+    // ==================================================
     // CORAÇÕES
-    // =========================
+    // ==================================================
 
     this.load.spritesheet(
-      'hearts-sheet',
-      '/assets/ui/hearts.png',
+      "hearts-sheet",
+      "/assets/ui/hearts.png",
       {
         frameWidth: 48,
         frameHeight: 48,
@@ -95,100 +123,51 @@ export class GameScene extends Phaser.Scene {
   }
 
   create() {
-    // =========================
+    // ==================================================
     // RESET DA VIDA
-    // =========================
+    // ==================================================
 
     this.hearts = this.maxHearts;
+
     this.isInvulnerable = false;
 
-    // =========================
-    // ANIMAÇÃO MADELINE - IDLE
-    // =========================
+    // ==================================================
+    // ANIMAÇÕES
+    // ==================================================
 
-    this.anims.create({
-      key: 'madeline-idle',
+    this.createPlayerAnimations();
 
-      frames: this.anims.generateFrameNumbers(
-        'madeline-idle-sheet',
-        {
-          start: 0,
-          end: 3,
-        }
-      ),
-
-      frameRate: 4,
-      repeat: -1,
-    });
-
-    // =========================
-    // ANIMAÇÃO MADELINE - CORRIDA
-    // =========================
-
-    this.anims.create({
-      key: 'madeline-run',
-
-      frames: this.anims.generateFrameNumbers(
-        'madeline-run-sheet',
-        {
-          start: 0,
-          end: 3,
-        }
-      ),
-
-      frameRate: 10,
-      repeat: -1,
-    });
-
-    // =========================
-    // ANIMAÇÃO MADELINE - PULO
-    // =========================
-
-    this.anims.create({
-      key: 'madeline-jump',
-
-      frames: this.anims.generateFrameNumbers(
-        'madeline-jump-sheet',
-        {
-          start: 0,
-          end: 3,
-        }
-      ),
-
-      frameRate: 8,
-      repeat: 0,
-    });
-
-    // =========================
+    // ==================================================
     // ANIMAÇÃO ESPOROTRICOSE
-    // =========================
+    // ==================================================
 
     this.anims.create({
-      key: 'esporotricose-idle',
-
+      key: "esporotricose-idle",
       frames: this.anims.generateFrameNumbers(
-        'esporotricose-idle-sheet',
+        "esporotricose-idle-sheet",
         {
           start: 0,
           end: 3,
         }
       ),
-
       frameRate: 4,
       repeat: -1,
     });
 
-    // =========================
+    // ==================================================
     // TEXTURAS TEMPORÁRIAS
-    // =========================
+    // ==================================================
 
-    const graphics = this.add.graphics();
+    const graphics =
+      this.add.graphics();
 
-    // =========================
+    // ==================================================
     // CHÃO
-    // =========================
+    // ==================================================
 
-    graphics.fillStyle(0x4a4a4a);
+    graphics.fillStyle(
+      0x4a4a4a
+    );
 
     graphics.fillRect(
       0,
@@ -198,18 +177,20 @@ export class GameScene extends Phaser.Scene {
     );
 
     graphics.generateTexture(
-      'ground',
+      "ground",
       1280,
       80
     );
 
     graphics.clear();
 
-    // =========================
+    // ==================================================
     // PLATAFORMA
-    // =========================
+    // ==================================================
 
-    graphics.fillStyle(0x6a6a6a);
+    graphics.fillStyle(
+      0x6a6a6a
+    );
 
     graphics.fillRect(
       0,
@@ -219,16 +200,16 @@ export class GameScene extends Phaser.Scene {
     );
 
     graphics.generateTexture(
-      'platform',
+      "platform",
       250,
       40
     );
 
     graphics.destroy();
 
-    // =========================
+    // ==================================================
     // MUNDO
-    // =========================
+    // ==================================================
 
     this.physics.world.setBounds(
       0,
@@ -244,9 +225,9 @@ export class GameScene extends Phaser.Scene {
       720
     );
 
-    // =========================
+    // ==================================================
     // PLATAFORMAS
-    // =========================
+    // ==================================================
 
     const platforms =
       this.physics.add.staticGroup();
@@ -254,36 +235,36 @@ export class GameScene extends Phaser.Scene {
     platforms.create(
       640,
       680,
-      'ground'
+      "ground"
     );
 
     platforms.create(
       400,
       550,
-      'platform'
+      "platform"
     );
 
     platforms.create(
       750,
       450,
-      'platform'
+      "platform"
     );
 
     platforms.create(
       1100,
       550,
-      'platform'
+      "platform"
     );
 
     platforms.create(
       1450,
       480,
-      'platform'
+      "platform"
     );
 
-    // =========================
-    // INIMIGOS
-    // =========================
+    // ==================================================
+    // INIMIGO
+    // ==================================================
 
     const enemies =
       this.physics.add.staticGroup();
@@ -292,63 +273,72 @@ export class GameScene extends Phaser.Scene {
       enemies.create(
         650,
         620,
-        'esporotricose-idle-sheet',
+        "esporotricose-idle-sheet",
         0
       ) as Phaser.Physics.Arcade.Sprite;
 
     enemy.play(
-      'esporotricose-idle'
+      "esporotricose-idle"
     );
 
-    // =========================
-    // MADELINE
-    // =========================
+    // ==================================================
+    // PERSONAGEM
+    // ==================================================
+
+    const playerTexture =
+      this.character === "madeline"
+        ? "madeline-idle-sheet"
+        : "makena-idle-sheet";
 
     this.player =
       this.physics.add.sprite(
         300,
         500,
-        'madeline-idle-sheet',
+        playerTexture,
         0
       );
 
+    // ==================================================
+    // ANIMAÇÃO INICIAL
+    // ==================================================
+
     this.player.play(
-      'madeline-idle'
+      this.getIdleAnimation()
     );
 
-    // =========================
+    // ==================================================
     // FÍSICA
-    // =========================
+    // ==================================================
 
     this.player.setCollideWorldBounds(
       true
     );
 
-    // =========================
+    // ==================================================
     // COLISÃO COM PLATAFORMAS
-    // =========================
+    // ==================================================
 
     this.physics.add.collider(
       this.player,
       platforms
     );
 
-    // =========================
+    // ==================================================
     // CONTROLES
-    // =========================
+    // ==================================================
 
     this.cursors =
       this.input.keyboard!.createCursorKeys();
 
-    // =========================
-    // HUD - CORAÇÕES
-    // =========================
+    // ==================================================
+    // HUD
+    // ==================================================
 
     this.createHearts();
 
-    // =========================
+    // ==================================================
     // COLISÃO COM INIMIGO
-    // =========================
+    // ==================================================
 
     this.physics.add.overlap(
       this.player,
@@ -369,9 +359,9 @@ export class GameScene extends Phaser.Scene {
       this
     );
 
-    // =========================
+    // ==================================================
     // CÂMERA
-    // =========================
+    // ==================================================
 
     this.cameras.main.startFollow(
       this.player,
@@ -384,9 +374,9 @@ export class GameScene extends Phaser.Scene {
   update() {
     const speed = 250;
 
-    // =========================
+    // ==================================================
     // MOVIMENTO
-    // =========================
+    // ==================================================
 
     if (
       this.cursors.left.isDown
@@ -399,7 +389,6 @@ export class GameScene extends Phaser.Scene {
         true
       );
     }
-
     else if (
       this.cursors.right.isDown
     ) {
@@ -411,16 +400,15 @@ export class GameScene extends Phaser.Scene {
         false
       );
     }
-
     else {
       this.player.setVelocityX(
         0
       );
     }
 
-    // =========================
+    // ==================================================
     // PULO
-    // =========================
+    // ==================================================
 
     if (
       this.cursors.up.isDown &&
@@ -431,17 +419,119 @@ export class GameScene extends Phaser.Scene {
       );
     }
 
-    // =========================
+    // ==================================================
     // ESTADO
-    // =========================
+    // ==================================================
 
     this.updatePlayerState();
 
-    // =========================
+    // ==================================================
     // ANIMAÇÃO
-    // =========================
+    // ==================================================
 
     this.updatePlayerAnimation();
+  }
+
+  // ==================================================
+  // CRIA ANIMAÇÕES DO PERSONAGEM
+  // ==================================================
+
+  private createPlayerAnimations() {
+    if (
+      this.character === "madeline"
+    ) {
+      this.anims.create({
+        key: "madeline-idle",
+        frames:
+          this.anims.generateFrameNumbers(
+            "madeline-idle-sheet",
+            {
+              start: 0,
+              end: 3,
+            }
+          ),
+        frameRate: 4,
+        repeat: -1,
+      });
+
+      this.anims.create({
+        key: "madeline-run",
+        frames:
+          this.anims.generateFrameNumbers(
+            "madeline-run-sheet",
+            {
+              start: 0,
+              end: 3,
+            }
+          ),
+        frameRate: 10,
+        repeat: -1,
+      });
+
+      this.anims.create({
+        key: "madeline-jump",
+        frames:
+          this.anims.generateFrameNumbers(
+            "madeline-jump-sheet",
+            {
+              start: 0,
+              end: 3,
+            }
+          ),
+        frameRate: 8,
+        repeat: 0,
+      });
+
+      return;
+    }
+
+    // ==================================================
+    // MAKENA
+    // ==================================================
+
+    this.anims.create({
+      key: "makena-idle",
+      frames:
+        this.anims.generateFrameNumbers(
+          "makena-idle-sheet",
+          {
+            start: 0,
+            end: 3,
+          }
+        ),
+      frameRate: 4,
+      repeat: -1,
+    });
+  }
+
+  // ==================================================
+  // IDLE ATUAL
+  // ==================================================
+
+  private getIdleAnimation() {
+    return this.character === "madeline"
+      ? "madeline-idle"
+      : "makena-idle";
+  }
+
+  // ==================================================
+  // RUN ATUAL
+  // ==================================================
+
+  private getRunAnimation() {
+    return this.character === "madeline"
+      ? "madeline-run"
+      : "makena-idle";
+  }
+
+  // ==================================================
+  // JUMP ATUAL
+  // ==================================================
+
+  private getJumpAnimation() {
+    return this.character === "madeline"
+      ? "madeline-jump"
+      : "makena-idle";
   }
 
   // ==================================================
@@ -460,14 +550,12 @@ export class GameScene extends Phaser.Scene {
         this.add.sprite(
           28 + i * 48,
           28,
-          'hearts-sheet',
+          "hearts-sheet",
           0
         );
 
-      // O HUD fica parado enquanto a câmera se movimenta.
       heart.setScrollFactor(0);
 
-      // Fica sempre acima do cenário.
       heart.setDepth(1000);
 
       this.heartSprites.push(
@@ -479,7 +567,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   // ==================================================
-  // ATUALIZA OS CORAÇÕES
+  // ATUALIZA CORAÇÕES
   // ==================================================
 
   private updateHeartsDisplay() {
@@ -491,14 +579,11 @@ export class GameScene extends Phaser.Scene {
       if (
         i < this.hearts
       ) {
-        // Frame 0 = coração cheio
         this.heartSprites[i].setFrame(
           0
         );
       }
-
       else {
-        // Frame 1 = coração vazio
         this.heartSprites[i].setFrame(
           1
         );
@@ -543,7 +628,7 @@ export class GameScene extends Phaser.Scene {
       );
 
       console.log(
-        '💥 Esporotricose derrotada!'
+        "💥 Esporotricose derrotada!"
       );
 
       return;
@@ -571,21 +656,13 @@ export class GameScene extends Phaser.Scene {
       return;
     }
 
-    // ==================================================
-    // PERDE 1 CORAÇÃO
-    // ==================================================
-
     this.hearts--;
 
     this.updateHeartsDisplay();
 
     console.log(
-      `💔 Madeline perdeu um coração! Restam ${this.hearts}.`
+      `💔 ${this.character} perdeu um coração! Restam ${this.hearts}.`
     );
-
-    // ==================================================
-    // MORTE
-    // ==================================================
 
     if (
       this.hearts <= 0
@@ -595,16 +672,8 @@ export class GameScene extends Phaser.Scene {
       return;
     }
 
-    // ==================================================
-    // INVULNERABILIDADE
-    // ==================================================
-
     this.isInvulnerable =
       true;
-
-    // ==================================================
-    // EMPURRÃO PARA LONGE DO INIMIGO
-    // ==================================================
 
     if (
       this.player.x < enemy.x
@@ -613,7 +682,6 @@ export class GameScene extends Phaser.Scene {
         -300
       );
     }
-
     else {
       this.player.setVelocityX(
         300
@@ -624,25 +692,13 @@ export class GameScene extends Phaser.Scene {
       -200
     );
 
-    // ==================================================
-    // EFEITO DE PISCAR
-    // ==================================================
-
     this.tweens.add({
       targets: this.player,
-
       alpha: 0.25,
-
       duration: 100,
-
       yoyo: true,
-
       repeat: 5,
     });
-
-    // ==================================================
-    // FIM DA INVULNERABILIDADE
-    // ==================================================
 
     this.time.delayedCall(
       1000,
@@ -658,12 +714,12 @@ export class GameScene extends Phaser.Scene {
   }
 
   // ==================================================
-  // MORTE DA MADELINE
+  // MORTE
   // ==================================================
 
   private playerDeath() {
     console.log(
-      '💀 Madeline morreu!'
+      `💀 ${this.character} morreu!`
     );
 
     this.player.setVelocity(
@@ -678,22 +734,20 @@ export class GameScene extends Phaser.Scene {
     this.time.delayedCall(
       500,
       () => {
-        this.scene.restart();
+        this.scene.restart({
+          character: this.character,
+        });
       }
     );
   }
 
   // ==================================================
-  // ESTADO DA MADELINE
+  // ESTADO
   // ==================================================
 
   private updatePlayerState() {
     const body =
       this.player.body as Phaser.Physics.Arcade.Body;
-
-    // =========================
-    // ESTÁ NO AR
-    // =========================
 
     if (
       !body.blocked.down
@@ -702,67 +756,58 @@ export class GameScene extends Phaser.Scene {
         body.velocity.y < 0
       ) {
         this.playerState =
-          'jump';
+          "jump";
       }
-
       else {
         this.playerState =
-          'fall';
+          "fall";
       }
 
       return;
     }
-
-    // =========================
-    // ESTÁ CORRENDO
-    // =========================
 
     if (
       body.velocity.x !== 0
     ) {
       this.playerState =
-        'walk';
+        "walk";
 
       return;
     }
 
-    // =========================
-    // ESTÁ PARADA
-    // =========================
-
     this.playerState =
-      'idle';
+      "idle";
   }
 
   // ==================================================
-  // ANIMAÇÃO DA MADELINE
+  // ANIMAÇÃO
   // ==================================================
 
   private updatePlayerAnimation() {
     switch (
       this.playerState
     ) {
-      case 'walk':
+      case "walk":
         this.playAnimation(
-          'madeline-run'
+          this.getRunAnimation()
         );
         break;
 
-      case 'idle':
+      case "idle":
         this.playAnimation(
-          'madeline-idle'
+          this.getIdleAnimation()
         );
         break;
 
-      case 'jump':
+      case "jump":
         this.playAnimation(
-          'madeline-jump'
+          this.getJumpAnimation()
         );
         break;
 
-      case 'fall':
+      case "fall":
         this.playAnimation(
-          'madeline-jump'
+          this.getJumpAnimation()
         );
         break;
     }
