@@ -16,6 +16,7 @@ export type LevelConfig = {
   }[];
 
   enemies: {
+    type: string;
     x: number;
     y: number;
   }[];
@@ -71,6 +72,7 @@ export const levels: Record<number, LevelConfig> = {
 
     enemies: [
       {
+        type: "esporotricose",
         x: 650,
         y: 620,
       },

@@ -176,7 +176,7 @@ export class GameScene extends Phaser.Scene {
       false;
 
     // ==================================================
-    // ANIMAÇÕES
+    // ANIMAÇÕES DO PERSONAGEM
     // ==================================================
 
     this.createPlayerAnimations();
@@ -308,17 +308,12 @@ export class GameScene extends Phaser.Scene {
       this.physics.add.staticGroup();
 
     levelConfig.enemies.forEach(
-      (enemyPosition) => {
-        const enemy =
-          enemies.create(
-            enemyPosition.x,
-            enemyPosition.y,
-            "esporotricose-idle-sheet",
-            0
-          ) as Phaser.Physics.Arcade.Sprite;
-
-        enemy.play(
-          "esporotricose-idle"
+      (enemyConfig) => {
+        this.createEnemy(
+          enemyConfig.type,
+          enemyConfig.x,
+          enemyConfig.y,
+          enemies
         );
       }
     );
@@ -418,6 +413,50 @@ export class GameScene extends Phaser.Scene {
       0.08,
       0.08
     );
+  }
+
+  // ==================================================
+  // CRIA INIMIGO
+  // ==================================================
+
+  private createEnemy(
+    type: string,
+    x: number,
+    y: number,
+    enemies: Phaser.Physics.Arcade.StaticGroup
+  ) {
+    switch (type) {
+      // ==================================================
+      // ESPOROTRICOSE
+      // ==================================================
+
+      case "esporotricose": {
+        const enemy =
+          enemies.create(
+            x,
+            y,
+            "esporotricose-idle-sheet",
+            0
+          ) as Phaser.Physics.Arcade.Sprite;
+
+        enemy.play(
+          "esporotricose-idle"
+        );
+
+        return enemy;
+      }
+
+      // ==================================================
+      // INIMIGO DESCONHECIDO
+      // ==================================================
+
+      default:
+        console.warn(
+          `⚠️ Tipo de inimigo desconhecido: ${type}`
+        );
+
+        return null;
+    }
   }
 
   // ==================================================
