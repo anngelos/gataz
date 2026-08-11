@@ -3,6 +3,10 @@ export type LevelConfig = {
 
   width: number;
 
+  background: string;
+
+  platformTexture: string;
+
   playerStart: {
     x: number;
     y: number;
@@ -28,6 +32,10 @@ export const levels: Record<number, LevelConfig> = {
 
     width: 2000,
 
+    background: "/assets/levels/level-1/level-1-background.png",
+
+    platformTexture: "/assets/levels/level-1/level-1-grass-platform.png",
+
     playerStart: {
       x: 300,
       y: 500,
@@ -35,9 +43,9 @@ export const levels: Record<number, LevelConfig> = {
 
     platforms: [
       {
-        x: 640,
+        x: 1000,
         y: 680,
-        width: 1280,
+        width: 2000,
         height: 80,
       },
 

@@ -30,7 +30,7 @@ function App() {
             y: 1200,
           },
     
-          debug: true,
+          debug: false,
         },
       },
     
