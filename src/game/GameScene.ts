@@ -1,7 +1,9 @@
 import Phaser from "phaser";
 import { levels } from "./levels";
 
-type Character = "madeline" | "makena";
+type Character =
+  | "madeline"
+  | "makena";
 
 type PlayerState =
   | "idle"
@@ -51,11 +53,11 @@ export class GameScene extends Phaser.Scene {
       data.level ?? 1;
 
     console.log(
-      `🐈 Personagem escolhido: ${this.character}`,
+      `🐈 Personagem escolhido: ${this.character}`
     );
 
     console.log(
-      `🗺️ Fase atual: ${this.level}`,
+      `🗺️ Fase atual: ${this.level}`
     );
   }
 
@@ -73,37 +75,37 @@ export class GameScene extends Phaser.Scene {
 
     if (!levelConfig) {
       console.error(
-        `❌ Fase ${this.level} não encontrada.`,
+        `❌ Fase ${this.level} não encontrada.`
       );
 
       return;
     }
 
     // ==================================================
-    // BACKGROUND DA FASE
+    // BACKGROUND
     // ==================================================
 
     this.load.image(
       "level-background",
-      levelConfig.background,
+      levelConfig.background
     );
 
     // ==================================================
-    // TEXTURA DAS PLATAFORMAS
+    // PLATAFORMA
     // ==================================================
 
     this.load.image(
       "level-platform",
-      levelConfig.platformTexture,
+      levelConfig.platformTexture
     );
 
     // ==================================================
-    // TEXTURA DO CHÃO
+    // CHÃO
     // ==================================================
 
     this.load.image(
       "level-ground",
-      "/assets/levels/level-1/level-1-ground.png",
+      "/assets/levels/level-1/level-1-ground.png"
     );
 
     // ==================================================
@@ -119,7 +121,7 @@ export class GameScene extends Phaser.Scene {
         {
           frameWidth: 48,
           frameHeight: 48,
-        },
+        }
       );
 
       this.load.spritesheet(
@@ -128,7 +130,7 @@ export class GameScene extends Phaser.Scene {
         {
           frameWidth: 48,
           frameHeight: 48,
-        },
+        }
       );
 
       this.load.spritesheet(
@@ -137,7 +139,7 @@ export class GameScene extends Phaser.Scene {
         {
           frameWidth: 48,
           frameHeight: 48,
-        },
+        }
       );
     }
 
@@ -154,7 +156,7 @@ export class GameScene extends Phaser.Scene {
         {
           frameWidth: 48,
           frameHeight: 48,
-        },
+        }
       );
     }
 
@@ -168,7 +170,7 @@ export class GameScene extends Phaser.Scene {
       {
         frameWidth: 48,
         frameHeight: 48,
-      },
+      }
     );
 
     // ==================================================
@@ -181,7 +183,7 @@ export class GameScene extends Phaser.Scene {
       {
         frameWidth: 48,
         frameHeight: 48,
-      },
+      }
     );
   }
 
@@ -199,7 +201,7 @@ export class GameScene extends Phaser.Scene {
 
     if (!levelConfig) {
       console.error(
-        `❌ Fase ${this.level} não encontrada.`,
+        `❌ Fase ${this.level} não encontrada.`
       );
 
       return;
@@ -234,7 +236,7 @@ export class GameScene extends Phaser.Scene {
           {
             start: 0,
             end: 3,
-          },
+          }
         ),
 
       frameRate: 4,
@@ -250,12 +252,12 @@ export class GameScene extends Phaser.Scene {
       this.add.image(
         levelConfig.width / 2,
         360,
-        "level-background",
+        "level-background"
       );
 
     background.setDisplaySize(
       levelConfig.width,
-      720,
+      720
     );
 
     background.setDepth(-100);
@@ -268,14 +270,37 @@ export class GameScene extends Phaser.Scene {
       0,
       0,
       levelConfig.width,
-      720,
+      900
     );
+
+    // ==================================================
+    // CÂMERA
+    // ==================================================
 
     this.cameras.main.setBounds(
       0,
       0,
       levelConfig.width,
-      720,
+      720
+    );
+
+    // ==================================================
+    // CHÃO
+    // ==================================================
+
+    const ground =
+      this.physics.add.staticGroup();
+
+    levelConfig.ground.forEach(
+      (groundConfig) => {
+        this.createGround(
+          groundConfig.x,
+          groundConfig.y,
+          groundConfig.width,
+          groundConfig.height,
+          ground
+        );
+      }
     );
 
     // ==================================================
@@ -292,9 +317,9 @@ export class GameScene extends Phaser.Scene {
           platform.y,
           platform.width,
           platform.height,
-          platforms,
+          platforms
         );
-      },
+      }
     );
 
     // ==================================================
@@ -310,9 +335,9 @@ export class GameScene extends Phaser.Scene {
           enemyConfig.type,
           enemyConfig.x,
           enemyConfig.y,
-          enemies,
+          enemies
         );
-      },
+      }
     );
 
     // ==================================================
@@ -333,11 +358,11 @@ export class GameScene extends Phaser.Scene {
         levelConfig.playerStart.x,
         levelConfig.playerStart.y,
         playerTexture,
-        0,
+        0
       );
 
     // ==================================================
-    // CORPO FÍSICO DA PERSONAGEM
+    // CORPO FÍSICO DO PERSONAGEM
     // ==================================================
 
     const playerBody =
@@ -345,12 +370,12 @@ export class GameScene extends Phaser.Scene {
 
     playerBody.setSize(
       32,
-      30,
+      30
     );
 
     playerBody.setOffset(
       8,
-      8,
+      8
     );
 
     // ==================================================
@@ -358,7 +383,7 @@ export class GameScene extends Phaser.Scene {
     // ==================================================
 
     this.player.play(
-      this.getIdleAnimation(),
+      this.getIdleAnimation()
     );
 
     // ==================================================
@@ -366,7 +391,16 @@ export class GameScene extends Phaser.Scene {
     // ==================================================
 
     this.player.setCollideWorldBounds(
-      true,
+      true
+    );
+
+    // ==================================================
+    // COLISÃO COM CHÃO
+    // ==================================================
+
+    this.physics.add.collider(
+      this.player,
+      ground
     );
 
     // ==================================================
@@ -375,7 +409,7 @@ export class GameScene extends Phaser.Scene {
 
     this.physics.add.collider(
       this.player,
-      platforms,
+      platforms
     );
 
     // ==================================================
@@ -401,32 +435,100 @@ export class GameScene extends Phaser.Scene {
 
       (
         _playerObject: any,
-        enemyObject: any,
+        enemyObject: any
       ) => {
         const enemy =
           enemyObject.gameObject ??
           enemyObject;
 
         this.handleEnemyCollision(
-          enemy,
+          enemy
         );
       },
 
       undefined,
 
-      this,
+      this
     );
 
     // ==================================================
-    // CÂMERA
+    // CÂMERA SEGUINDO PLAYER
     // ==================================================
 
     this.cameras.main.startFollow(
       this.player,
       true,
       0.08,
-      0.08,
+      0.08
     );
+  }
+
+  // ==================================================
+  // CRIA CHÃO
+  // ==================================================
+
+  private createGround(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    ground: Phaser.Physics.Arcade.StaticGroup
+  ) {
+    // ==================================================
+    // CORPO FÍSICO
+    // ==================================================
+
+    const physicsGround =
+      ground.create(
+        x,
+        y,
+        "level-ground"
+      ) as Phaser.Physics.Arcade.Sprite;
+
+    physicsGround.setVisible(
+      false
+    );
+
+    // ==================================================
+    // CORPO ESTÁTICO
+    // ==================================================
+
+    const body =
+      physicsGround.body as Phaser.Physics.Arcade.StaticBody;
+
+    body.setSize(
+      width,
+      height,
+      true
+    );
+
+    // ==================================================
+    // VISUAL
+    // ==================================================
+
+    const groundVisual =
+      this.add.tileSprite(
+        x,
+        y,
+        width,
+        height,
+        "level-ground"
+      );
+
+    // ==================================================
+    // ESCALA
+    // ==================================================
+
+    groundVisual.setTileScale(
+      1,
+      height / 80
+    );
+
+    // ==================================================
+    // PROFUNDIDADE
+    // ==================================================
+
+    groundVisual.setDepth(0);
   }
 
   // ==================================================
@@ -438,15 +540,8 @@ export class GameScene extends Phaser.Scene {
     y: number,
     width: number,
     height: number,
-    platforms: Phaser.Physics.Arcade.StaticGroup,
+    platforms: Phaser.Physics.Arcade.StaticGroup
   ) {
-    // ==================================================
-    // VERIFICA SE É O CHÃO
-    // ==================================================
-
-    const isGround =
-      height === 80;
-
     // ==================================================
     // CORPO FÍSICO
     // ==================================================
@@ -455,15 +550,15 @@ export class GameScene extends Phaser.Scene {
       platforms.create(
         x,
         y,
-        "level-platform",
+        "level-platform"
       ) as Phaser.Physics.Arcade.Sprite;
 
     // ==================================================
-    // ESCONDE O OBJETO FÍSICO
+    // ESCONDE OBJETO FÍSICO
     // ==================================================
 
     physicsPlatform.setVisible(
-      false,
+      false
     );
 
     // ==================================================
@@ -473,24 +568,11 @@ export class GameScene extends Phaser.Scene {
     const body =
       physicsPlatform.body as Phaser.Physics.Arcade.StaticBody;
 
-    // ==================================================
-    // TAMANHO EXATO DEFINIDO PELO LEVEL
-    // ==================================================
-
     body.setSize(
       width,
       height,
-      true,
+      true
     );
-
-    // ==================================================
-    // TEXTURA VISUAL
-    // ==================================================
-
-    const texture =
-      isGround
-        ? "level-ground"
-        : "level-platform";
 
     // ==================================================
     // VISUAL
@@ -502,26 +584,17 @@ export class GameScene extends Phaser.Scene {
         y,
         width,
         height,
-        texture,
+        "level-platform"
       );
 
     // ==================================================
-    // ESCALA DO TILE
+    // ESCALA
     // ==================================================
 
-    if (isGround) {
-      // O ground já possui exatamente 48x80.
-      platformVisual.setTileScale(
-        1,
-        1,
-      );
-    } else {
-      // Plataformas normais usam o asset 48x48.
-      platformVisual.setTileScale(
-        1,
-        height / 48,
-      );
-    }
+    platformVisual.setTileScale(
+      1,
+      height / 48
+    );
 
     // ==================================================
     // PROFUNDIDADE
@@ -538,7 +611,7 @@ export class GameScene extends Phaser.Scene {
     type: string,
     x: number,
     y: number,
-    enemies: Phaser.Physics.Arcade.StaticGroup,
+    enemies: Phaser.Physics.Arcade.StaticGroup
   ) {
     switch (type) {
       // ==================================================
@@ -551,23 +624,23 @@ export class GameScene extends Phaser.Scene {
             x,
             y,
             "esporotricose-idle-sheet",
-            0,
+            0
           ) as Phaser.Physics.Arcade.Sprite;
 
         enemy.play(
-          "esporotricose-idle",
+          "esporotricose-idle"
         );
 
         return enemy;
       }
 
       // ==================================================
-      // INIMIGO DESCONHECIDO
+      // DESCONHECIDO
       // ==================================================
 
       default:
         console.warn(
-          `⚠️ Tipo de inimigo desconhecido: ${type}`,
+          `⚠️ Tipo de inimigo desconhecido: ${type}`
         );
 
         return null;
@@ -579,6 +652,22 @@ export class GameScene extends Phaser.Scene {
   // ==================================================
 
   update() {
+    // ==================================================
+    // QUEDA NO BURACO
+    // ==================================================
+
+    if (
+      this.player.y > 780
+    ) {
+      console.log(
+        "🕳️ A gata caiu no buraco!"
+      );
+
+      this.playerDeath();
+
+      return;
+    }
+
     const speed = 250;
 
     // ==================================================
@@ -589,11 +678,11 @@ export class GameScene extends Phaser.Scene {
       this.cursors.left.isDown
     ) {
       this.player.setVelocityX(
-        -speed,
+        -speed
       );
 
       this.player.setFlipX(
-        true,
+        true
       );
     }
 
@@ -601,17 +690,17 @@ export class GameScene extends Phaser.Scene {
       this.cursors.right.isDown
     ) {
       this.player.setVelocityX(
-        speed,
+        speed
       );
 
       this.player.setFlipX(
-        false,
+        false
       );
     }
 
     else {
       this.player.setVelocityX(
-        0,
+        0
       );
     }
 
@@ -624,7 +713,7 @@ export class GameScene extends Phaser.Scene {
       this.player.body!.blocked.down
     ) {
       this.player.setVelocityY(
-        -550,
+        -550
       );
     }
 
@@ -662,7 +751,7 @@ export class GameScene extends Phaser.Scene {
             {
               start: 0,
               end: 3,
-            },
+            }
           ),
 
         frameRate: 4,
@@ -679,7 +768,7 @@ export class GameScene extends Phaser.Scene {
             {
               start: 0,
               end: 3,
-            },
+            }
           ),
 
         frameRate: 10,
@@ -696,7 +785,7 @@ export class GameScene extends Phaser.Scene {
             {
               start: 0,
               end: 3,
-            },
+            }
           ),
 
         frameRate: 8,
@@ -720,7 +809,7 @@ export class GameScene extends Phaser.Scene {
           {
             start: 0,
             end: 3,
-          },
+          }
         ),
 
       frameRate: 4,
@@ -776,19 +865,19 @@ export class GameScene extends Phaser.Scene {
           28 + i * 48,
           28,
           "hearts-sheet",
-          0,
+          0
         );
 
       heart.setScrollFactor(
-        0,
+        0
       );
 
       heart.setDepth(
-        1000,
+        1000
       );
 
       this.heartSprites.push(
-        heart,
+        heart
       );
     }
 
@@ -826,7 +915,7 @@ export class GameScene extends Phaser.Scene {
   // ==================================================
 
   private handleEnemyCollision(
-    enemy: Phaser.Physics.Arcade.Sprite,
+    enemy: Phaser.Physics.Arcade.Sprite
   ) {
     if (
       !enemy.active
@@ -854,11 +943,11 @@ export class GameScene extends Phaser.Scene {
       enemy.destroy();
 
       this.player.setVelocityY(
-        -350,
+        -350
       );
 
       console.log(
-        "💥 Esporotricose derrotada!",
+        "💥 Esporotricose derrotada!"
       );
 
       return;
@@ -869,7 +958,7 @@ export class GameScene extends Phaser.Scene {
     // ==================================================
 
     this.takeDamage(
-      enemy,
+      enemy
     );
   }
 
@@ -878,7 +967,7 @@ export class GameScene extends Phaser.Scene {
   // ==================================================
 
   private takeDamage(
-    enemy: Phaser.Physics.Arcade.Sprite,
+    enemy: Phaser.Physics.Arcade.Sprite
   ) {
     if (
       this.isInvulnerable
@@ -891,7 +980,7 @@ export class GameScene extends Phaser.Scene {
     this.updateHeartsDisplay();
 
     console.log(
-      `💔 ${this.character} perdeu um coração! Restam ${this.hearts}.`,
+      `💔 ${this.character} perdeu um coração! Restam ${this.hearts}.`
     );
 
     // ==================================================
@@ -921,18 +1010,18 @@ export class GameScene extends Phaser.Scene {
       this.player.x < enemy.x
     ) {
       this.player.setVelocityX(
-        -300,
+        -300
       );
     }
 
     else {
       this.player.setVelocityX(
-        300,
+        300
       );
     }
 
     this.player.setVelocityY(
-      -200,
+      -200
     );
 
     // ==================================================
@@ -962,9 +1051,9 @@ export class GameScene extends Phaser.Scene {
           false;
 
         this.player.setAlpha(
-          1,
+          1
         );
-      },
+      }
     );
   }
 
@@ -974,16 +1063,16 @@ export class GameScene extends Phaser.Scene {
 
   private playerDeath() {
     console.log(
-      `💀 ${this.character} morreu!`,
+      `💀 ${this.character} morreu!`
     );
 
     this.player.setVelocity(
       0,
-      0,
+      0
     );
 
     this.player.setTint(
-      0xff0000,
+      0xff0000
     );
 
     this.time.delayedCall(
@@ -996,7 +1085,7 @@ export class GameScene extends Phaser.Scene {
           level:
             this.level,
         });
-      },
+      }
     );
   }
 
@@ -1061,26 +1150,30 @@ export class GameScene extends Phaser.Scene {
     ) {
       case "walk":
         this.playAnimation(
-          this.getRunAnimation(),
+          this.getRunAnimation()
         );
+
         break;
 
       case "idle":
         this.playAnimation(
-          this.getIdleAnimation(),
+          this.getIdleAnimation()
         );
+
         break;
 
       case "jump":
         this.playAnimation(
-          this.getJumpAnimation(),
+          this.getJumpAnimation()
         );
+
         break;
 
       case "fall":
         this.playAnimation(
-          this.getJumpAnimation(),
+          this.getJumpAnimation()
         );
+
         break;
     }
   }
@@ -1090,14 +1183,14 @@ export class GameScene extends Phaser.Scene {
   // ==================================================
 
   private playAnimation(
-    animationKey: string,
+    animationKey: string
   ) {
     if (
       this.player.anims.currentAnim
         ?.key !== animationKey
     ) {
       this.player.play(
-        animationKey,
+        animationKey
       );
     }
   }
