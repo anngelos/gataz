@@ -13,34 +13,22 @@ type PlayerState =
 
 export class GameScene extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite;
-
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
-
   private playerState: PlayerState = "idle";
-
   private character: Character = "madeline";
-
   private level = 1;
-
-  // ==================================================
-  // VIDA
-  // ==================================================
-
   private maxHearts = 3;
-
   private hearts = 3;
-
   private heartSprites: Phaser.GameObjects.Sprite[] = [];
-
   private isInvulnerable = false;
+  private score = 0;
+  private scoreText!: Phaser.GameObjects.Text;
+  private collectibles!: Phaser.Physics.Arcade.StaticGroup;
+  private collectibleScore = 100;
 
   constructor() {
     super("GameScene");
   }
-
-  // ==================================================
-  // DADOS RECEBIDOS
-  // ==================================================
 
   init(data: {
     character?: Character;
@@ -61,14 +49,7 @@ export class GameScene extends Phaser.Scene {
     );
   }
 
-  // ==================================================
-  // CARREGAMENTO
-  // ==================================================
-
   preload() {
-    // ==================================================
-    // CONFIGURAÇÃO DA FASE
-    // ==================================================
 
     const levelConfig =
       levels[this.level];
@@ -81,36 +62,29 @@ export class GameScene extends Phaser.Scene {
       return;
     }
 
-    // ==================================================
-    // BACKGROUND
-    // ==================================================
-
     this.load.image(
       "level-background",
       levelConfig.background
     );
-
-    // ==================================================
-    // PLATAFORMA
-    // ==================================================
 
     this.load.image(
       "level-platform",
       levelConfig.platformTexture
     );
 
-    // ==================================================
-    // CHÃO
-    // ==================================================
-
     this.load.image(
       "level-ground",
       "/assets/levels/level-1/level-1-ground.png"
     );
 
-    // ==================================================
-    // MADELINE
-    // ==================================================
+    this.load.spritesheet(
+      "coin",
+      "/assets/collectible/coin.png",
+      {
+        frameWidth: 48,
+        frameHeight: 48,
+      }
+    );
 
     if (
       this.character === "madeline"
@@ -143,10 +117,6 @@ export class GameScene extends Phaser.Scene {
       );
     }
 
-    // ==================================================
-    // MAKENA
-    // ==================================================
-
     if (
       this.character === "makena"
     ) {
@@ -160,10 +130,6 @@ export class GameScene extends Phaser.Scene {
       );
     }
 
-    // ==================================================
-    // ESPOROTRICOSE
-    // ==================================================
-
     this.load.spritesheet(
       "esporotricose-idle-sheet",
       "/assets/characters/enemies/esporotricose/esporotricose-idle.png",
@@ -172,10 +138,6 @@ export class GameScene extends Phaser.Scene {
         frameHeight: 48,
       }
     );
-
-    // ==================================================
-    // CORAÇÕES
-    // ==================================================
 
     this.load.spritesheet(
       "hearts-sheet",
@@ -187,14 +149,7 @@ export class GameScene extends Phaser.Scene {
     );
   }
 
-  // ==================================================
-  // CREATE
-  // ==================================================
-
   create() {
-    // ==================================================
-    // CONFIGURAÇÃO DA FASE
-    // ==================================================
 
     const levelConfig =
       levels[this.level];
@@ -207,25 +162,11 @@ export class GameScene extends Phaser.Scene {
       return;
     }
 
-    // ==================================================
-    // RESET DA VIDA
-    // ==================================================
+    this.hearts = this.maxHearts;
+    this.isInvulnerable = false;
 
-    this.hearts =
-      this.maxHearts;
-
-    this.isInvulnerable =
-      false;
-
-    // ==================================================
-    // ANIMAÇÕES DO PERSONAGEM
-    // ==================================================
-
+    this.score = 0;
     this.createPlayerAnimations();
-
-    // ==================================================
-    // ANIMAÇÃO ESPOROTRICOSE
-    // ==================================================
 
     this.anims.create({
       key: "esporotricose-idle",
@@ -244,9 +185,22 @@ export class GameScene extends Phaser.Scene {
       repeat: -1,
     });
 
-    // ==================================================
-    // BACKGROUND
-    // ==================================================
+    this.anims.create({
+      key: "coin-idle",
+
+      frames:
+        this.anims.generateFrameNumbers(
+          "coin",
+          {
+            start: 0,
+            end: 5,
+          }
+        ),
+
+      frameRate: 8,
+
+      repeat: -1,
+    });
 
     const background =
       this.add.image(
@@ -262,10 +216,6 @@ export class GameScene extends Phaser.Scene {
 
     background.setDepth(-100);
 
-    // ==================================================
-    // MUNDO FÍSICO
-    // ==================================================
-
     this.physics.world.setBounds(
       0,
       0,
@@ -273,20 +223,12 @@ export class GameScene extends Phaser.Scene {
       900
     );
 
-    // ==================================================
-    // CÂMERA
-    // ==================================================
-
     this.cameras.main.setBounds(
       0,
       0,
       levelConfig.width,
       720
     );
-
-    // ==================================================
-    // CHÃO
-    // ==================================================
 
     const ground =
       this.physics.add.staticGroup();
@@ -303,10 +245,6 @@ export class GameScene extends Phaser.Scene {
       }
     );
 
-    // ==================================================
-    // PLATAFORMAS
-    // ==================================================
-
     const platforms =
       this.physics.add.staticGroup();
 
@@ -322,10 +260,6 @@ export class GameScene extends Phaser.Scene {
       }
     );
 
-    // ==================================================
-    // INIMIGOS
-    // ==================================================
-
     const enemies =
       this.physics.add.staticGroup();
 
@@ -340,18 +274,34 @@ export class GameScene extends Phaser.Scene {
       }
     );
 
-    // ==================================================
-    // TEXTURA DO PERSONAGEM
-    // ==================================================
+    this.collectibles =
+      this.physics.add.staticGroup();
+
+    const collectibles =
+      (
+        levelConfig as typeof levelConfig & {
+          collectibles?: {
+            type: string;
+            x: number;
+            y: number;
+          }[];
+        }
+      ).collectibles ?? [];
+
+    collectibles.forEach(
+      (collectible) => {
+        this.createCollectible(
+          collectible.type,
+          collectible.x,
+          collectible.y
+        );
+      }
+    );
 
     const playerTexture =
       this.character === "madeline"
         ? "madeline-idle-sheet"
         : "makena-idle-sheet";
-
-    // ==================================================
-    // PERSONAGEM
-    // ==================================================
 
     this.player =
       this.physics.add.sprite(
@@ -360,10 +310,6 @@ export class GameScene extends Phaser.Scene {
         playerTexture,
         0
       );
-
-    // ==================================================
-    // CORPO FÍSICO DO PERSONAGEM
-    // ==================================================
 
     const playerBody =
       this.player.body as Phaser.Physics.Arcade.Body;
@@ -378,56 +324,29 @@ export class GameScene extends Phaser.Scene {
       8
     );
 
-    // ==================================================
-    // ANIMAÇÃO INICIAL
-    // ==================================================
-
     this.player.play(
       this.getIdleAnimation()
     );
 
-    // ==================================================
-    // FÍSICA DO PERSONAGEM
-    // ==================================================
-
     this.player.setCollideWorldBounds(
       true
     );
-
-    // ==================================================
-    // COLISÃO COM CHÃO
-    // ==================================================
 
     this.physics.add.collider(
       this.player,
       ground
     );
 
-    // ==================================================
-    // COLISÃO COM PLATAFORMAS
-    // ==================================================
-
     this.physics.add.collider(
       this.player,
       platforms
     );
 
-    // ==================================================
-    // CONTROLES
-    // ==================================================
-
     this.cursors =
       this.input.keyboard!.createCursorKeys();
 
-    // ==================================================
-    // HUD
-    // ==================================================
-
     this.createHearts();
-
-    // ==================================================
-    // COLISÃO COM INIMIGO
-    // ==================================================
+    this.createScore();
 
     this.physics.add.overlap(
       this.player,
@@ -451,9 +370,27 @@ export class GameScene extends Phaser.Scene {
       this
     );
 
-    // ==================================================
-    // CÂMERA SEGUINDO PLAYER
-    // ==================================================
+    this.physics.add.overlap(
+      this.player,
+      this.collectibles,
+
+      (
+        _playerObject: any,
+        collectibleObject: any
+      ) => {
+        const collectible =
+          collectibleObject.gameObject ??
+          collectibleObject;
+
+        this.collectCollectible(
+          collectible
+        );
+      },
+
+      undefined,
+
+      this
+    );
 
     this.cameras.main.startFollow(
       this.player,
@@ -463,10 +400,6 @@ export class GameScene extends Phaser.Scene {
     );
   }
 
-  // ==================================================
-  // CRIA CHÃO
-  // ==================================================
-
   private createGround(
     x: number,
     y: number,
@@ -474,9 +407,6 @@ export class GameScene extends Phaser.Scene {
     height: number,
     ground: Phaser.Physics.Arcade.StaticGroup
   ) {
-    // ==================================================
-    // CORPO FÍSICO
-    // ==================================================
 
     const physicsGround =
       ground.create(
@@ -489,10 +419,6 @@ export class GameScene extends Phaser.Scene {
       false
     );
 
-    // ==================================================
-    // CORPO ESTÁTICO
-    // ==================================================
-
     const body =
       physicsGround.body as Phaser.Physics.Arcade.StaticBody;
 
@@ -501,10 +427,6 @@ export class GameScene extends Phaser.Scene {
       height,
       true
     );
-
-    // ==================================================
-    // VISUAL
-    // ==================================================
 
     const groundVisual =
       this.add.tileSprite(
@@ -515,25 +437,13 @@ export class GameScene extends Phaser.Scene {
         "level-ground"
       );
 
-    // ==================================================
-    // ESCALA
-    // ==================================================
-
     groundVisual.setTileScale(
       1,
       height / 80
     );
 
-    // ==================================================
-    // PROFUNDIDADE
-    // ==================================================
-
     groundVisual.setDepth(0);
   }
-
-  // ==================================================
-  // CRIA PLATAFORMA
-  // ==================================================
 
   private createPlatform(
     x: number,
@@ -542,9 +452,6 @@ export class GameScene extends Phaser.Scene {
     height: number,
     platforms: Phaser.Physics.Arcade.StaticGroup
   ) {
-    // ==================================================
-    // CORPO FÍSICO
-    // ==================================================
 
     const physicsPlatform =
       platforms.create(
@@ -553,17 +460,9 @@ export class GameScene extends Phaser.Scene {
         "level-platform"
       ) as Phaser.Physics.Arcade.Sprite;
 
-    // ==================================================
-    // ESCONDE OBJETO FÍSICO
-    // ==================================================
-
     physicsPlatform.setVisible(
       false
     );
-
-    // ==================================================
-    // CORPO ESTÁTICO
-    // ==================================================
 
     const body =
       physicsPlatform.body as Phaser.Physics.Arcade.StaticBody;
@@ -574,10 +473,6 @@ export class GameScene extends Phaser.Scene {
       true
     );
 
-    // ==================================================
-    // VISUAL
-    // ==================================================
-
     const platformVisual =
       this.add.tileSprite(
         x,
@@ -587,25 +482,13 @@ export class GameScene extends Phaser.Scene {
         "level-platform"
       );
 
-    // ==================================================
-    // ESCALA
-    // ==================================================
-
     platformVisual.setTileScale(
       1,
       height / 48
     );
 
-    // ==================================================
-    // PROFUNDIDADE
-    // ==================================================
-
     platformVisual.setDepth(0);
   }
-
-  // ==================================================
-  // CRIA INIMIGO
-  // ==================================================
 
   private createEnemy(
     type: string,
@@ -614,9 +497,6 @@ export class GameScene extends Phaser.Scene {
     enemies: Phaser.Physics.Arcade.StaticGroup
   ) {
     switch (type) {
-      // ==================================================
-      // ESPOROTRICOSE
-      // ==================================================
 
       case "esporotricose": {
         const enemy =
@@ -634,10 +514,6 @@ export class GameScene extends Phaser.Scene {
         return enemy;
       }
 
-      // ==================================================
-      // DESCONHECIDO
-      // ==================================================
-
       default:
         console.warn(
           `⚠️ Tipo de inimigo desconhecido: ${type}`
@@ -647,14 +523,101 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
-  // ==================================================
-  // UPDATE
-  // ==================================================
+  private createCollectible(
+    type: string,
+    x: number,
+    y: number
+  ) {
+    switch (type) {
+
+      case "coin": {
+        const coin =
+          this.collectibles.create(
+            x,
+            y,
+            "coin",
+            0
+          ) as Phaser.Physics.Arcade.Sprite;
+
+        coin.play(
+          "coin-idle"
+        );
+
+        coin.setDepth(1);
+
+        return coin;
+      }
+
+      default:
+        console.warn(
+          `⚠️ Tipo de coletável desconhecido: ${type}`
+        );
+
+        return null;
+    }
+  }
+
+  private collectCollectible(
+    collectible: Phaser.Physics.Arcade.Sprite
+  ) {
+    if (
+      !collectible.active
+    ) {
+      return;
+    }
+
+    collectible.destroy();
+
+    this.addScore(
+      this.collectibleScore
+    );
+
+    console.log(
+      `🪙 Moeda coletada! +${this.collectibleScore} pontos.`
+    );
+  }
+
+  private createScore() {
+    this.scoreText =
+      this.add.text(
+        1120,
+        25,
+        "PONTOS: 0",
+        {
+          fontSize: "24px",
+          fontFamily: "Pixelify",
+          color: "#ffffff",
+          stroke: "#000000",
+          strokeThickness: 4,
+          letterSpacing: 1,
+  
+          shadow: {
+            offsetX: 2,
+            offsetY: 2,
+            color: "#000000",
+            blur: 0,
+            stroke: true,
+            fill: true,
+          },
+        }
+      );
+  
+    this.scoreText.setScrollFactor(0);
+  
+    this.scoreText.setDepth(1000);
+  }
+
+  private addScore(
+    points: number
+  ) {
+    this.score += points;
+
+    this.scoreText.setText(
+      `PONTOS: ${this.score}`
+    );
+  }
 
   update() {
-    // ==================================================
-    // QUEDA NO BURACO
-    // ==================================================
 
     if (
       this.player.y > 780
@@ -669,10 +632,6 @@ export class GameScene extends Phaser.Scene {
     }
 
     const speed = 250;
-
-    // ==================================================
-    // MOVIMENTO
-    // ==================================================
 
     if (
       this.cursors.left.isDown
@@ -704,10 +663,6 @@ export class GameScene extends Phaser.Scene {
       );
     }
 
-    // ==================================================
-    // PULO
-    // ==================================================
-
     if (
       this.cursors.up.isDown &&
       this.player.body!.blocked.down
@@ -717,27 +672,11 @@ export class GameScene extends Phaser.Scene {
       );
     }
 
-    // ==================================================
-    // ESTADO
-    // ==================================================
-
     this.updatePlayerState();
-
-    // ==================================================
-    // ANIMAÇÃO
-    // ==================================================
-
     this.updatePlayerAnimation();
   }
 
-  // ==================================================
-  // CRIA ANIMAÇÕES DO PERSONAGEM
-  // ==================================================
-
   private createPlayerAnimations() {
-    // ==================================================
-    // MADELINE
-    // ==================================================
 
     if (
       this.character === "madeline"
@@ -796,10 +735,6 @@ export class GameScene extends Phaser.Scene {
       return;
     }
 
-    // ==================================================
-    // MAKENA
-    // ==================================================
-
     this.anims.create({
       key: "makena-idle",
 
@@ -818,19 +753,11 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
-  // ==================================================
-  // IDLE ATUAL
-  // ==================================================
-
   private getIdleAnimation() {
     return this.character === "madeline"
       ? "madeline-idle"
       : "makena-idle";
   }
-
-  // ==================================================
-  // RUN ATUAL
-  // ==================================================
 
   private getRunAnimation() {
     return this.character === "madeline"
@@ -838,19 +765,11 @@ export class GameScene extends Phaser.Scene {
       : "makena-idle";
   }
 
-  // ==================================================
-  // JUMP ATUAL
-  // ==================================================
-
   private getJumpAnimation() {
     return this.character === "madeline"
       ? "madeline-jump"
       : "makena-idle";
   }
-
-  // ==================================================
-  // CRIA OS 3 CORAÇÕES
-  // ==================================================
 
   private createHearts() {
     this.heartSprites = [];
@@ -884,10 +803,6 @@ export class GameScene extends Phaser.Scene {
     this.updateHeartsDisplay();
   }
 
-  // ==================================================
-  // ATUALIZA CORAÇÕES
-  // ==================================================
-
   private updateHeartsDisplay() {
     for (
       let i = 0;
@@ -910,10 +825,6 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
-  // ==================================================
-  // COLISÃO COM INIMIGO
-  // ==================================================
-
   private handleEnemyCollision(
     enemy: Phaser.Physics.Arcade.Sprite
   ) {
@@ -932,39 +843,31 @@ export class GameScene extends Phaser.Scene {
     const body =
       this.player.body as Phaser.Physics.Arcade.Body;
 
-    // ==================================================
-    // PISOU EM CIMA
-    // ==================================================
-
     if (
       body.velocity.y > 0 &&
       this.player.y < enemy.y
     ) {
       enemy.destroy();
 
+      this.addScore(
+        10
+      );
+
       this.player.setVelocityY(
         -350
       );
 
       console.log(
-        "💥 Esporotricose derrotada!"
+        "💥 Esporotricose derrotada! +10 pontos."
       );
 
       return;
     }
 
-    // ==================================================
-    // BATEU DE LADO
-    // ==================================================
-
     this.takeDamage(
       enemy
     );
   }
-
-  // ==================================================
-  // DANO
-  // ==================================================
 
   private takeDamage(
     enemy: Phaser.Physics.Arcade.Sprite
@@ -983,10 +886,6 @@ export class GameScene extends Phaser.Scene {
       `💔 ${this.character} perdeu um coração! Restam ${this.hearts}.`
     );
 
-    // ==================================================
-    // MORTE
-    // ==================================================
-
     if (
       this.hearts <= 0
     ) {
@@ -995,16 +894,7 @@ export class GameScene extends Phaser.Scene {
       return;
     }
 
-    // ==================================================
-    // INVULNERABILIDADE
-    // ==================================================
-
-    this.isInvulnerable =
-      true;
-
-    // ==================================================
-    // EMPURRÃO
-    // ==================================================
+    this.isInvulnerable = true;
 
     if (
       this.player.x < enemy.x
@@ -1024,25 +914,13 @@ export class GameScene extends Phaser.Scene {
       -200
     );
 
-    // ==================================================
-    // PISCAR
-    // ==================================================
-
     this.tweens.add({
       targets: this.player,
-
       alpha: 0.25,
-
       duration: 100,
-
       yoyo: true,
-
       repeat: 5,
     });
-
-    // ==================================================
-    // FIM DA INVULNERABILIDADE
-    // ==================================================
 
     this.time.delayedCall(
       1000,
@@ -1056,10 +934,6 @@ export class GameScene extends Phaser.Scene {
       }
     );
   }
-
-  // ==================================================
-  // MORTE
-  // ==================================================
 
   private playerDeath() {
     console.log(
@@ -1089,17 +963,9 @@ export class GameScene extends Phaser.Scene {
     );
   }
 
-  // ==================================================
-  // ESTADO
-  // ==================================================
-
   private updatePlayerState() {
     const body =
       this.player.body as Phaser.Physics.Arcade.Body;
-
-    // ==================================================
-    // NO AR
-    // ==================================================
 
     if (
       !body.blocked.down
@@ -1119,10 +985,6 @@ export class GameScene extends Phaser.Scene {
       return;
     }
 
-    // ==================================================
-    // CORRENDO
-    // ==================================================
-
     if (
       body.velocity.x !== 0
     ) {
@@ -1132,17 +994,9 @@ export class GameScene extends Phaser.Scene {
       return;
     }
 
-    // ==================================================
-    // PARADO
-    // ==================================================
-
     this.playerState =
       "idle";
   }
-
-  // ==================================================
-  // ANIMAÇÃO
-  // ==================================================
 
   private updatePlayerAnimation() {
     switch (
@@ -1177,10 +1031,6 @@ export class GameScene extends Phaser.Scene {
         break;
     }
   }
-
-  // ==================================================
-  // TROCA ANIMAÇÃO
-  // ==================================================
 
   private playAnimation(
     animationKey: string

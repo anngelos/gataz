@@ -31,6 +31,12 @@ export type LevelConfig = {
     x: number;
     y: number;
   }[];
+
+  collectibles: {
+    type: string;
+    x: number;
+    y: number;
+  }[];
 };
 
 export const levels: Record<number, LevelConfig> = {
@@ -186,6 +192,56 @@ export const levels: Record<number, LevelConfig> = {
         type: "esporotricose",
         x: 3750,
         y: 625,
+      },
+    ],
+
+    collectibles: [
+      {
+        type: "coin",
+        x: 800,
+        y: 370,
+      },
+
+      {
+        type: "coin",
+        x: 1200,
+        y: 470,
+      },
+
+      {
+        type: "coin",
+        x: 1550,
+        y: 390,
+      },
+
+      {
+        type: "coin",
+        x: 2000,
+        y: 470,
+      },
+
+      {
+        type: "coin",
+        x: 2350,
+        y: 360,
+      },
+
+      {
+        type: "coin",
+        x: 2750,
+        y: 460,
+      },
+
+      {
+        type: "coin",
+        x: 3150,
+        y: 370,
+      },
+
+      {
+        type: "coin",
+        x: 3500,
+        y: 460,
       },
     ],
   },
