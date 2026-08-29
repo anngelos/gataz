@@ -581,7 +581,7 @@ export class GameScene extends Phaser.Scene {
     this.scoreText =
       this.add.text(
         1120,
-        25,
+        10,
         "PONTOS: 0",
         {
           fontSize: "24px",
