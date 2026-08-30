@@ -1,15 +1,9 @@
 import Phaser from "phaser";
 import { levels } from "./levels";
 
-type Character =
-  | "madeline"
-  | "makena";
+type Character = "madeline" | "makena";
 
-type PlayerState =
-  | "idle"
-  | "walk"
-  | "jump"
-  | "fall";
+type PlayerState = "idle" | "walk" | "jump" | "fall";
 
 export class GameScene extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite;
@@ -30,72 +24,47 @@ export class GameScene extends Phaser.Scene {
     super("GameScene");
   }
 
-  init(data: {
-    character?: Character;
-    level?: number;
-  }) {
-    this.character =
-      data.character ?? "madeline";
+  init(data: { character?: Character; level?: number }) {
+    this.character = data.character ?? "madeline";
 
-    this.level =
-      data.level ?? 1;
+    this.level = data.level ?? 1;
 
-    console.log(
-      `🐈 Personagem escolhido: ${this.character}`
-    );
+    console.log(`🐈 Personagem escolhido: ${this.character}`);
 
-    console.log(
-      `🗺️ Fase atual: ${this.level}`
-    );
+    console.log(`🗺️ Fase atual: ${this.level}`);
   }
 
   preload() {
-
-    const levelConfig =
-      levels[this.level];
+    const levelConfig = levels[this.level];
 
     if (!levelConfig) {
-      console.error(
-        `❌ Fase ${this.level} não encontrada.`
-      );
+      console.error(`❌ Fase ${this.level} não encontrada.`);
 
       return;
     }
 
-    this.load.image(
-      "level-background",
-      levelConfig.background
-    );
+    this.load.image("level-background", levelConfig.background);
 
-    this.load.image(
-      "level-platform",
-      levelConfig.platformTexture
-    );
+    this.load.image("level-platform", levelConfig.platformTexture);
 
     this.load.image(
       "level-ground",
-      "/assets/levels/level-1/level-1-ground.png"
+      "/assets/levels/level-1/level-1-ground.png",
     );
 
-    this.load.spritesheet(
-      "coin",
-      "/assets/collectible/coin.png",
-      {
-        frameWidth: 48,
-        frameHeight: 48,
-      }
-    );
+    this.load.spritesheet("coin", "/assets/collectible/coin.png", {
+      frameWidth: 48,
+      frameHeight: 48,
+    });
 
-    if (
-      this.character === "madeline"
-    ) {
+    if (this.character === "madeline") {
       this.load.spritesheet(
         "madeline-idle-sheet",
         "/assets/characters/madeline/madeline-idle.png",
         {
           frameWidth: 48,
           frameHeight: 48,
-        }
+        },
       );
 
       this.load.spritesheet(
@@ -104,7 +73,7 @@ export class GameScene extends Phaser.Scene {
         {
           frameWidth: 48,
           frameHeight: 48,
-        }
+        },
       );
 
       this.load.spritesheet(
@@ -113,20 +82,36 @@ export class GameScene extends Phaser.Scene {
         {
           frameWidth: 48,
           frameHeight: 48,
-        }
+        },
       );
     }
 
-    if (
-      this.character === "makena"
-    ) {
+    if (this.character === "makena") {
       this.load.spritesheet(
         "makena-idle-sheet",
         "/assets/characters/makena/makena-idle.png",
         {
           frameWidth: 48,
           frameHeight: 48,
-        }
+        },
+      );
+
+      this.load.spritesheet(
+        "makena-run-sheet",
+        "/assets/characters/makena/makena-run.png",
+        {
+          frameWidth: 48,
+          frameHeight: 48,
+        },
+      );
+
+      this.load.spritesheet(
+        "makena-jump-sheet",
+        "/assets/characters/makena/makena-jump.png",
+        {
+          frameWidth: 48,
+          frameHeight: 48,
+        },
       );
     }
 
@@ -136,28 +121,20 @@ export class GameScene extends Phaser.Scene {
       {
         frameWidth: 48,
         frameHeight: 48,
-      }
+      },
     );
 
-    this.load.spritesheet(
-      "hearts-sheet",
-      "/assets/ui/hearts.png",
-      {
-        frameWidth: 48,
-        frameHeight: 48,
-      }
-    );
+    this.load.spritesheet("hearts-sheet", "/assets/ui/hearts.png", {
+      frameWidth: 48,
+      frameHeight: 48,
+    });
   }
 
   create() {
-
-    const levelConfig =
-      levels[this.level];
+    const levelConfig = levels[this.level];
 
     if (!levelConfig) {
-      console.error(
-        `❌ Fase ${this.level} não encontrada.`
-      );
+      console.error(`❌ Fase ${this.level} não encontrada.`);
 
       return;
     }
@@ -171,14 +148,10 @@ export class GameScene extends Phaser.Scene {
     this.anims.create({
       key: "esporotricose-idle",
 
-      frames:
-        this.anims.generateFrameNumbers(
-          "esporotricose-idle-sheet",
-          {
-            start: 0,
-            end: 3,
-          }
-        ),
+      frames: this.anims.generateFrameNumbers("esporotricose-idle-sheet", {
+        start: 0,
+        end: 3,
+      }),
 
       frameRate: 4,
 
@@ -188,94 +161,61 @@ export class GameScene extends Phaser.Scene {
     this.anims.create({
       key: "coin-idle",
 
-      frames:
-        this.anims.generateFrameNumbers(
-          "coin",
-          {
-            start: 0,
-            end: 5,
-          }
-        ),
+      frames: this.anims.generateFrameNumbers("coin", {
+        start: 0,
+        end: 5,
+      }),
 
       frameRate: 8,
 
       repeat: -1,
     });
 
-    const background =
-      this.add.image(
-        levelConfig.width / 2,
-        360,
-        "level-background"
-      );
-
-    background.setDisplaySize(
-      levelConfig.width,
-      720
+    const background = this.add.image(
+      levelConfig.width / 2,
+      360,
+      "level-background",
     );
+
+    background.setDisplaySize(levelConfig.width, 720);
 
     background.setDepth(-100);
 
-    this.physics.world.setBounds(
-      0,
-      0,
-      levelConfig.width,
-      900
-    );
+    this.physics.world.setBounds(0, 0, levelConfig.width, 900);
 
-    this.cameras.main.setBounds(
-      0,
-      0,
-      levelConfig.width,
-      720
-    );
+    this.cameras.main.setBounds(0, 0, levelConfig.width, 720);
 
-    const ground =
-      this.physics.add.staticGroup();
+    const ground = this.physics.add.staticGroup();
 
-    levelConfig.ground.forEach(
-      (groundConfig) => {
-        this.createGround(
-          groundConfig.x,
-          groundConfig.y,
-          groundConfig.width,
-          groundConfig.height,
-          ground
-        );
-      }
-    );
+    levelConfig.ground.forEach((groundConfig) => {
+      this.createGround(
+        groundConfig.x,
+        groundConfig.y,
+        groundConfig.width,
+        groundConfig.height,
+        ground,
+      );
+    });
 
-    const platforms =
-      this.physics.add.staticGroup();
+    const platforms = this.physics.add.staticGroup();
 
-    levelConfig.platforms.forEach(
-      (platform) => {
-        this.createPlatform(
-          platform.x,
-          platform.y,
-          platform.width,
-          platform.height,
-          platforms
-        );
-      }
-    );
+    levelConfig.platforms.forEach((platform) => {
+      this.createPlatform(
+        platform.x,
+        platform.y,
+        platform.width,
+        platform.height,
+        platforms,
+      );
+    });
 
-    const enemies =
-      this.physics.add.staticGroup();
+    const enemies = this.physics.add.staticGroup();
 
-    levelConfig.enemies.forEach(
-      (enemyConfig) => {
-        this.createEnemy(
-          enemyConfig.type,
-          enemyConfig.x,
-          enemyConfig.y,
-          enemies
-        );
-      }
-    );
+    levelConfig.enemies.forEach((enemyConfig) => {
+      this.createEnemy(enemyConfig.type, enemyConfig.x, enemyConfig.y, enemies);
+    });
 
-    this.collectibles =
-      this.physics.add.staticGroup();
+    this.collectibles = this.physics.add.staticGroup();
 
     const collectibles =
       (
@@ -288,62 +228,37 @@ export class GameScene extends Phaser.Scene {
         }
       ).collectibles ?? [];
 
-    collectibles.forEach(
-      (collectible) => {
-        this.createCollectible(
-          collectible.type,
-          collectible.x,
-          collectible.y
-        );
-      }
-    );
+    collectibles.forEach((collectible) => {
+      this.createCollectible(collectible.type, collectible.x, collectible.y);
+    });
 
     const playerTexture =
       this.character === "madeline"
         ? "madeline-idle-sheet"
         : "makena-idle-sheet";
 
-    this.player =
-      this.physics.add.sprite(
-        levelConfig.playerStart.x,
-        levelConfig.playerStart.y,
-        playerTexture,
-        0
-      );
-
-    const playerBody =
-      this.player.body as Phaser.Physics.Arcade.Body;
-
-    playerBody.setSize(
-      32,
-      30
+    this.player = this.physics.add.sprite(
+      levelConfig.playerStart.x,
+      levelConfig.playerStart.y,
+      playerTexture,
+      0,
     );
 
-    playerBody.setOffset(
-      8,
-      8
-    );
+    const playerBody = this.player.body as Phaser.Physics.Arcade.Body;
 
-    this.player.play(
-      this.getIdleAnimation()
-    );
+    playerBody.setSize(32, 30);
 
-    this.player.setCollideWorldBounds(
-      true
-    );
+    playerBody.setOffset(8, 8);
 
-    this.physics.add.collider(
-      this.player,
-      ground
-    );
+    this.player.play(this.getIdleAnimation());
 
-    this.physics.add.collider(
-      this.player,
-      platforms
-    );
+    this.player.setCollideWorldBounds(true);
 
-    this.cursors =
-      this.input.keyboard!.createCursorKeys();
+    this.physics.add.collider(this.player, ground);
+
+    this.physics.add.collider(this.player, platforms);
+
+    this.cursors = this.input.keyboard!.createCursorKeys();
 
     this.createHearts();
     this.createScore();
@@ -352,52 +267,33 @@ export class GameScene extends Phaser.Scene {
       this.player,
       enemies,
 
-      (
-        _playerObject: any,
-        enemyObject: any
-      ) => {
-        const enemy =
-          enemyObject.gameObject ??
-          enemyObject;
+      (_playerObject: any, enemyObject: any) => {
+        const enemy = enemyObject.gameObject ?? enemyObject;
 
-        this.handleEnemyCollision(
-          enemy
-        );
+        this.handleEnemyCollision(enemy);
       },
 
       undefined,
 
-      this
+      this,
     );
 
     this.physics.add.overlap(
       this.player,
       this.collectibles,
 
-      (
-        _playerObject: any,
-        collectibleObject: any
-      ) => {
-        const collectible =
-          collectibleObject.gameObject ??
-          collectibleObject;
+      (_playerObject: any, collectibleObject: any) => {
+        const collectible = collectibleObject.gameObject ?? collectibleObject;
 
-        this.collectCollectible(
-          collectible
-        );
+        this.collectCollectible(collectible);
       },
 
       undefined,
 
-      this
+      this,
     );
 
-    this.cameras.main.startFollow(
-      this.player,
-      true,
-      0.08,
-      0.08
-    );
+    this.cameras.main.startFollow(this.player, true, 0.08, 0.08);
   }
 
   private createGround(
@@ -405,42 +301,29 @@ export class GameScene extends Phaser.Scene {
     y: number,
     width: number,
     height: number,
-    ground: Phaser.Physics.Arcade.StaticGroup
+    ground: Phaser.Physics.Arcade.StaticGroup,
   ) {
+    const physicsGround = ground.create(
+      x,
+      y,
+      "level-ground",
+    ) as Phaser.Physics.Arcade.Sprite;
 
-    const physicsGround =
-      ground.create(
-        x,
-        y,
-        "level-ground"
-      ) as Phaser.Physics.Arcade.Sprite;
+    physicsGround.setVisible(false);
 
-    physicsGround.setVisible(
-      false
-    );
+    const body = physicsGround.body as Phaser.Physics.Arcade.StaticBody;
 
-    const body =
-      physicsGround.body as Phaser.Physics.Arcade.StaticBody;
+    body.setSize(width, height, true);
 
-    body.setSize(
+    const groundVisual = this.add.tileSprite(
+      x,
+      y,
       width,
       height,
-      true
+      "level-ground",
     );
 
-    const groundVisual =
-      this.add.tileSprite(
-        x,
-        y,
-        width,
-        height,
-        "level-ground"
-      );
-
-    groundVisual.setTileScale(
-      1,
-      height / 80
-    );
+    groundVisual.setTileScale(1, height / 80);
 
     groundVisual.setDepth(0);
   }
@@ -450,42 +333,29 @@ export class GameScene extends Phaser.Scene {
     y: number,
     width: number,
     height: number,
-    platforms: Phaser.Physics.Arcade.StaticGroup
+    platforms: Phaser.Physics.Arcade.StaticGroup,
   ) {
+    const physicsPlatform = platforms.create(
+      x,
+      y,
+      "level-platform",
+    ) as Phaser.Physics.Arcade.Sprite;
 
-    const physicsPlatform =
-      platforms.create(
-        x,
-        y,
-        "level-platform"
-      ) as Phaser.Physics.Arcade.Sprite;
+    physicsPlatform.setVisible(false);
 
-    physicsPlatform.setVisible(
-      false
-    );
+    const body = physicsPlatform.body as Phaser.Physics.Arcade.StaticBody;
 
-    const body =
-      physicsPlatform.body as Phaser.Physics.Arcade.StaticBody;
+    body.setSize(width, height, true);
 
-    body.setSize(
+    const platformVisual = this.add.tileSprite(
+      x,
+      y,
       width,
       height,
-      true
+      "level-platform",
     );
 
-    const platformVisual =
-      this.add.tileSprite(
-        x,
-        y,
-        width,
-        height,
-        "level-platform"
-      );
-
-    platformVisual.setTileScale(
-      1,
-      height / 48
-    );
+    platformVisual.setTileScale(1, height / 48);
 
     platformVisual.setDepth(0);
   }
@@ -494,54 +364,40 @@ export class GameScene extends Phaser.Scene {
     type: string,
     x: number,
     y: number,
-    enemies: Phaser.Physics.Arcade.StaticGroup
+    enemies: Phaser.Physics.Arcade.StaticGroup,
   ) {
     switch (type) {
-
       case "esporotricose": {
-        const enemy =
-          enemies.create(
-            x,
-            y,
-            "esporotricose-idle-sheet",
-            0
-          ) as Phaser.Physics.Arcade.Sprite;
+        const enemy = enemies.create(
+          x,
+          y,
+          "esporotricose-idle-sheet",
+          0,
+        ) as Phaser.Physics.Arcade.Sprite;
 
-        enemy.play(
-          "esporotricose-idle"
-        );
+        enemy.play("esporotricose-idle");
 
         return enemy;
       }
 
       default:
-        console.warn(
-          `⚠️ Tipo de inimigo desconhecido: ${type}`
-        );
+        console.warn(`⚠️ Tipo de inimigo desconhecido: ${type}`);
 
         return null;
     }
   }
 
-  private createCollectible(
-    type: string,
-    x: number,
-    y: number
-  ) {
+  private createCollectible(type: string, x: number, y: number) {
     switch (type) {
-
       case "coin": {
-        const coin =
-          this.collectibles.create(
-            x,
-            y,
-            "coin",
-            0
-          ) as Phaser.Physics.Arcade.Sprite;
+        const coin = this.collectibles.create(
+          x,
+          y,
+          "coin",
+          0,
+        ) as Phaser.Physics.Arcade.Sprite;
 
-        coin.play(
-          "coin-idle"
-        );
+        coin.play("coin-idle");
 
         coin.setDepth(1);
 
@@ -549,82 +405,57 @@ export class GameScene extends Phaser.Scene {
       }
 
       default:
-        console.warn(
-          `⚠️ Tipo de coletável desconhecido: ${type}`
-        );
+        console.warn(`⚠️ Tipo de coletável desconhecido: ${type}`);
 
         return null;
     }
   }
 
-  private collectCollectible(
-    collectible: Phaser.Physics.Arcade.Sprite
-  ) {
-    if (
-      !collectible.active
-    ) {
+  private collectCollectible(collectible: Phaser.Physics.Arcade.Sprite) {
+    if (!collectible.active) {
       return;
     }
 
     collectible.destroy();
 
-    this.addScore(
-      this.collectibleScore
-    );
+    this.addScore(this.collectibleScore);
 
-    console.log(
-      `🪙 Moeda coletada! +${this.collectibleScore} pontos.`
-    );
+    console.log(`🪙 Moeda coletada! +${this.collectibleScore} pontos.`);
   }
 
   private createScore() {
-    this.scoreText =
-      this.add.text(
-        1120,
-        10,
-        "PONTOS: 0",
-        {
-          fontSize: "24px",
-          fontFamily: "Pixelify",
-          color: "#ffffff",
-          stroke: "#000000",
-          strokeThickness: 4,
-          letterSpacing: 1,
-  
-          shadow: {
-            offsetX: 2,
-            offsetY: 2,
-            color: "#000000",
-            blur: 0,
-            stroke: true,
-            fill: true,
-          },
-        }
-      );
-  
+    this.scoreText = this.add.text(1120, 10, "PONTOS: 0", {
+      fontSize: "24px",
+      fontFamily: "Pixelify",
+      color: "#ffffff",
+      stroke: "#000000",
+      strokeThickness: 4,
+      letterSpacing: 1,
+
+      shadow: {
+        offsetX: 2,
+        offsetY: 2,
+        color: "#000000",
+        blur: 0,
+        stroke: true,
+        fill: true,
+      },
+    });
+
     this.scoreText.setScrollFactor(0);
-  
+
     this.scoreText.setDepth(1000);
   }
 
-  private addScore(
-    points: number
-  ) {
+  private addScore(points: number) {
     this.score += points;
 
-    this.scoreText.setText(
-      `PONTOS: ${this.score}`
-    );
+    this.scoreText.setText(`PONTOS: ${this.score}`);
   }
 
   update() {
-
-    if (
-      this.player.y > 780
-    ) {
-      console.log(
-        "🕳️ A gata caiu no buraco!"
-      );
+    if (this.player.y > 780) {
+      console.log("🕳️ A gata caiu no buraco!");
 
       this.playerDeath();
 
@@ -633,43 +464,20 @@ export class GameScene extends Phaser.Scene {
 
     const speed = 250;
 
-    if (
-      this.cursors.left.isDown
-    ) {
-      this.player.setVelocityX(
-        -speed
-      );
+    if (this.cursors.left.isDown) {
+      this.player.setVelocityX(-speed);
 
-      this.player.setFlipX(
-        true
-      );
+      this.player.setFlipX(true);
+    } else if (this.cursors.right.isDown) {
+      this.player.setVelocityX(speed);
+
+      this.player.setFlipX(false);
+    } else {
+      this.player.setVelocityX(0);
     }
 
-    else if (
-      this.cursors.right.isDown
-    ) {
-      this.player.setVelocityX(
-        speed
-      );
-
-      this.player.setFlipX(
-        false
-      );
-    }
-
-    else {
-      this.player.setVelocityX(
-        0
-      );
-    }
-
-    if (
-      this.cursors.up.isDown &&
-      this.player.body!.blocked.down
-    ) {
-      this.player.setVelocityY(
-        -550
-      );
+    if (this.cursors.up.isDown && this.player.body!.blocked.down) {
+      this.player.setVelocityY(-550);
     }
 
     this.updatePlayerState();
@@ -677,21 +485,14 @@ export class GameScene extends Phaser.Scene {
   }
 
   private createPlayerAnimations() {
-
-    if (
-      this.character === "madeline"
-    ) {
+    if (this.character === "madeline") {
       this.anims.create({
         key: "madeline-idle",
 
-        frames:
-          this.anims.generateFrameNumbers(
-            "madeline-idle-sheet",
-            {
-              start: 0,
-              end: 3,
-            }
-          ),
+        frames: this.anims.generateFrameNumbers("madeline-idle-sheet", {
+          start: 0,
+          end: 3,
+        }),
 
         frameRate: 4,
 
@@ -701,14 +502,10 @@ export class GameScene extends Phaser.Scene {
       this.anims.create({
         key: "madeline-run",
 
-        frames:
-          this.anims.generateFrameNumbers(
-            "madeline-run-sheet",
-            {
-              start: 0,
-              end: 3,
-            }
-          ),
+        frames: this.anims.generateFrameNumbers("madeline-run-sheet", {
+          start: 0,
+          end: 3,
+        }),
 
         frameRate: 10,
 
@@ -718,14 +515,10 @@ export class GameScene extends Phaser.Scene {
       this.anims.create({
         key: "madeline-jump",
 
-        frames:
-          this.anims.generateFrameNumbers(
-            "madeline-jump-sheet",
-            {
-              start: 0,
-              end: 3,
-            }
-          ),
+        frames: this.anims.generateFrameNumbers("madeline-jump-sheet", {
+          start: 0,
+          end: 3,
+        }),
 
         frameRate: 8,
 
@@ -738,143 +531,109 @@ export class GameScene extends Phaser.Scene {
     this.anims.create({
       key: "makena-idle",
 
-      frames:
-        this.anims.generateFrameNumbers(
-          "makena-idle-sheet",
-          {
-            start: 0,
-            end: 3,
-          }
-        ),
+      frames: this.anims.generateFrameNumbers("makena-idle-sheet", {
+        start: 0,
+        end: 3,
+      }),
 
       frameRate: 4,
 
       repeat: -1,
     });
+
+    this.anims.create({
+      key: "makena-run",
+
+      frames: this.anims.generateFrameNumbers("makena-run-sheet", {
+        start: 0,
+        end: 3,
+      }),
+
+      frameRate: 10,
+
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "makena-jump",
+
+      frames: this.anims.generateFrameNumbers("makena-jump-sheet", {
+        start: 0,
+        end: 3,
+      }),
+
+      frameRate: 8,
+
+      repeat: 0,
+    });
   }
 
   private getIdleAnimation() {
-    return this.character === "madeline"
-      ? "madeline-idle"
-      : "makena-idle";
+    return this.character === "madeline" ? "madeline-idle" : "makena-idle";
   }
 
   private getRunAnimation() {
-    return this.character === "madeline"
-      ? "madeline-run"
-      : "makena-idle";
+    return this.character === "madeline" ? "madeline-run" : "makena-run";
   }
 
   private getJumpAnimation() {
-    return this.character === "madeline"
-      ? "madeline-jump"
-      : "makena-idle";
+    return this.character === "madeline" ? "madeline-jump" : "makena-jump";
   }
 
   private createHearts() {
     this.heartSprites = [];
 
-    for (
-      let i = 0;
-      i < this.maxHearts;
-      i++
-    ) {
-      const heart =
-        this.add.sprite(
-          28 + i * 48,
-          28,
-          "hearts-sheet",
-          0
-        );
+    for (let i = 0; i < this.maxHearts; i++) {
+      const heart = this.add.sprite(28 + i * 48, 28, "hearts-sheet", 0);
 
-      heart.setScrollFactor(
-        0
-      );
+      heart.setScrollFactor(0);
 
-      heart.setDepth(
-        1000
-      );
+      heart.setDepth(1000);
 
-      this.heartSprites.push(
-        heart
-      );
+      this.heartSprites.push(heart);
     }
 
     this.updateHeartsDisplay();
   }
 
   private updateHeartsDisplay() {
-    for (
-      let i = 0;
-      i < this.heartSprites.length;
-      i++
-    ) {
-      if (
-        i < this.hearts
-      ) {
-        this.heartSprites[
-          i
-        ].setFrame(0);
-      }
-
-      else {
-        this.heartSprites[
-          i
-        ].setFrame(1);
+    for (let i = 0; i < this.heartSprites.length; i++) {
+      if (i < this.hearts) {
+        this.heartSprites[i].setFrame(0);
+      } else {
+        this.heartSprites[i].setFrame(1);
       }
     }
   }
 
-  private handleEnemyCollision(
-    enemy: Phaser.Physics.Arcade.Sprite
-  ) {
-    if (
-      !enemy.active
-    ) {
+  private handleEnemyCollision(enemy: Phaser.Physics.Arcade.Sprite) {
+    if (!enemy.active) {
       return;
     }
 
-    if (
-      this.isInvulnerable
-    ) {
+    if (this.isInvulnerable) {
       return;
     }
 
-    const body =
-      this.player.body as Phaser.Physics.Arcade.Body;
+    const body = this.player.body as Phaser.Physics.Arcade.Body;
 
-    if (
-      body.velocity.y > 0 &&
-      this.player.y < enemy.y
-    ) {
+    if (body.velocity.y > 0 && this.player.y < enemy.y) {
       enemy.destroy();
 
-      this.addScore(
-        10
-      );
+      this.addScore(10);
 
-      this.player.setVelocityY(
-        -350
-      );
+      this.player.setVelocityY(-350);
 
-      console.log(
-        "💥 Esporotricose derrotada! +10 pontos."
-      );
+      console.log("💥 Esporotricose derrotada! +10 pontos.");
 
       return;
     }
 
-    this.takeDamage(
-      enemy
-    );
+    this.takeDamage(enemy);
   }
 
-  private takeDamage(
-    enemy: Phaser.Physics.Arcade.Sprite
-  ) {
-    if (
-      this.isInvulnerable
-    ) {
+  private takeDamage(enemy: Phaser.Physics.Arcade.Sprite) {
+    if (this.isInvulnerable) {
       return;
     }
 
@@ -883,12 +642,10 @@ export class GameScene extends Phaser.Scene {
     this.updateHeartsDisplay();
 
     console.log(
-      `💔 ${this.character} perdeu um coração! Restam ${this.hearts}.`
+      `💔 ${this.character} perdeu um coração! Restam ${this.hearts}.`,
     );
 
-    if (
-      this.hearts <= 0
-    ) {
+    if (this.hearts <= 0) {
       this.playerDeath();
 
       return;
@@ -896,23 +653,13 @@ export class GameScene extends Phaser.Scene {
 
     this.isInvulnerable = true;
 
-    if (
-      this.player.x < enemy.x
-    ) {
-      this.player.setVelocityX(
-        -300
-      );
+    if (this.player.x < enemy.x) {
+      this.player.setVelocityX(-300);
+    } else {
+      this.player.setVelocityX(300);
     }
 
-    else {
-      this.player.setVelocityX(
-        300
-      );
-    }
-
-    this.player.setVelocityY(
-      -200
-    );
+    this.player.setVelocityY(-200);
 
     this.tweens.add({
       targets: this.player,
@@ -922,126 +669,78 @@ export class GameScene extends Phaser.Scene {
       repeat: 5,
     });
 
-    this.time.delayedCall(
-      1000,
-      () => {
-        this.isInvulnerable =
-          false;
+    this.time.delayedCall(1000, () => {
+      this.isInvulnerable = false;
 
-        this.player.setAlpha(
-          1
-        );
-      }
-    );
+      this.player.setAlpha(1);
+    });
   }
 
   private playerDeath() {
-    console.log(
-      `💀 ${this.character} morreu!`
-    );
+    console.log(`💀 ${this.character} morreu!`);
 
-    this.player.setVelocity(
-      0,
-      0
-    );
+    this.player.setVelocity(0, 0);
 
-    this.player.setTint(
-      0xff0000
-    );
+    this.player.setTint(0xff0000);
 
-    this.time.delayedCall(
-      500,
-      () => {
-        this.scene.restart({
-          character:
-            this.character,
+    this.time.delayedCall(500, () => {
+      this.scene.restart({
+        character: this.character,
 
-          level:
-            this.level,
-        });
-      }
-    );
+        level: this.level,
+      });
+    });
   }
 
   private updatePlayerState() {
-    const body =
-      this.player.body as Phaser.Physics.Arcade.Body;
+    const body = this.player.body as Phaser.Physics.Arcade.Body;
 
-    if (
-      !body.blocked.down
-    ) {
-      if (
-        body.velocity.y < 0
-      ) {
-        this.playerState =
-          "jump";
-      }
-
-      else {
-        this.playerState =
-          "fall";
+    if (!body.blocked.down) {
+      if (body.velocity.y < 0) {
+        this.playerState = "jump";
+      } else {
+        this.playerState = "fall";
       }
 
       return;
     }
 
-    if (
-      body.velocity.x !== 0
-    ) {
-      this.playerState =
-        "walk";
+    if (body.velocity.x !== 0) {
+      this.playerState = "walk";
 
       return;
     }
 
-    this.playerState =
-      "idle";
+    this.playerState = "idle";
   }
 
   private updatePlayerAnimation() {
-    switch (
-      this.playerState
-    ) {
+    switch (this.playerState) {
       case "walk":
-        this.playAnimation(
-          this.getRunAnimation()
-        );
+        this.playAnimation(this.getRunAnimation());
 
         break;
 
       case "idle":
-        this.playAnimation(
-          this.getIdleAnimation()
-        );
+        this.playAnimation(this.getIdleAnimation());
 
         break;
 
       case "jump":
-        this.playAnimation(
-          this.getJumpAnimation()
-        );
+        this.playAnimation(this.getJumpAnimation());
 
         break;
 
       case "fall":
-        this.playAnimation(
-          this.getJumpAnimation()
-        );
+        this.playAnimation(this.getJumpAnimation());
 
         break;
     }
   }
 
-  private playAnimation(
-    animationKey: string
-  ) {
-    if (
-      this.player.anims.currentAnim
-        ?.key !== animationKey
-    ) {
-      this.player.play(
-        animationKey
-      );
+  private playAnimation(animationKey: string) {
+    if (this.player.anims.currentAnim?.key !== animationKey) {
+      this.player.play(animationKey);
     }
   }
 }
