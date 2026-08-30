@@ -21,6 +21,10 @@ function App() {
       parent: gameRef.current,
     
       backgroundColor: '#1b1630',
+
+      input: {
+        gamepad: true,
+      },
     
       physics: {
         default: 'arcade',

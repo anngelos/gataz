@@ -8,6 +8,7 @@ type PlayerState = "idle" | "walk" | "jump" | "fall";
 export class GameScene extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite;
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
+  private jumpKey!: Phaser.Input.Keyboard.Key;
   private playerState: PlayerState = "idle";
   private character: Character = "madeline";
   private level = 1;
@@ -290,6 +291,9 @@ export class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.player, ground);
     this.physics.add.collider(this.player, platforms);
     this.cursors = this.input.keyboard!.createCursorKeys();
+    this.jumpKey = this.input.keyboard!.addKey(
+      Phaser.Input.Keyboard.KeyCodes.SPACE,
+    );
     this.createHearts();
     this.createScore();
 
@@ -386,6 +390,16 @@ export class GameScene extends Phaser.Scene {
 
     platformVisual.setTileScale(1, height / 48);
     platformVisual.setDepth(0);
+  }
+
+  private getConnectedGamepad(): globalThis.Gamepad | undefined {
+    if (!navigator.getGamepads) {
+      return undefined;
+    }
+
+    return Array.from(navigator.getGamepads()).find(
+      (gamepad): gamepad is globalThis.Gamepad => gamepad !== null,
+    );
   }
 
   private createEnemy(
@@ -505,12 +519,23 @@ export class GameScene extends Phaser.Scene {
     }
 
     const speed = 250;
+    const phaserGamepad = this.input.gamepad?.getAll()[0];
+    const nativeGamepad = this.getConnectedGamepad();
+    const leftButton = Phaser.Input.Gamepad.Configs.XBOX_360.LEFT;
+    const rightButton = Phaser.Input.Gamepad.Configs.XBOX_360.RIGHT;
+    const actionButton = Phaser.Input.Gamepad.Configs.XBOX_360.A;
+    const isGamepadButtonDown = (buttonIndex: number) =>
+      Boolean(
+        phaserGamepad?.buttons[buttonIndex]?.pressed ||
+          nativeGamepad?.buttons[buttonIndex]?.pressed ||
+          (nativeGamepad?.buttons[buttonIndex]?.value ?? 0) > 0.5,
+      );
 
-    if (this.cursors.left.isDown) {
+    if (this.cursors.left.isDown || isGamepadButtonDown(leftButton)) {
       this.player.setVelocityX(-speed);
 
       this.player.setFlipX(true);
-    } else if (this.cursors.right.isDown) {
+    } else if (this.cursors.right.isDown || isGamepadButtonDown(rightButton)) {
       this.player.setVelocityX(speed);
 
       this.player.setFlipX(false);
@@ -518,7 +543,10 @@ export class GameScene extends Phaser.Scene {
       this.player.setVelocityX(0);
     }
 
-    if (this.cursors.up.isDown && this.player.body!.blocked.down) {
+    if (
+      (this.jumpKey.isDown || isGamepadButtonDown(actionButton)) &&
+      this.player.body!.blocked.down
+    ) {
       this.player.setVelocityY(-550);
     }
 
