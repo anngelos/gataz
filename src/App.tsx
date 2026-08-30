@@ -4,6 +4,7 @@ import { GameScene } from './game/GameScene';
 import { MenuScene } from './game/MenuScene';
 import { CharacterSelectScene } from './game/CharacterSelectScene';
 import { AboutScene } from './game/AboutScene';
+import { LevelCompleteScene } from './game/LevelCompleteScene';
 
 function App() {
   const gameRef = useRef<HTMLDivElement>(null);
@@ -39,6 +40,7 @@ function App() {
         AboutScene,
         CharacterSelectScene,
         GameScene,
+        LevelCompleteScene,
       ],
     });
 
