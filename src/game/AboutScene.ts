@@ -6,10 +6,6 @@ export class AboutScene extends Phaser.Scene {
   }
 
   preload() {
-    // =========================
-    // FUNDO DO SOBRE
-    // =========================
-
     this.load.image(
       'about-background',
       '/assets/menu/about-background.png'
@@ -17,9 +13,6 @@ export class AboutScene extends Phaser.Scene {
   }
 
   create() {
-    // =========================
-    // FUNDO
-    // =========================
 
     const background = this.add.image(
       640,
@@ -33,10 +26,6 @@ export class AboutScene extends Phaser.Scene {
     );
 
     background.setDepth(-1);
-
-    // =========================
-    // TÍTULO
-    // =========================
 
     this.add.text(
       640,
@@ -52,10 +41,6 @@ export class AboutScene extends Phaser.Scene {
       }
     ).setOrigin(0.5);
 
-    // =========================
-    // NOME DO JOGO
-    // =========================
-
     this.add.text(
       640,
       190,
@@ -67,10 +52,6 @@ export class AboutScene extends Phaser.Scene {
         color: '#ffb347',
       }
     ).setOrigin(0.5);
-
-    // =========================
-    // DESCRIÇÃO
-    // =========================
 
     this.add.text(
       640,
@@ -87,10 +68,6 @@ export class AboutScene extends Phaser.Scene {
       }
     ).setOrigin(0.5);
 
-    // =========================
-    // FRASE
-    // =========================
-
     this.add.text(
       640,
       425,
@@ -106,10 +83,6 @@ export class AboutScene extends Phaser.Scene {
       }
     ).setOrigin(0.5);
 
-    // =========================
-    // BOA AVENTURA
-    // =========================
-
     this.add.text(
       640,
       520,
@@ -122,10 +95,6 @@ export class AboutScene extends Phaser.Scene {
       }
     ).setOrigin(0.5);
 
-    // =========================
-    // CRÉDITO
-    // =========================
-
     this.add.text(
       640,
       570,
@@ -137,29 +106,21 @@ export class AboutScene extends Phaser.Scene {
       }
     ).setOrigin(0.5);
 
-    // ==================================================
-    // BOTÃO VOLTAR
-    // ==================================================
-
-    const voltarVisual =
+    const backVisual =
       this.add.container(
         640,
         650
       );
 
-    // =========================
-    // FUNDO DO BOTÃO
-    // =========================
-
-    const voltarBackground =
+    const backBackground =
       this.add.graphics();
 
-    voltarBackground.fillStyle(
+    backBackground.fillStyle(
       0x7b4ab5,
       1
     );
 
-    voltarBackground.fillRoundedRect(
+    backBackground.fillRoundedRect(
       -100,
       -28,
       200,
@@ -167,27 +128,19 @@ export class AboutScene extends Phaser.Scene {
       8
     );
 
-    // =========================
-    // BORDA BRANCA
-    // =========================
-
-    voltarBackground.lineStyle(
+    backBackground.lineStyle(
       3,
       0xffffff,
       1
     );
 
-    voltarBackground.strokeRoundedRect(
+    backBackground.strokeRoundedRect(
       -100,
       -28,
       200,
       56,
       8
     );
-
-    // =========================
-    // TEXTO
-    // =========================
 
     const voltarText =
       this.add.text(
@@ -202,16 +155,12 @@ export class AboutScene extends Phaser.Scene {
         }
       ).setOrigin(0.5);
 
-    voltarVisual.add([
-      voltarBackground,
+    backVisual.add([
+      backBackground,
       voltarText,
     ]);
 
-    // =========================
-    // ÁREA REAL DO MOUSE
-    // =========================
-
-    const voltarZone =
+    const backZone =
       this.add.zone(
         640,
         650,
@@ -219,33 +168,25 @@ export class AboutScene extends Phaser.Scene {
         56
       );
 
-    voltarZone.setInteractive({
+    backZone.setInteractive({
       useHandCursor: true,
     });
 
-    // =========================
-    // HOVER
-    // =========================
-
-    voltarZone.on(
+    backZone.on(
       'pointerover',
       () => {
-        voltarVisual.setScale(1.08);
+        backVisual.setScale(1.08);
       }
     );
 
-    voltarZone.on(
+    backZone.on(
       'pointerout',
       () => {
-        voltarVisual.setScale(1);
+        backVisual.setScale(1);
       }
     );
 
-    // =========================
-    // CLICOU EM VOLTAR
-    // =========================
-
-    voltarZone.on(
+    backZone.on(
       'pointerdown',
       () => {
         this.scene.start(
