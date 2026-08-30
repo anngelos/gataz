@@ -37,6 +37,12 @@ export type LevelConfig = {
     x: number;
     y: number;
   }[];
+
+  finish: {
+    type: string;
+    x: number;
+    y: number;
+  };
 };
 
 export const levels: Record<number, LevelConfig> = {
@@ -54,6 +60,12 @@ export const levels: Record<number, LevelConfig> = {
     playerStart: {
       x: 130,
       y: 500,
+    },
+
+    finish: {
+      type: "morciga",
+      x: 3900,
+      y: 550,
     },
 
     ground: [

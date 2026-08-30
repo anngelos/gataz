@@ -58,6 +58,15 @@ export class GameScene extends Phaser.Scene {
       frameHeight: 48,
     });
 
+    this.load.spritesheet(
+      "morciga-idle-sheet",
+      "/assets/characters/morciga/morciga-idle.png",
+      {
+        frameWidth: 48,
+        frameHeight: 48,
+      },
+    );
+
     if (this.character === "madeline") {
       this.load.spritesheet(
         "madeline-idle-sheet",
@@ -132,7 +141,6 @@ export class GameScene extends Phaser.Scene {
   }
 
   create() {
-
     AudioManager.stopMusic();
 
     const levelConfig = levels[this.level];
@@ -172,6 +180,18 @@ export class GameScene extends Phaser.Scene {
 
       frameRate: 8,
 
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "morciga-idle",
+
+      frames: this.anims.generateFrameNumbers("morciga-idle-sheet", {
+        start: 0,
+        end: 3,
+      }),
+
+      frameRate: 8,
       repeat: -1,
     });
 
@@ -235,6 +255,25 @@ export class GameScene extends Phaser.Scene {
     collectibles.forEach((collectible) => {
       this.createCollectible(collectible.type, collectible.x, collectible.y);
     });
+
+    let finish: Phaser.Physics.Arcade.Sprite | null = null;
+
+    if (levelConfig.finish.type === "morciga") {
+      finish = this.physics.add.sprite(
+        levelConfig.finish.x,
+        levelConfig.finish.y,
+        "morciga-idle-sheet",
+        0,
+      );
+
+      finish.play("morciga-idle");
+
+      const finishBody = finish.body as Phaser.Physics.Arcade.Body;
+
+      finishBody.setAllowGravity(false);
+      finish.setFlipX(true);
+      finish.setDepth(1);
+    }
 
     const playerTexture =
       this.character === "madeline"
@@ -328,7 +367,6 @@ export class GameScene extends Phaser.Scene {
     );
 
     groundVisual.setTileScale(1, height / 80);
-
     groundVisual.setDepth(0);
   }
 
