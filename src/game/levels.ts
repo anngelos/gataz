@@ -204,8 +204,8 @@ export const levels: Record<number, LevelConfig> = {
 
       {
         type: "coin",
-        x: 1200,
-        y: 470,
+        x: 1550,
+        y: 550,
       },
 
       {
@@ -222,13 +222,13 @@ export const levels: Record<number, LevelConfig> = {
 
       {
         type: "coin",
-        x: 2350,
-        y: 360,
+        x: 2700,
+        y: 460,
       },
 
       {
         type: "coin",
-        x: 2750,
+        x: 2800,
         y: 460,
       },
 
@@ -240,7 +240,7 @@ export const levels: Record<number, LevelConfig> = {
 
       {
         type: "coin",
-        x: 3500,
+        x: 3700,
         y: 460,
       },
     ],
