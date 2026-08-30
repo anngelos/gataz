@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { levels } from "./levels";
+import { AudioManager } from "./AudioManager";
 
 type Character = "madeline" | "makena";
 
@@ -131,6 +132,9 @@ export class GameScene extends Phaser.Scene {
   }
 
   create() {
+
+    AudioManager.stopMusic();
+
     const levelConfig = levels[this.level];
 
     if (!levelConfig) {

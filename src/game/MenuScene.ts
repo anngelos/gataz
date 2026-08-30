@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { AudioManager } from './AudioManager';
 
 export class MenuScene extends Phaser.Scene {
   constructor() {
@@ -12,18 +13,15 @@ export class MenuScene extends Phaser.Scene {
       '/fonts/Pixelify.ttf'
     );
 
-    // =========================
-    // FUNDO DO MENU
-    // =========================
+    this.load.audio(
+      "gataz-menu",
+      "/assets/audio/gataz-menu.mp3"
+    );
 
     this.load.image(
       'gataz-menu-background',
       '/assets/menu/gataz-menu-background.png'
     );
-
-    // =========================
-    // LOGO GATAZ
-    // =========================
 
     this.load.image(
       'gataz-logo',
@@ -33,13 +31,11 @@ export class MenuScene extends Phaser.Scene {
 
   async create() {
 
+    AudioManager.playMenuMusic(this);
+
     await document.fonts.load(
       '400 25px "Pixelify"'
     );
-
-    // =========================
-    // FUNDO
-    // =========================
 
     const background = this.add.image(
       640,
@@ -54,10 +50,6 @@ export class MenuScene extends Phaser.Scene {
 
     background.setDepth(-1);
 
-    // =========================
-    // LOGO GATAZ
-    // =========================
-
     const logo = this.add.image(
       330,
       150,
@@ -68,10 +60,6 @@ export class MenuScene extends Phaser.Scene {
       430,
       185
     );
-
-    // =========================
-    // SUBTÍTULO
-    // =========================
 
     this.add.text(
       330,
@@ -85,10 +73,6 @@ export class MenuScene extends Phaser.Scene {
         strokeThickness: 4,
       }
     ).setOrigin(0.5);
-
-    // ==================================================
-    // BOTÃO JOGAR
-    // ==================================================
 
     const jogarVisual =
       this.add.container(
@@ -144,10 +128,6 @@ export class MenuScene extends Phaser.Scene {
       jogarText,
     ]);
 
-    // =========================
-    // ÁREA REAL DO MOUSE
-    // =========================
-
     const jogarZone =
       this.add.zone(
         330,
@@ -159,10 +139,6 @@ export class MenuScene extends Phaser.Scene {
     jogarZone.setInteractive({
       useHandCursor: true,
     });
-
-    // =========================
-    // HOVER - JOGAR
-    // =========================
 
     jogarZone.on(
       'pointerover',
@@ -178,10 +154,6 @@ export class MenuScene extends Phaser.Scene {
       }
     );
 
-    // =========================
-    // CLICOU EM JOGAR
-    // =========================
-
     jogarZone.on(
       'pointerdown',
       () => {
@@ -194,10 +166,6 @@ export class MenuScene extends Phaser.Scene {
         );
       }
     );
-
-    // ==================================================
-    // BOTÃO SOBRE
-    // ==================================================
 
     const aboutVisual =
       this.add.container(
@@ -253,10 +221,6 @@ export class MenuScene extends Phaser.Scene {
       aboutText,
     ]);
 
-    // =========================
-    // ÁREA REAL DO MOUSE
-    // =========================
-
     const aboutZone =
       this.add.zone(
         330,
@@ -268,10 +232,6 @@ export class MenuScene extends Phaser.Scene {
     aboutZone.setInteractive({
       useHandCursor: true,
     });
-
-    // =========================
-    // HOVER - SOBRE
-    // =========================
 
     aboutZone.on(
       'pointerover',
@@ -286,10 +246,6 @@ export class MenuScene extends Phaser.Scene {
         aboutVisual.setScale(1);
       }
     );
-
-    // =========================
-    // CLICOU EM SOBRE
-    // =========================
 
     aboutZone.on(
       'pointerdown',
