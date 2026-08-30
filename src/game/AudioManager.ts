@@ -6,13 +6,7 @@ export class AudioManager {
   | Phaser.Sound.HTML5AudioSound
   | null = null;
 
-  // ==================================================
-  // MÚSICA DO MENU
-  // ==================================================
-
   static playMenuMusic(scene: Phaser.Scene) {
-    // Se a música já estiver tocando,
-    // não cria outra por cima.
     if (
       this.music &&
       this.music.isPlaying
@@ -28,10 +22,6 @@ export class AudioManager {
     this.music.play();
   }
 
-  // ==================================================
-  // PARAR MÚSICA
-  // ==================================================
-
   static stopMusic() {
     if (!this.music) {
       return;
@@ -43,10 +33,6 @@ export class AudioManager {
 
     this.music = null;
   }
-
-  // ==================================================
-  // VOLUME
-  // ==================================================
 
   static setVolume(
     volume: number
