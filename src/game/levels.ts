@@ -378,7 +378,7 @@ export const levels: Record<number, LevelConfig> = {
 
       {
         x: 3200,
-        y: 530,
+        y: 545,
         width: 220,
         height: 40,
       },
@@ -420,14 +420,14 @@ export const levels: Record<number, LevelConfig> = {
 
       {
         type: "rato",
-        x: 1800,
+        x: 1750,
         y: 488,
       },
 
       {
         type: "rato",
-        x: 2150,
-        y: 388,
+        x: 1850,
+        y: 488,
       },
 
       {
@@ -438,7 +438,7 @@ export const levels: Record<number, LevelConfig> = {
 
       {
         type: "rato",
-        x: 2850,
+        x: 2920,
         y: 408,
       },
 
@@ -450,8 +450,8 @@ export const levels: Record<number, LevelConfig> = {
 
       {
         type: "rato",
-        x: 3550,
-        y: 418,
+        x: 3740,
+        y: 625,
       },
 
       {
@@ -464,14 +464,14 @@ export const levels: Record<number, LevelConfig> = {
     collectibles: [
       {
         type: "coin",
-        x: 750,
-        y: 410,
+        x: 400,
+        y: 490,
       },
 
       {
         type: "coin",
-        x: 1100,
-        y: 490,
+        x: 750,
+        y: 410,
       },
 
       {
@@ -482,8 +482,8 @@ export const levels: Record<number, LevelConfig> = {
 
       {
         type: "coin",
-        x: 1800,
-        y: 460,
+        x: 2150,
+        y: 520,
       },
 
       {
@@ -500,7 +500,7 @@ export const levels: Record<number, LevelConfig> = {
 
       {
         type: "coin",
-        x: 2850,
+        x: 2800,
         y: 380,
       },
 
