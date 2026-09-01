@@ -6,7 +6,7 @@ export class LevelCompleteScene extends Phaser.Scene {
   private level = 1;
   private score = 0;
   private character: Character = "madeline";
-  private canContinue = true;
+  private isLeaving = false;
 
   constructor() {
     super("LevelCompleteScene");
@@ -20,6 +20,7 @@ export class LevelCompleteScene extends Phaser.Scene {
     this.level = data.level ?? 1;
     this.score = data.score ?? 0;
     this.character = data.character ?? "madeline";
+    this.isLeaving = false;
   }
 
   preload() {
@@ -264,20 +265,24 @@ export class LevelCompleteScene extends Phaser.Scene {
   }
 
   private continueGame() {
-    if (!this.canContinue) {
+    const nextLevel = this.level + 1;
+    
+    if (this.isLeaving) {
       return;
     }
   
-    this.canContinue = false;
-    const nextLevel = this.level + 1;
+    this.isLeaving = true;
+
+    console.log(
+      `▶️ Continuando após a fase ${this.level}`
+    );
+
   
-    console.log(`▶️ Indo para a fase ${nextLevel}`);
     console.log(`Personagem: ${this.character}`);
+    
     console.log(`Fase: ${nextLevel}`);
   
-    this.scene.start(
-      "GameScene",
-      {
+    this.scene.start("GameScene", {
         character: this.character,
         level: nextLevel,
       }
@@ -285,18 +290,14 @@ export class LevelCompleteScene extends Phaser.Scene {
   }
 
   private goToMainMenu() {
-    if (!this.canContinue) {
+    if (this.isLeaving) {
       return;
     }
 
-    this.canContinue = false;
+    this.isLeaving = true;
 
-    console.log(
-      "🏠 Voltando para o menu principal."
-    );
+    console.log("🏠 Voltando para o menu principal.");
 
-    this.scene.start(
-      "MenuScene"
-    );
+    this.scene.start("MenuScene");
   }
 }
