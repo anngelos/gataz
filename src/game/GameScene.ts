@@ -44,7 +44,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     this.load.image(`level-background-${this.level}`, levelConfig.background);
-    this.load.image("level-platform", levelConfig.platformTexture);
+    this.load.image(`level-platform-${this.level}`, levelConfig.platformTexture);
     this.load.image(`level-ground-${this.level}`, levelConfig.groundTexture);
 
     this.load.spritesheet("coin", "/assets/collectible/coin.png", {
@@ -119,14 +119,40 @@ export class GameScene extends Phaser.Scene {
       );
     }
 
-    this.load.spritesheet(
-      "esporotricose-idle-sheet",
-      "/assets/characters/enemies/esporotricose/esporotricose-idle.png",
-      {
-        frameWidth: 48,
-        frameHeight: 48,
-      },
-    );
+    const enemyTypes = [
+      ...new Set(levelConfig.enemies.map((enemy) => enemy.type)),
+    ];
+    
+    enemyTypes.forEach((type) => {
+      switch (type) {
+        case "esporotricose":
+          this.load.spritesheet(
+            "enemy-esporotricose-idle-sheet",
+            "/assets/characters/enemies/esporotricose/esporotricose-idle.png",
+            {
+              frameWidth: 48,
+              frameHeight: 48,
+            },
+          );
+          break;
+    
+        case "rato":
+          this.load.spritesheet(
+            "enemy-rato-idle-sheet",
+            "/assets/characters/enemies/rat/rat-idle.png",
+            {
+              frameWidth: 48,
+              frameHeight: 48,
+            },
+          );
+          break;
+    
+        default:
+          console.warn(
+            `⚠️ Tipo de inimigo desconhecido: ${type}`,
+          );
+      }
+    });
 
     this.load.spritesheet("hearts-sheet", "/assets/ui/hearts.png", {
       frameWidth: 48,
@@ -147,20 +173,45 @@ export class GameScene extends Phaser.Scene {
 
     this.hearts = this.maxHearts;
     this.isInvulnerable = false;
-    // this.score = 0;
     this.levelCompleted = false;
     this.createPlayerAnimations();
 
-    this.anims.create({
-      key: "esporotricose-idle",
-
-      frames: this.anims.generateFrameNumbers("esporotricose-idle-sheet", {
-        start: 0,
-        end: 3,
-      }),
-
-      frameRate: 4,
-      repeat: -1,
+    const enemyTypes = [
+      ...new Set(levelConfig.enemies.map((enemy) => enemy.type)),
+    ];
+    
+    enemyTypes.forEach((type) => {
+      switch (type) {
+        case "esporotricose":
+          this.anims.create({
+            key: "enemy-esporotricose-idle",
+            frames: this.anims.generateFrameNumbers(
+              "enemy-esporotricose-idle-sheet",
+              {
+                start: 0,
+                end: 3,
+              },
+            ),
+            frameRate: 4,
+            repeat: -1,
+          });
+          break;
+    
+        case "rato":
+          this.anims.create({
+            key: "enemy-rato-idle",
+            frames: this.anims.generateFrameNumbers(
+              "enemy-rato-idle-sheet",
+              {
+                start: 0,
+                end: 3,
+              },
+            ),
+            frameRate: 2,
+            repeat: -1,
+          });
+          break;
+      }
     });
 
     this.anims.create({
@@ -369,18 +420,21 @@ export class GameScene extends Phaser.Scene {
     const physicsPlatform = platforms.create(
       x,
       y,
-      "level-platform",
+      `level-platform-${this.level}`,
     ) as Phaser.Physics.Arcade.Sprite;
 
     physicsPlatform.setVisible(false);
+    
     const body = physicsPlatform.body as Phaser.Physics.Arcade.StaticBody;
+    
     body.setSize(width, height, true);
+    
     const platformVisual = this.add.tileSprite(
       x,
       y,
       width,
       height,
-      "level-platform",
+      `level-platform-${this.level}`,
     );
 
     platformVisual.setTileScale(1, height / 48);
@@ -408,16 +462,34 @@ export class GameScene extends Phaser.Scene {
         const enemy = enemies.create(
           x,
           y,
-          "esporotricose-idle-sheet",
+          "enemy-esporotricose-idle-sheet",
           0,
         ) as Phaser.Physics.Arcade.Sprite;
-
-        enemy.play("esporotricose-idle");
+  
+        enemy.play("enemy-esporotricose-idle");
+  
         return enemy;
       }
-
+  
+      case "rato": {
+        const enemy = enemies.create(
+          x,
+          y,
+          "enemy-rato-idle-sheet",
+          0,
+        ) as Phaser.Physics.Arcade.Sprite;
+  
+        enemy.play("enemy-rato-idle");
+        enemy.setFlipX(true);
+  
+        return enemy;
+      }
+  
       default:
-        console.warn(`⚠️ Tipo de inimigo desconhecido: ${type}`);
+        console.warn(
+          `⚠️ Tipo de inimigo desconhecido: ${type}`,
+        );
+  
         return null;
     }
   }

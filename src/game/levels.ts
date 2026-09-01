@@ -267,7 +267,7 @@ export const levels: Record<number, LevelConfig> = {
 
     background: "/assets/levels/level-2/level-2-background.png",
 
-    platformTexture: "/assets/levels/level-1/level-1-grass-platform.png",
+    platformTexture: "/assets/levels/level-2/level-2-dirt-platform.png",
 
     groundTexture: "/assets/levels/level-2/level-2-ground.png",
 
@@ -284,7 +284,7 @@ export const levels: Record<number, LevelConfig> = {
 
     ground: [
       {
-        x: 450, // 500
+        x: 450,
         y: 680,
         width: 900,
         height: 80,
@@ -407,55 +407,55 @@ export const levels: Record<number, LevelConfig> = {
 
     enemies: [
       {
-        type: "esporotricose",
+        type: "rato",
         x: 650,
         y: 625,
       },
 
       {
-        type: "esporotricose",
+        type: "rato",
         x: 1100,
         y: 518,
       },
 
       {
-        type: "esporotricose",
+        type: "rato",
         x: 1800,
         y: 488,
       },
 
       {
-        type: "esporotricose",
+        type: "rato",
         x: 2150,
         y: 388,
       },
 
       {
-        type: "esporotricose",
+        type: "rato",
         x: 2600,
         y: 625,
       },
 
       {
-        type: "esporotricose",
+        type: "rato",
         x: 2850,
         y: 408,
       },
 
       {
-        type: "esporotricose",
+        type: "rato",
         x: 3350,
         y: 625,
       },
 
       {
-        type: "esporotricose",
+        type: "rato",
         x: 3550,
         y: 418,
       },
 
       {
-        type: "esporotricose",
+        type: "rato",
         x: 4050,
         y: 625,
       },
