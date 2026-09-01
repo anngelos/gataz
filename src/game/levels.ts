@@ -7,6 +7,8 @@ export type LevelConfig = {
 
   platformTexture: string;
 
+  groundTexture: string;
+
   playerStart: {
     x: number;
     y: number;
@@ -51,11 +53,11 @@ export const levels: Record<number, LevelConfig> = {
 
     width: 4000,
 
-    background:
-      "/assets/levels/level-1/level-1-background.png",
+    background: "/assets/levels/level-1/level-1-background.png",
 
-    platformTexture:
-      "/assets/levels/level-1/level-1-grass-platform.png",
+    platformTexture: "/assets/levels/level-1/level-1-grass-platform.png",
+
+    groundTexture: "/assets/levels/level-1/level-1-ground.png",
 
     playerStart: {
       x: 130,
@@ -263,13 +265,11 @@ export const levels: Record<number, LevelConfig> = {
 
     width: 5000,
 
-    // TEMPORARIAMENTE usamos os assets da fase 1.
-    // Depois criamos os assets próprios da fase 2.
-    background:
-      "/assets/levels/level-1/level-1-background.png",
+    background: "/assets/levels/level-2/level-2-background.png",
 
-    platformTexture:
-      "/assets/levels/level-1/level-1-grass-platform.png",
+    platformTexture: "/assets/levels/level-1/level-1-grass-platform.png",
+
+    groundTexture: "/assets/levels/level-2/level-2-ground.png",
 
     playerStart: {
       x: 130,
@@ -284,7 +284,7 @@ export const levels: Record<number, LevelConfig> = {
 
     ground: [
       {
-        x: 500,
+        x: 450, // 500
         y: 680,
         width: 900,
         height: 80,

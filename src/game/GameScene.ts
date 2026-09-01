@@ -26,11 +26,10 @@ export class GameScene extends Phaser.Scene {
     super("GameScene");
   }
 
-  init(data: { character?: Character; level?: number }) {
+  init(data: { character?: Character; level?: number, score?: number }) {
     this.character = data.character ?? "madeline";
-
     this.level = data.level ?? 1;
-
+    this.score = data.score ?? 0;
     console.log(`🐈 Personagem escolhido: ${this.character}`);
     console.log(`🗺️ Fase atual: ${this.level}`);
   }
@@ -44,13 +43,9 @@ export class GameScene extends Phaser.Scene {
       return;
     }
 
-    this.load.image("level-background", levelConfig.background);
+    this.load.image(`level-background-${this.level}`, levelConfig.background);
     this.load.image("level-platform", levelConfig.platformTexture);
-
-    this.load.image(
-      "level-ground",
-      "/assets/levels/level-1/level-1-ground.png",
-    );
+    this.load.image(`level-ground-${this.level}`, levelConfig.groundTexture);
 
     this.load.spritesheet("coin", "/assets/collectible/coin.png", {
       frameWidth: 48,
@@ -152,7 +147,7 @@ export class GameScene extends Phaser.Scene {
 
     this.hearts = this.maxHearts;
     this.isInvulnerable = false;
-    this.score = 0;
+    // this.score = 0;
     this.levelCompleted = false;
     this.createPlayerAnimations();
 
@@ -195,7 +190,7 @@ export class GameScene extends Phaser.Scene {
     const background = this.add.image(
       levelConfig.width / 2,
       360,
-      "level-background",
+      `level-background-${this.level}`,
     );
 
     background.setDisplaySize(levelConfig.width, 720);
@@ -345,7 +340,7 @@ export class GameScene extends Phaser.Scene {
     const physicsGround = ground.create(
       x,
       y,
-      "level-ground",
+      `level-ground-${this.level}`,
     ) as Phaser.Physics.Arcade.Sprite;
 
     physicsGround.setVisible(false);
@@ -357,7 +352,7 @@ export class GameScene extends Phaser.Scene {
       y,
       width,
       height,
-      "level-ground",
+      `level-ground-${this.level}`,
     );
 
     groundVisual.setTileScale(1, height / 80);
@@ -463,7 +458,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private createScore() {
-    this.scoreText = this.add.text(1120, 10, "PONTOS: 0", {
+    this.scoreText = this.add.text(1120, 10, `PONTOS: ${this.score}`, {
       fontSize: "24px",
       fontFamily: "Pixelify",
       color: "#ffffff",
