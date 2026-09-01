@@ -6,27 +6,16 @@ export class CharacterSelectScene extends Phaser.Scene {
   }
 
   preload() {
-    // =========================
-    // FUNDO DA SELEÇÃO
-    // =========================
-
+    
     this.load.image(
       "character-select-background",
       "/assets/menu/character-select-background.png",
     );
 
-    // =========================
-    // MADELINE
-    // =========================
-
     this.load.image(
       "madeline-face",
       "/assets/characters/madeline/madeline-face.png",
     );
-
-    // =========================
-    // MAKENA
-    // =========================
 
     this.load.image(
       "makena-face",
@@ -35,9 +24,6 @@ export class CharacterSelectScene extends Phaser.Scene {
   }
 
   create() {
-    // =========================
-    // FUNDO
-    // =========================
 
     const background = this.add.image(
       640,
@@ -51,10 +37,6 @@ export class CharacterSelectScene extends Phaser.Scene {
     );
 
     background.setDepth(-1);
-
-    // =========================
-    // TÍTULO
-    // =========================
 
     this.add
       .text(
@@ -72,20 +54,11 @@ export class CharacterSelectScene extends Phaser.Scene {
       )
       .setOrigin(0.5);
 
-    // =========================
-    // CARDS
-    // =========================
-
     const cardWidth = 300;
     const cardHeight = 430;
-
     const madelineX = 420;
     const makenaX = 860;
     const cardY = 390;
-
-    // =========================
-    // CARD MADELINE
-    // =========================
 
     const madelineCard =
       this.add.rectangle(
@@ -104,11 +77,7 @@ export class CharacterSelectScene extends Phaser.Scene {
     madelineCard.setInteractive({
       useHandCursor: true,
     });
-
-    // =========================
-    // CARD MAKENA
-    // =========================
-
+    
     const makenaCard =
       this.add.rectangle(
         makenaX,
@@ -127,10 +96,6 @@ export class CharacterSelectScene extends Phaser.Scene {
       useHandCursor: true,
     });
 
-    // ==================================================
-    // MADELINE - ROSTO
-    // ==================================================
-
     const madelineFace =
       this.add.image(
         madelineX,
@@ -143,10 +108,6 @@ export class CharacterSelectScene extends Phaser.Scene {
       200,
     );
 
-    // ==================================================
-    // MAKENA - ROSTO
-    // ==================================================
-
     const makenaFace =
       this.add.image(
         makenaX,
@@ -158,10 +119,6 @@ export class CharacterSelectScene extends Phaser.Scene {
       200,
       200,
     );
-
-    // ==================================================
-    // NOMES
-    // ==================================================
 
     const madelineName =
       this.add
@@ -197,10 +154,6 @@ export class CharacterSelectScene extends Phaser.Scene {
         )
         .setOrigin(0.5);
 
-    // ==================================================
-    // TEXTO DOS BOTÕES
-    // ==================================================
-
     const madelineHint =
       this.add
         .text(
@@ -231,20 +184,12 @@ export class CharacterSelectScene extends Phaser.Scene {
         )
         .setOrigin(0.5);
 
-    // ==================================================
-    // ELEMENTOS DA MADELINE
-    // ==================================================
-
     const madelineElements = [
       madelineCard,
       madelineFace,
       madelineName,
       madelineHint,
     ];
-
-    // ==================================================
-    // ELEMENTOS DA MAKENA
-    // ==================================================
 
     const makenaElements = [
       makenaCard,
@@ -253,10 +198,6 @@ export class CharacterSelectScene extends Phaser.Scene {
       makenaHint,
     ];
 
-    // ==================================================
-    // HOVER MADELINE
-    // ==================================================
-
     madelineCard.on(
       "pointerover",
       () => {
@@ -279,10 +220,6 @@ export class CharacterSelectScene extends Phaser.Scene {
       },
     );
 
-    // ==================================================
-    // HOVER MAKENA
-    // ==================================================
-
     makenaCard.on(
       "pointerover",
       () => {
@@ -304,10 +241,6 @@ export class CharacterSelectScene extends Phaser.Scene {
         );
       },
     );
-
-    // ==================================================
-    // ESCOLHER MADELINE
-    // ==================================================
 
     madelineCard.on(
       "pointerdown",
@@ -326,10 +259,6 @@ export class CharacterSelectScene extends Phaser.Scene {
       },
     );
 
-    // ==================================================
-    // ESCOLHER MAKENA
-    // ==================================================
-
     makenaCard.on(
       "pointerdown",
       () => {
@@ -347,19 +276,11 @@ export class CharacterSelectScene extends Phaser.Scene {
       },
     );
 
-    // ==================================================
-    // BOTÃO VOLTAR
-    // ==================================================
-
     const voltarVisual =
       this.add.container(
         110,
         665,
       );
-
-    // =========================
-    // FUNDO DO BOTÃO
-    // =========================
 
     const voltarBackground =
       this.add.graphics();
@@ -377,10 +298,6 @@ export class CharacterSelectScene extends Phaser.Scene {
       8,
     );
 
-    // =========================
-    // BORDA BRANCA
-    // =========================
-
     voltarBackground.lineStyle(
       3,
       0xffffff,
@@ -394,10 +311,6 @@ export class CharacterSelectScene extends Phaser.Scene {
       56,
       8,
     );
-
-    // =========================
-    // TEXTO
-    // =========================
 
     const voltarText =
       this.add
@@ -419,10 +332,6 @@ export class CharacterSelectScene extends Phaser.Scene {
       voltarText,
     ]);
 
-    // =========================
-    // ÁREA REAL DO MOUSE
-    // =========================
-
     const voltarZone =
       this.add.zone(
         110,
@@ -434,10 +343,6 @@ export class CharacterSelectScene extends Phaser.Scene {
     voltarZone.setInteractive({
       useHandCursor: true,
     });
-
-    // =========================
-    // HOVER - VOLTAR
-    // =========================
 
     voltarZone.on(
       "pointerover",
@@ -452,10 +357,6 @@ export class CharacterSelectScene extends Phaser.Scene {
         voltarVisual.setScale(1);
       },
     );
-
-    // =========================
-    // CLICOU EM VOLTAR
-    // =========================
 
     voltarZone.on(
       "pointerdown",
