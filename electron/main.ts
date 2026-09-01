@@ -1,4 +1,9 @@
 import { app, BrowserWindow } from "electron";
+import path from "path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const isDevelopment = !app.isPackaged && !process.argv.includes('--production');
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -13,7 +18,11 @@ const createWindow = () => {
     },
   });
 
-  win.loadURL("http://localhost:5173");
+  if (isDevelopment) {
+    void win.loadURL("http://127.0.0.1:5173");
+  } else {
+    void win.loadFile(path.join(__dirname, "../dist/index.html"));
+  }
 };
 
 app.whenReady().then(() => {
