@@ -9,8 +9,8 @@ export class MenuScene extends Phaser.Scene {
   preload() {
 
     this.load.text(
-      'pixelify-font',
-      '/fonts/Pixelify.ttf'
+      'determination-font',
+      '/fonts/Determination.ttf'
     );
 
     this.load.audio(
@@ -34,7 +34,7 @@ export class MenuScene extends Phaser.Scene {
     AudioManager.playMenuMusic(this);
 
     await document.fonts.load(
-      '400 25px "Pixelify"'
+      '400 25px "Determination"'
     );
 
     const background = this.add.image(
@@ -66,7 +66,7 @@ export class MenuScene extends Phaser.Scene {
       245,
       'Uma aventura de duas gatitas',
       {
-        fontFamily: 'Pixelify',
+        fontFamily: 'Determination',
         fontSize: 25,
         color: '#ffffff',
         stroke: '#333333',
@@ -116,7 +116,7 @@ export class MenuScene extends Phaser.Scene {
         0,
         'JOGAR',
         {
-          fontFamily: 'Pixelify',
+          fontFamily: 'Determination',
           fontSize: 44,
           fontStyle: 'bold',
           color: '#ffffff',
@@ -209,7 +209,7 @@ export class MenuScene extends Phaser.Scene {
         0,
         'SOBRE',
         {
-          fontFamily: 'Pixelify',
+          fontFamily: 'Determination',
           fontSize: 34,
           fontStyle: 'bold',
           color: '#ffffff',

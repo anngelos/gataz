@@ -25,15 +25,15 @@ export class LevelCompleteScene extends Phaser.Scene {
 
   preload() {
     this.load.text(
-      "pixelify-font",
-      "/fonts/Pixelify.ttf"
+      "determination-font",
+      "/fonts/Determination.ttf"
     );
   }
 
   async create() {
 
     await document.fonts.load(
-      '400 25px "Pixelify"'
+      '400 25px "Determination"'
     );
 
     this.cameras.main.setBackgroundColor(
@@ -45,7 +45,7 @@ export class LevelCompleteScene extends Phaser.Scene {
       130,
       "FASE CONCLUÍDA!",
       {
-        fontFamily: "Pixelify",
+        fontFamily: "Determination",
         fontSize: "56px",
         fontStyle: "bold",
         color: "#ffffff",
@@ -59,7 +59,7 @@ export class LevelCompleteScene extends Phaser.Scene {
       210,
       `FASE ${this.level}`,
       {
-        fontFamily: "Pixelify",
+        fontFamily: "Determination",
         fontSize: "32px",
         fontStyle: "bold",
         color: "#d8b8ff",
@@ -100,7 +100,7 @@ export class LevelCompleteScene extends Phaser.Scene {
       375,
       `PONTOS: ${this.score}`,
       {
-        fontFamily: "Pixelify",
+        fontFamily: "Determination",
         fontSize: "32px",
         fontStyle: "bold",
         color: "#ffffff",
@@ -114,7 +114,7 @@ export class LevelCompleteScene extends Phaser.Scene {
       525,
       "Parabéns!",
       {
-        fontFamily: "Pixelify",
+        fontFamily: "Determination",
         fontSize: "28px",
         color: "#ffffff",
       }
@@ -214,7 +214,7 @@ export class LevelCompleteScene extends Phaser.Scene {
         0,
         text,
         {
-          fontFamily: "Pixelify",
+          fontFamily: "Determination",
           fontSize: text === "MENU PRINCIPAL"
             ? "25px"
             : "30px",
