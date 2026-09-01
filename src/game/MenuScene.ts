@@ -154,32 +154,15 @@ export class MenuScene extends Phaser.Scene {
       }
     );
 
-    jogarZone.on(
-      'pointerdown',
-      () => {
-        console.log(
-          '🎮 Jogar!'
-        );
+    jogarZone.on('pointerdown', () => {
+      this.scene.start('CharacterSelectScene')
+    });
 
-        this.scene.start(
-          'CharacterSelectScene'
-        );
-      }
-    );
+    const aboutVisual = this.add.container(330, 485);
 
-    const aboutVisual =
-      this.add.container(
-        330,
-        485
-      );
+    const aboutBackground = this.add.graphics();
 
-    const aboutBackground =
-      this.add.graphics();
-
-    aboutBackground.fillStyle(
-      0x7b4ab5,
-      1
-    );
+    aboutBackground.fillStyle(0x7b4ab5, 1);
 
     aboutBackground.fillRoundedRect(
       -100,
@@ -247,17 +230,8 @@ export class MenuScene extends Phaser.Scene {
       }
     );
 
-    aboutZone.on(
-      'pointerdown',
-      () => {
-        console.log(
-          'ℹ️ Sobre'
-        );
-
-        this.scene.start(
-          'AboutScene'
-        );
-      }
-    );
+    aboutZone.on('pointerdown', () => {
+      this.scene.start('AboutScene')
+    });
   }
 }

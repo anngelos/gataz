@@ -30,8 +30,6 @@ export class GameScene extends Phaser.Scene {
     this.character = data.character ?? "madeline";
     this.level = data.level ?? 1;
     this.score = data.score ?? 0;
-    console.log(`🐈 Personagem escolhido: ${this.character}`);
-    console.log(`🗺️ Fase atual: ${this.level}`);
   }
 
   preload() {
@@ -39,7 +37,6 @@ export class GameScene extends Phaser.Scene {
 
     if (!levelConfig) {
       console.error(`❌ Fase ${this.level} não encontrada.`);
-
       return;
     }
 
@@ -148,9 +145,7 @@ export class GameScene extends Phaser.Scene {
           break;
     
         default:
-          console.warn(
-            `⚠️ Tipo de inimigo desconhecido: ${type}`,
-          );
+          console.warn(`⚠️ Tipo de inimigo desconhecido: ${type}`);
       }
     });
 
@@ -167,7 +162,6 @@ export class GameScene extends Phaser.Scene {
 
     if (!levelConfig) {
       console.error(`❌ Fase ${this.level} não encontrada.`);
-
       return;
     }
 
@@ -486,10 +480,7 @@ export class GameScene extends Phaser.Scene {
       }
   
       default:
-        console.warn(
-          `⚠️ Tipo de inimigo desconhecido: ${type}`,
-        );
-  
+        console.warn(`⚠️ Tipo de inimigo desconhecido: ${type}`);
         return null;
     }
   }
@@ -526,7 +517,6 @@ export class GameScene extends Phaser.Scene {
 
     collectible.destroy();
     this.addScore(this.collectibleScore);
-    console.log(`🪙 Moeda coletada! +${this.collectibleScore} pontos.`);
   }
 
   private createScore() {
@@ -563,7 +553,6 @@ export class GameScene extends Phaser.Scene {
     }
 
     this.levelCompleted = true;
-    console.log(`🎉 Fase ${this.level} concluída!`);
     this.player.setVelocity(0, 0);
     this.player.setActive(false);
 
@@ -580,7 +569,6 @@ export class GameScene extends Phaser.Scene {
     }
 
     if (this.player.y > 780) {
-      console.log("🕳️ A gata caiu no buraco!");
       this.playerDeath();
       return;
     }
@@ -750,7 +738,6 @@ export class GameScene extends Phaser.Scene {
       enemy.destroy();
       this.addScore(10);
       this.player.setVelocityY(-350);
-      console.log("💥 Esporotricose derrotada! +10 pontos.");
       return;
     }
 
@@ -764,10 +751,6 @@ export class GameScene extends Phaser.Scene {
 
     this.hearts--;
     this.updateHeartsDisplay();
-
-    console.log(
-      `💔 ${this.character} perdeu um coração! Restam ${this.hearts}.`,
-    );
 
     if (this.hearts <= 0) {
       this.playerDeath();
@@ -801,8 +784,6 @@ export class GameScene extends Phaser.Scene {
   }
 
   private playerDeath() {
-    console.log(`💀 ${this.character} morreu!`);
-
     this.player.setVelocity(0, 0);
     this.player.setTint(0xff0000);
 

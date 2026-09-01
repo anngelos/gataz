@@ -272,10 +272,6 @@ export class LevelCompleteScene extends Phaser.Scene {
     }
   
     this.isLeaving = true;
-
-    console.log(`▶️ Continuando após a fase ${this.level}`);  
-    console.log(`Personagem: ${this.character}`);
-    console.log(`Fase: ${nextLevel}`);
   
     this.scene.start("GameScene", {
         character: this.character,
@@ -291,9 +287,6 @@ export class LevelCompleteScene extends Phaser.Scene {
     }
 
     this.isLeaving = true;
-
-    console.log("🏠 Voltando para o menu principal.");
-
     this.scene.start("MenuScene");
   }
 }

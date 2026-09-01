@@ -27,19 +27,24 @@ export class AboutScene extends Phaser.Scene {
 
     background.setDepth(-1);
 
-    this.add.text(
-      640,
-      100,
-      'SOBRE',
-      {
-        fontFamily: 'Determination',
-        fontSize: '56px',
-        fontStyle: 'bold',
-        color: '#ffffff',
-        stroke: '#333333',
-        strokeThickness: 6,
-      }
-    ).setOrigin(0.5);
+    this.add
+      .text(640, 100, "SOBRE", {
+        fontFamily: "Determination",
+        fontSize: "56px",
+        fontStyle: "bold",
+        color: "#ffffff",
+        stroke: "#333333",
+        strokeThickness: 5,
+        shadow: {
+          offsetX: 2,
+          offsetY: 2,
+          color: "#000000",
+          blur: 0,
+          stroke: true,
+          fill: true,
+        },
+      })
+      .setOrigin(0.5);
 
     this.add.text(
       640,
@@ -50,6 +55,16 @@ export class AboutScene extends Phaser.Scene {
         fontSize: '42px',
         fontStyle: 'bold',
         color: '#ffb347',
+        stroke: '#000000',
+        strokeThickness: 4,
+        shadow: {
+          offsetX: 2,
+          offsetY: 2,
+          color: '#000000',
+          blur: 0,
+          stroke: true,
+          fill: true,
+        },
       }
     ).setOrigin(0.5);
 
@@ -65,6 +80,16 @@ export class AboutScene extends Phaser.Scene {
         color: '#ffffff',
         align: 'center',
         lineSpacing: 10,
+        stroke: '#000000',
+        strokeThickness: 4,
+        shadow: {
+          offsetX: 2,
+          offsetY: 2,
+          color: '#000000',
+          blur: 0,
+          stroke: true,
+          fill: true,
+        },
       }
     ).setOrigin(0.5);
 
@@ -80,6 +105,16 @@ export class AboutScene extends Phaser.Scene {
         color: '#ffffff',
         align: 'center',
         lineSpacing: 8,
+        stroke: '#000000',
+        strokeThickness: 4,
+        shadow: {
+          offsetX: 2,
+          offsetY: 2,
+          color: '#000000',
+          blur: 0,
+          stroke: true,
+          fill: true,
+        },
       }
     ).setOrigin(0.5);
 
@@ -92,6 +127,16 @@ export class AboutScene extends Phaser.Scene {
         fontSize: '30px',
         fontStyle: 'bold',
         color: '#ffffff',
+        stroke: '#000000',
+        strokeThickness: 4,
+        shadow: {
+          offsetX: 2,
+          offsetY: 2,
+          color: '#000000',
+          blur: 0,
+          stroke: true,
+          fill: true,
+        },
       }
     ).setOrigin(0.5);
 
@@ -103,6 +148,16 @@ export class AboutScene extends Phaser.Scene {
         fontFamily: 'Determination',
         fontSize: '20px',
         color: '#cccccc',
+        stroke: '#000000',
+        strokeThickness: 3,
+        shadow: {
+          offsetX: 2,
+          offsetY: 2,
+          color: '#000000',
+          blur: 0,
+          stroke: true,
+          fill: true,
+        },
       }
     ).setOrigin(0.5);
 
