@@ -132,7 +132,7 @@ export class GameScene extends Phaser.Scene {
             },
           );
           break;
-    
+
         case "rato":
           this.load.spritesheet(
             "enemy-rato-idle-sheet",
@@ -143,7 +143,18 @@ export class GameScene extends Phaser.Scene {
             },
           );
           break;
-    
+
+        case "sick-cat":
+          this.load.spritesheet(
+            "enemy-sick-cat-idle-sheet",
+            "/assets/characters/enemies/sick-cat/sick-cat.png",
+            {
+              frameWidth: 48,
+              frameHeight: 48,
+            },
+          );
+          break;
+
         default:
           console.warn(`⚠️ Tipo de inimigo desconhecido: ${type}`);
       }
@@ -202,6 +213,21 @@ export class GameScene extends Phaser.Scene {
               },
             ),
             frameRate: 2,
+            repeat: -1,
+          });
+          break;
+
+        case "sick-cat":
+          this.anims.create({
+            key: "enemy-sick-cat-idle",
+            frames: this.anims.generateFrameNumbers(
+              "enemy-sick-cat-idle-sheet",
+              {
+                start: 0,
+                end: 3,
+              },
+            ),
+            frameRate: 4,
             repeat: -1,
           });
           break;
@@ -460,12 +486,12 @@ export class GameScene extends Phaser.Scene {
           "enemy-esporotricose-idle-sheet",
           0,
         ) as Phaser.Physics.Arcade.Sprite;
-  
+
         enemy.play("enemy-esporotricose-idle");
-  
+
         return enemy;
       }
-  
+
       case "rato": {
         const enemy = enemies.create(
           x,
@@ -473,13 +499,26 @@ export class GameScene extends Phaser.Scene {
           "enemy-rato-idle-sheet",
           0,
         ) as Phaser.Physics.Arcade.Sprite;
-  
+
         enemy.play("enemy-rato-idle");
         enemy.setFlipX(true);
-  
+
         return enemy;
       }
-  
+
+      case "sick-cat": {
+        const enemy = enemies.create(
+          x,
+          y,
+          "enemy-sick-cat-idle-sheet",
+          0,
+        ) as Phaser.Physics.Arcade.Sprite;
+
+        enemy.play("enemy-sick-cat-idle");
+        enemy.setFlipX(true);
+        return enemy;
+      }
+
       default:
         console.warn(`⚠️ Tipo de inimigo desconhecido: ${type}`);
         return null;

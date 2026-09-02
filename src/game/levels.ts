@@ -526,29 +526,26 @@ export const levels: Record<number, LevelConfig> = {
 
   3: {
     id: 3,
-  
+
     width: 6000,
-  
-    background:
-      "/assets/levels/level-3/level-3-background.png",
-  
-    platformTexture:
-      "/assets/levels/level-1/level-1-grass-platform.png",
-  
-    groundTexture:
-      "/assets/levels/level-1/level-1-ground.png",
-  
+
+    background: "/assets/levels/level-3/level-3-background.png",
+
+    platformTexture: "/assets/levels/level-3/level-3-platform.png",
+
+    groundTexture: "/assets/levels/level-3/level-3-ground.png",
+
     playerStart: {
       x: 130,
       y: 500,
     },
-  
+
     finish: {
       type: "morciga",
       x: 5900,
       y: 550,
     },
-  
+
     ground: [
       {
         x: 500,
@@ -556,35 +553,35 @@ export const levels: Record<number, LevelConfig> = {
         width: 1000,
         height: 80,
       },
-  
+
       {
         x: 1750,
         y: 680,
         width: 500,
         height: 80,
       },
-  
+
       {
         x: 2500,
         y: 680,
         width: 1000,
         height: 80,
       },
-  
+
       {
         x: 3800,
         y: 680,
         width: 800,
         height: 80,
       },
-  
+
       {
         x: 4850,
         y: 680,
         width: 700,
         height: 80,
       },
-  
+
       {
         x: 5750,
         y: 680,
@@ -592,7 +589,7 @@ export const levels: Record<number, LevelConfig> = {
         height: 80,
       },
     ],
-  
+
     platforms: [
       {
         x: 800,
@@ -600,77 +597,77 @@ export const levels: Record<number, LevelConfig> = {
         width: 250,
         height: 40,
       },
-  
+
       {
         x: 1200,
         y: 550,
         width: 250,
         height: 40,
       },
-  
+
       {
         x: 1550,
         y: 500,
         width: 250,
         height: 40,
       },
-  
+
       {
         x: 2000,
         y: 550,
         width: 250,
         height: 40,
       },
-  
+
       {
         x: 2350,
         y: 440,
         width: 250,
         height: 40,
       },
-  
+
       {
         x: 2750,
         y: 540,
         width: 250,
         height: 40,
       },
-  
+
       {
         x: 3150,
         y: 450,
         width: 250,
         height: 40,
       },
-  
+
       {
         x: 3500,
         y: 540,
         width: 250,
         height: 40,
       },
-  
+
       {
         x: 4050,
         y: 450,
         width: 250,
         height: 40,
       },
-  
+
       {
         x: 4400,
         y: 540,
         width: 250,
         height: 40,
       },
-  
+
       {
         x: 5000,
         y: 450,
         width: 250,
         height: 40,
       },
-  
+
       {
         x: 5420,
         y: 540,
@@ -678,69 +675,69 @@ export const levels: Record<number, LevelConfig> = {
         height: 40,
       },
     ],
-  
+
     enemies: [
       {
-        type: "esporotricose",
+        type: "sick-cat",
         x: 480,
         y: 625,
       },
 
       {
-        type: "esporotricose",
+        type: "sick-cat",
         x: 700,
         y: 625,
       },
-  
+
       {
-        type: "esporotricose",
+        type: "sick-cat",
         x: 1200,
         y: 517,
       },
-  
+
       {
-        type: "esporotricose",
+        type: "sick-cat",
         x: 1760,
         y: 625,
       },
-  
+
       {
-        type: "esporotricose",
+        type: "sick-cat",
         x: 2940,
         y: 625,
       },
-  
+
       {
-        type: "esporotricose",
+        type: "sick-cat",
         x: 3690,
         y: 625,
       },
-  
+
       {
-        type: "esporotricose",
+        type: "sick-cat",
         x: 4100,
         y: 625,
       },
-  
+
       {
-        type: "esporotricose",
+        type: "sick-cat",
         x: 4750,
         y: 625,
       },
-  
+
       {
-        type: "esporotricose",
+        type: "sick-cat",
         x: 5050,
         y: 625,
       },
-  
+
       {
-        type: "esporotricose",
+        type: "sick-cat",
         x: 5750,
         y: 625,
       },
     ],
-  
+
     collectibles: [
       {
         type: "coin",
@@ -759,49 +756,49 @@ export const levels: Record<number, LevelConfig> = {
         x: 830,
         y: 380,
       },
-  
+
       {
         type: "coin",
         x: 1550,
         y: 390,
       },
-  
+
       {
         type: "coin",
         x: 2000,
         y: 470,
       },
-  
+
       {
         type: "coin",
         x: 2350,
         y: 360,
       },
-  
+
       {
         type: "coin",
         x: 3150,
         y: 370,
       },
-  
+
       {
         type: "coin",
         x: 4050,
         y: 370,
       },
-  
+
       {
         type: "coin",
         x: 4400,
         y: 460,
       },
-  
+
       {
         type: "coin",
         x: 5000,
         y: 370,
       },
-  
+
       {
         type: "coin",
         x: 5420,
