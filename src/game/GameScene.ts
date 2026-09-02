@@ -232,13 +232,14 @@ export class GameScene extends Phaser.Scene {
       repeat: -1,
     });
 
-    const background = this.add.image(
+    const background = this.add.tileSprite(
       levelConfig.width / 2,
       360,
+      levelConfig.width,
+      720,
       `level-background-${this.level}`,
     );
-
-    background.setDisplaySize(levelConfig.width, 720);
+    
     background.setDepth(-100);
 
     this.physics.world.setBounds(0, 0, levelConfig.width, 900);

@@ -658,7 +658,7 @@ export const levels: Record<number, LevelConfig> = {
       },
   
       {
-        x: 4500,
+        x: 4400,
         y: 540,
         width: 250,
         height: 40,
@@ -672,7 +672,7 @@ export const levels: Record<number, LevelConfig> = {
       },
   
       {
-        x: 5450,
+        x: 5420,
         y: 540,
         width: 250,
         height: 40,
