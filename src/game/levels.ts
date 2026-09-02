@@ -438,8 +438,8 @@ export const levels: Record<number, LevelConfig> = {
 
       {
         type: "rato",
-        x: 2920,
-        y: 408,
+        x: 3040,
+        y: 625,
       },
 
       {
@@ -700,25 +700,25 @@ export const levels: Record<number, LevelConfig> = {
   
       {
         type: "esporotricose",
-        x: 2050,
+        x: 1760,
         y: 625,
       },
   
       {
         type: "esporotricose",
-        x: 2800,
+        x: 2940,
         y: 625,
       },
   
       {
         type: "esporotricose",
-        x: 3550,
+        x: 3690,
         y: 625,
       },
   
       {
         type: "esporotricose",
-        x: 4200,
+        x: 4100,
         y: 625,
       },
   
@@ -730,7 +730,7 @@ export const levels: Record<number, LevelConfig> = {
   
       {
         type: "esporotricose",
-        x: 5250,
+        x: 5050,
         y: 625,
       },
   
