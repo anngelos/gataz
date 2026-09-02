@@ -609,7 +609,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     if (this.player.y > 780) {
-      this.playerFallDeath();
+      this.playerDeath();
       return;
     }
 
@@ -824,19 +824,6 @@ export class GameScene extends Phaser.Scene {
   }
 
   private playerDeath() {
-    this.player.setVelocity(0, 0);
-    this.player.setTint(0xff0000);
-
-    this.time.delayedCall(500, () => {
-      this.scene.restart({
-        character: this.character,
-
-        level: this.level,
-      });
-    });
-  }
-
-  private playerFallDeath() {
     this.player.setVelocity(0, 0);
     this.player.setTint(0xff0000);
 
