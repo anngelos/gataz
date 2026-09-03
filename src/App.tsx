@@ -24,6 +24,13 @@ function App() {
         gamepad: true,
       },
 
+      scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: 1280,
+        height: 720,
+      },
+
       physics: {
         default: "arcade",
         arcade: {
