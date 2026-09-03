@@ -12,6 +12,7 @@ export class GameScene extends Phaser.Scene {
   private jumpSound!: Phaser.Sound.BaseSound;
   private enemyImpactSound!: Phaser.Sound.BaseSound;
   private coinCollectSound!: Phaser.Sound.BaseSound;
+  private levelWinSound!: Phaser.Sound.BaseSound;
   private playerState: PlayerState = "idle";
   private character: Character = "madeline";
   private level = 1;
@@ -50,6 +51,7 @@ export class GameScene extends Phaser.Scene {
     this.load.audio("cat-jump", "/assets/audio/cat-jump.mp3");
     this.load.audio("enemy-impact", "/assets/audio/enemy-impact.mp3");
     this.load.audio("coin-collect", "/assets/audio/get-coin.mp3");
+    this.load.audio("level-win", "/assets/audio/level-win.mp3");
 
     this.load.spritesheet("coin", "/assets/collectible/coin.png", {
       frameWidth: 48,
@@ -178,6 +180,7 @@ export class GameScene extends Phaser.Scene {
     this.jumpSound = this.sound.add("cat-jump", { volume: 0.7 });
     this.enemyImpactSound = this.sound.add("enemy-impact", { volume: 0.7 });
     this.coinCollectSound = this.sound.add("coin-collect", { volume: 0.7 });
+    this.levelWinSound = this.sound.add("level-win", { volume: 0.8 });
 
     const levelConfig = levels[this.level];
 
@@ -603,6 +606,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     this.levelCompleted = true;
+    this.levelWinSound.play();
     this.player.setVelocity(0, 0);
     this.player.setActive(false);
 
