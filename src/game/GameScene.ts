@@ -26,10 +26,11 @@ export class GameScene extends Phaser.Scene {
     super("GameScene");
   }
 
-  init(data: { character?: Character; level?: number, score?: number }) {
+  init(data: { character?: Character; level?: number, score?: number, hearts?: number }) {
     this.character = data.character ?? "madeline";
     this.level = data.level ?? 1;
     this.score = data.score ?? 0;
+    this.hearts = data.hearts ?? this.maxHearts;
   }
 
   preload() {
@@ -176,7 +177,6 @@ export class GameScene extends Phaser.Scene {
       return;
     }
 
-    this.hearts = this.maxHearts;
     this.isInvulnerable = false;
     this.levelCompleted = false;
     this.createPlayerAnimations();
@@ -597,9 +597,10 @@ export class GameScene extends Phaser.Scene {
     this.player.setActive(false);
 
     this.scene.start("LevelCompleteScene", {
+      character: this.character,
       level: this.level,
       score: this.score,
-      character: this.character,
+      hearts: this.hearts,
     });
   }
 
@@ -832,6 +833,7 @@ export class GameScene extends Phaser.Scene {
         character: this.character,
         level: 1,
         score: 0,
+        hearts: this.maxHearts,
       });
     });
   }

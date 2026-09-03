@@ -7,161 +7,104 @@ export class LevelCompleteScene extends Phaser.Scene {
   private score = 0;
   private character: Character = "madeline";
   private isLeaving = false;
+  private hearts = 3;
 
   constructor() {
     super("LevelCompleteScene");
   }
 
   init(data: {
+    character?: Character;
     level?: number;
     score?: number;
-    character?: Character;
+    hearts?: number;
   }) {
+    this.character = data.character ?? "madeline";
     this.level = data.level ?? 1;
     this.score = data.score ?? 0;
-    this.character = data.character ?? "madeline";
+    this.hearts = data.hearts ?? 3;
     this.isLeaving = false;
   }
 
   preload() {
-    this.load.text(
-      "determination-font",
-      "/fonts/Determination.ttf"
-    );
+    this.load.text("determination-font", "/fonts/Determination.ttf");
   }
 
-  async create() {
+  create() {
+    document.fonts.load('400 25px "Determination"');
 
-    await document.fonts.load(
-      '400 25px "Determination"'
-    );
+    this.cameras.main.setBackgroundColor("#241936");
 
-    this.cameras.main.setBackgroundColor(
-      "#241936"
-    );
-
-    this.add.text(
-      640,
-      130,
-      "FASE CONCLUÍDA!",
-      {
+    this.add
+      .text(640, 80, "FASE CONCLUÍDA!", {
         fontFamily: "Determination",
         fontSize: "56px",
         fontStyle: "bold",
         color: "#ffffff",
-        stroke: "#000000",
-        strokeThickness: 6,
-      }
-    ).setOrigin(0.5);
+      })
+      .setOrigin(0.5);
 
-    this.add.text(
-      640,
-      210,
-      `FASE ${this.level}`,
-      {
+    this.add
+      .text(640, 160, `FASE ${this.level}`, {
         fontFamily: "Determination",
-        fontSize: "32px",
+        fontSize: "38px",
         fontStyle: "bold",
-        color: "#d8b8ff",
-      }
-    ).setOrigin(0.5);
+        color: "#ffd86b",
+      })
+      .setOrigin(0.5);
+
+    this.add
+      .text(640, 230, `PONTUAÇÃO: ${this.score}`, {
+        fontFamily: "Determination",
+        fontSize: "30px",
+        color: "#ffffff",
+      })
+      .setOrigin(0.5);
 
     const panel = this.add.graphics();
 
-    panel.fillStyle(
-      0x392653,
-      1
-    );
+    panel.fillStyle(0x302247, 1);
+    panel.fillRoundedRect(290, 285, 700, 230, 12);
 
-    panel.fillRoundedRect(
-      390,
-      270,
-      500,
-      210,
-      12
-    );
+    panel.lineStyle(3, 0xffffff, 1);
+    panel.strokeRoundedRect(290, 285, 700, 230, 12);
 
-    panel.lineStyle(
-      4,
-      0x7b4ab5,
-      1
-    );
-
-    panel.strokeRoundedRect(
-      390,
-      270,
-      500,
-      210,
-      12
-    );
-
-    this.add.text(
-      640,
-      375,
-      `PONTOS: ${this.score}`,
-      {
+    this.add
+      .text(640, 350, "Parabéns!", {
         fontFamily: "Determination",
-        fontSize: "32px",
+        fontSize: "42px",
         fontStyle: "bold",
         color: "#ffffff",
-        stroke: "#000000",
-        strokeThickness: 4,
-      }
-    ).setOrigin(0.5);
+      })
+      .setOrigin(0.5);
 
-    this.add.text(
-      640,
-      525,
-      "Parabéns!",
-      {
+    this.add
+      .text(640, 420, "Você completou esta fase!", {
         fontFamily: "Determination",
         fontSize: "28px",
         color: "#ffffff",
-      }
-    ).setOrigin(0.5);
+      })
+      .setOrigin(0.5);
 
-    this.createButton(
-      455,
-      625,
-      260,
-      70,
-      "CONTINUAR",
-      () => {
-        this.continueGame();
-      }
-    );
+    this.createButton(455, 625, 260, 70, "CONTINUAR", () => {
+      this.continueGame();
+    });
 
-    this.createButton(
-      825,
-      625,
-      300,
-      70,
-      "MENU PRINCIPAL",
-      () => {
-        this.goToMainMenu();
-      }
-    );
+    this.createButton(825, 625, 300, 70, "MENU PRINCIPAL", () => {
+      this.goToMainMenu();
+    });
 
-    this.input.keyboard!.on(
-      "keydown-ENTER",
-      () => {
-        this.continueGame();
-      }
-    );
+    this.input.keyboard?.on("keydown-ENTER", () => {
+      this.continueGame();
+    });
 
-    this.input.keyboard!.on(
-      "keydown-SPACE",
-      () => {
-        this.continueGame();
-      }
-    );
+    this.input.keyboard?.on("keydown-SPACE", () => {
+      this.continueGame();
+    });
 
-    this.input.keyboard!.on(
-      "keydown-ESC",
-      () => {
-        this.goToMainMenu();
-      }
-    );
+    this.input.keyboard?.on("keydown-ESC", () => {
+      this.goToMainMenu();
+    });
   }
 
   private createButton(
@@ -170,115 +113,67 @@ export class LevelCompleteScene extends Phaser.Scene {
     width: number,
     height: number,
     text: string,
-    callback: () => void
+    callback: () => void,
   ) {
-    const button =
-      this.add.container(
-        x,
-        y
-      );
+    const background = this.add
+      .rectangle(x, y, width, height, 0x7b4ab5)
+      .setStrokeStyle(3, 0xffffff, 1);
 
-    const background =
-      this.add.graphics();
-
-    background.fillStyle(
-      0x7b4ab5,
-      1
-    );
-
-    background.fillRoundedRect(
-      -width / 2,
-      -height / 2,
-      width,
-      height,
-      8
-    );
-
-    background.lineStyle(
-      3,
-      0xffffff,
-      1
-    );
-
-    background.strokeRoundedRect(
-      -width / 2,
-      -height / 2,
-      width,
-      height,
-      8
-    );
-
-    const buttonText =
-      this.add.text(
-        0,
-        0,
-        text,
-        {
-          fontFamily: "Determination",
-          fontSize: text === "MENU PRINCIPAL"
-            ? "25px"
-            : "30px",
-          fontStyle: "bold",
-          color: "#ffffff",
-        }
-      ).setOrigin(0.5);
-
-    button.add([
-      background,
-      buttonText,
-    ]);
-
-    const zone =
-      this.add.zone(
-        x,
-        y,
-        width,
-        height
-      );
-
-    zone.setInteractive({
+    background.setInteractive({
       useHandCursor: true,
     });
 
-    zone.on(
-      "pointerover",
-      () => {
-        button.setScale(1.08);
-      }
-    );
+    const buttonText = this.add
+      .text(x, y, text, {
+        fontFamily: "Determination",
+        fontSize: text === "MENU PRINCIPAL" ? "25px" : "30px",
+        fontStyle: "bold",
+        color: "#ffffff",
+      })
+      .setOrigin(0.5);
 
-    zone.on(
-      "pointerout",
-      () => {
-        button.setScale(1);
-      }
-    );
+    buttonText.setInteractive({
+      useHandCursor: true,
+    });
 
-    zone.on(
-      "pointerdown",
-      () => {
-        callback();
-      }
-    );
+    background.on("pointerover", () => {
+      background.setScale(1.08);
+      buttonText.setScale(1.08);
+    });
 
-    return button;
+    background.on("pointerout", () => {
+      background.setScale(1);
+      buttonText.setScale(1);
+    });
+
+    background.on("pointerdown", () => {
+      console.log(`🖱️ Botão clicado: ${text}`);
+      callback();
+    });
+
+    buttonText.on("pointerdown", () => {
+      console.log(`🖱️ Texto clicado: ${text}`);
+      callback();
+    });
+
+    return background;
   }
 
   private continueGame() {
-    const nextLevel = this.level + 1;
-    
     if (this.isLeaving) {
       return;
     }
-  
+
+    const nextLevel = this.level + 1;
+
     this.isLeaving = true;
-  
+
     this.scene.start("GameScene", {
-        character: this.character,
-        level: nextLevel,
-        score: this.score,
-      }
-    );
+      character: this.character,
+      level: nextLevel,
+      score: this.score,
+      hearts: this.hearts,
+    });
   }
 
   private goToMainMenu() {
