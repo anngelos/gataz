@@ -181,6 +181,9 @@ export class GameScene extends Phaser.Scene {
   }
 
   create() {
+    this.touchLeft = false;
+    this.touchRight = false;
+    this.touchJump = false;
     this.input.addPointer(2);
     AudioManager.stopMusic();
     this.jumpSound = this.sound.add("cat-jump", { volume: 0.7 });
@@ -916,10 +919,6 @@ export class GameScene extends Phaser.Scene {
   private createTouchControls() {
     this.touchControls = this.add.container(0, 0);
   
-    // =========================
-    // BOTÃO ESQUERDA
-    // =========================
-  
     const leftButton = this.add
       .circle(80, 620, 45, 0xffffff, 0.25)
       .setScrollFactor(0)
@@ -933,11 +932,7 @@ export class GameScene extends Phaser.Scene {
       })
       .setOrigin(0.5)
       .setScrollFactor(0);
-  
-    // =========================
-    // BOTÃO DIREITA
-    // =========================
-  
+    
     const rightButton = this.add
       .circle(190, 620, 45, 0xffffff, 0.25)
       .setScrollFactor(0)
@@ -951,11 +946,7 @@ export class GameScene extends Phaser.Scene {
       })
       .setOrigin(0.5)
       .setScrollFactor(0);
-  
-    // =========================
-    // BOTÃO PULO
-    // =========================
-  
+    
     const jumpButton = this.add
       .circle(1200, 620, 50, 0xffffff, 0.25)
       .setScrollFactor(0)
@@ -969,11 +960,7 @@ export class GameScene extends Phaser.Scene {
       })
       .setOrigin(0.5)
       .setScrollFactor(0);
-  
-    // =========================
-    // TOUCH - ESQUERDA
-    // =========================
-  
+    
     leftButton.on("pointerdown", () => {
       this.touchLeft = true;
     });
@@ -989,11 +976,7 @@ export class GameScene extends Phaser.Scene {
     leftButton.on("pointercancel", () => {
       this.touchLeft = false;
     });
-  
-    // =========================
-    // TOUCH - DIREITA
-    // =========================
-  
+    
     rightButton.on("pointerdown", () => {
       this.touchRight = true;
     });
@@ -1009,11 +992,7 @@ export class GameScene extends Phaser.Scene {
     rightButton.on("pointercancel", () => {
       this.touchRight = false;
     });
-  
-    // =========================
-    // TOUCH - PULO
-    // =========================
-  
+    
     jumpButton.on("pointerdown", () => {
       this.touchJump = true;
     });
@@ -1039,14 +1018,9 @@ export class GameScene extends Phaser.Scene {
       jumpText,
     ]);
   
-    // Começa invisível no PC.
     this.touchControls.setVisible(false);
   
-    // Mostra somente em dispositivos com touch.
-    if (
-      "ontouchstart" in window ||
-      navigator.maxTouchPoints > 0
-    ) {
+    if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
       this.touchControls.setVisible(true);
     }
   }
