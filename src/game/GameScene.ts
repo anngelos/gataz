@@ -181,6 +181,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   create() {
+    this.input.addPointer(2);
     AudioManager.stopMusic();
     this.jumpSound = this.sound.add("cat-jump", { volume: 0.7 });
     this.enemyImpactSound = this.sound.add("enemy-impact", { volume: 0.7 });
@@ -976,12 +977,16 @@ export class GameScene extends Phaser.Scene {
     leftButton.on("pointerdown", () => {
       this.touchLeft = true;
     });
-  
+    
     leftButton.on("pointerup", () => {
       this.touchLeft = false;
     });
-  
+    
     leftButton.on("pointerout", () => {
+      this.touchLeft = false;
+    });
+    
+    leftButton.on("pointercancel", () => {
       this.touchLeft = false;
     });
   
@@ -992,12 +997,16 @@ export class GameScene extends Phaser.Scene {
     rightButton.on("pointerdown", () => {
       this.touchRight = true;
     });
-  
+    
     rightButton.on("pointerup", () => {
       this.touchRight = false;
     });
-  
+    
     rightButton.on("pointerout", () => {
+      this.touchRight = false;
+    });
+    
+    rightButton.on("pointercancel", () => {
       this.touchRight = false;
     });
   
@@ -1008,12 +1017,16 @@ export class GameScene extends Phaser.Scene {
     jumpButton.on("pointerdown", () => {
       this.touchJump = true;
     });
-  
+    
     jumpButton.on("pointerup", () => {
       this.touchJump = false;
     });
-  
+    
     jumpButton.on("pointerout", () => {
+      this.touchJump = false;
+    });
+    
+    jumpButton.on("pointercancel", () => {
       this.touchJump = false;
     });
   
