@@ -26,6 +26,11 @@ export class GameScene extends Phaser.Scene {
   private collectibleScore = 100;
   private levelCompleted = false;
 
+  private touchControls!: Phaser.GameObjects.Container;
+  private touchLeft = false;
+  private touchRight = false;
+  private touchJump = false;
+
   constructor() {
     super("GameScene");
   }
@@ -412,6 +417,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     this.cameras.main.startFollow(this.player, true, 0.08, 0.08);
+    this.createTouchControls();
   }
 
   private createGround(
@@ -641,11 +647,11 @@ export class GameScene extends Phaser.Scene {
           (nativeGamepad?.buttons[buttonIndex]?.value ?? 0) > 0.5,
       );
 
-    if (this.cursors.left.isDown || isGamepadButtonDown(leftButton)) {
+    if (this.cursors.left.isDown || isGamepadButtonDown(leftButton) || this.touchLeft) {
       this.player.setVelocityX(-speed);
 
       this.player.setFlipX(true);
-    } else if (this.cursors.right.isDown || isGamepadButtonDown(rightButton)) {
+    } else if (this.cursors.right.isDown || isGamepadButtonDown(rightButton) || this.touchRight) {
       this.player.setVelocityX(speed);
 
       this.player.setFlipX(false);
@@ -654,7 +660,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     if (
-      (this.jumpKey.isDown || isGamepadButtonDown(actionButton)) &&
+      (this.jumpKey.isDown || isGamepadButtonDown(actionButton) || this.touchJump) &&
       this.player.body!.blocked.down
     ) {
       this.player.setVelocityY(-550);
@@ -903,6 +909,132 @@ export class GameScene extends Phaser.Scene {
   private playAnimation(animationKey: string) {
     if (this.player.anims.currentAnim?.key !== animationKey) {
       this.player.play(animationKey);
+    }
+  }
+
+  private createTouchControls() {
+    this.touchControls = this.add.container(0, 0);
+  
+    // =========================
+    // BOTÃO ESQUERDA
+    // =========================
+  
+    const leftButton = this.add
+      .circle(80, 620, 45, 0xffffff, 0.25)
+      .setScrollFactor(0)
+      .setInteractive();
+  
+    const leftText = this.add
+      .text(80, 620, "◀", {
+        fontFamily: "Arial",
+        fontSize: "32px",
+        color: "#ffffff",
+      })
+      .setOrigin(0.5)
+      .setScrollFactor(0);
+  
+    // =========================
+    // BOTÃO DIREITA
+    // =========================
+  
+    const rightButton = this.add
+      .circle(190, 620, 45, 0xffffff, 0.25)
+      .setScrollFactor(0)
+      .setInteractive();
+  
+    const rightText = this.add
+      .text(190, 620, "▶", {
+        fontFamily: "Arial",
+        fontSize: "32px",
+        color: "#ffffff",
+      })
+      .setOrigin(0.5)
+      .setScrollFactor(0);
+  
+    // =========================
+    // BOTÃO PULO
+    // =========================
+  
+    const jumpButton = this.add
+      .circle(1200, 620, 50, 0xffffff, 0.25)
+      .setScrollFactor(0)
+      .setInteractive();
+  
+    const jumpText = this.add
+      .text(1200, 620, "↑", {
+        fontFamily: "Arial",
+        fontSize: "36px",
+        color: "#ffffff",
+      })
+      .setOrigin(0.5)
+      .setScrollFactor(0);
+  
+    // =========================
+    // TOUCH - ESQUERDA
+    // =========================
+  
+    leftButton.on("pointerdown", () => {
+      this.touchLeft = true;
+    });
+  
+    leftButton.on("pointerup", () => {
+      this.touchLeft = false;
+    });
+  
+    leftButton.on("pointerout", () => {
+      this.touchLeft = false;
+    });
+  
+    // =========================
+    // TOUCH - DIREITA
+    // =========================
+  
+    rightButton.on("pointerdown", () => {
+      this.touchRight = true;
+    });
+  
+    rightButton.on("pointerup", () => {
+      this.touchRight = false;
+    });
+  
+    rightButton.on("pointerout", () => {
+      this.touchRight = false;
+    });
+  
+    // =========================
+    // TOUCH - PULO
+    // =========================
+  
+    jumpButton.on("pointerdown", () => {
+      this.touchJump = true;
+    });
+  
+    jumpButton.on("pointerup", () => {
+      this.touchJump = false;
+    });
+  
+    jumpButton.on("pointerout", () => {
+      this.touchJump = false;
+    });
+  
+    this.touchControls.add([
+      leftButton,
+      leftText,
+      rightButton,
+      rightText,
+      jumpButton,
+      jumpText,
+    ]);
+  
+    // Começa invisível no PC.
+    this.touchControls.setVisible(false);
+  
+    // Mostra somente em dispositivos com touch.
+    if (
+      "ontouchstart" in window ||
+      navigator.maxTouchPoints > 0
+    ) {
+      this.touchControls.setVisible(true);
     }
   }
 }
