@@ -147,12 +147,10 @@ export class LevelCompleteScene extends Phaser.Scene {
     });
 
     background.on("pointerdown", () => {
-      console.log(`🖱️ Botão clicado: ${text}`);
       callback();
     });
 
     buttonText.on("pointerdown", () => {
-      console.log(`🖱️ Texto clicado: ${text}`);
       callback();
     });
 
