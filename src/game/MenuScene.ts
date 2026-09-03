@@ -1,237 +1,123 @@
-import Phaser from 'phaser';
-import { AudioManager } from './AudioManager';
+import Phaser from "phaser";
+import { AudioManager } from "./AudioManager";
 
 export class MenuScene extends Phaser.Scene {
+  private mouseClickSound!: Phaser.Sound.BaseSound;
+
   constructor() {
-    super('MenuScene');
+    super("MenuScene");
   }
 
   preload() {
-
-    this.load.text(
-      'determination-font',
-      '/fonts/Determination.ttf'
-    );
-
-    this.load.audio(
-      "gataz-menu",
-      "/assets/audio/gataz-menu.mp3"
-    );
-
-    this.load.image(
-      'gataz-menu-background',
-      '/assets/menu/gataz-menu-background.png'
-    );
-
-    this.load.image(
-      'gataz-logo',
-      '/assets/menu/gataz-logo.png'
-    );
+    this.load.text("determination-font", "/fonts/Determination.ttf");
+    this.load.audio("gataz-menu", "/assets/audio/gataz-menu.mp3");
+    this.load.image("gataz-menu-background", "/assets/menu/gataz-menu-background.png");
+    this.load.image("gataz-logo", "/assets/menu/gataz-logo.png");
+    this.load.audio("mouse-click", "/assets/audio/mouse-click.mp3");
   }
 
   async create() {
-
     AudioManager.playMenuMusic(this);
 
-    await document.fonts.load(
-      '400 25px "Determination"'
-    );
+    this.mouseClickSound = this.sound.add("mouse-click", {
+      volume: 0.7,
+    });
 
-    const background = this.add.image(
-      640,
-      360,
-      'gataz-menu-background'
-    );
+    await document.fonts.load('400 25px "Determination"');
 
-    background.setDisplaySize(
-      1280,
-      720
-    );
+    const background = this.add.image(640, 360, "gataz-menu-background");
 
+    background.setDisplaySize(1280, 720);
     background.setDepth(-1);
 
-    const logo = this.add.image(
-      330,
-      150,
-      'gataz-logo'
-    );
+    const logo = this.add.image(330, 150, "gataz-logo");
 
-    logo.setDisplaySize(
-      430,
-      185
-    );
+    logo.setDisplaySize(430, 185);
 
-    this.add.text(
-      330,
-      245,
-      'Uma aventura de duas gatitas',
-      {
-        fontFamily: 'Determination',
+    this.add
+      .text(330, 245, "Uma aventura de duas gatitas", {
+        fontFamily: "Determination",
         fontSize: 25,
-        color: '#ffffff',
-        stroke: '#333333',
+        color: "#ffffff",
+        stroke: "#333333",
         strokeThickness: 4,
-      }
-    ).setOrigin(0.5);
+      })
+      .setOrigin(0.5);
 
-    const jogarVisual =
-      this.add.container(
-        330,
-        380
-      );
+    const jogarVisual = this.add.container(330, 380);
+    const jogarBackground = this.add.graphics();
 
-    const jogarBackground =
-      this.add.graphics();
+    jogarBackground.fillStyle(0x7b4ab5, 1);
+    jogarBackground.fillRoundedRect(-100, -40, 200, 80, 8);
+    jogarBackground.lineStyle(3, 0xffffff, 1);
+    jogarBackground.strokeRoundedRect(-100, -40, 200, 80, 8);
 
-    jogarBackground.fillStyle(
-      0x7b4ab5,
-      1
-    );
+    const jogarText = this.add
+      .text(0, 0, "JOGAR", {
+        fontFamily: "Determination",
+        fontSize: 44,
+        fontStyle: "bold",
+        color: "#ffffff",
+      })
+      .setOrigin(0.5);
 
-    jogarBackground.fillRoundedRect(
-      -100,
-      -40,
-      200,
-      80,
-      8
-    );
+    jogarVisual.add([jogarBackground, jogarText]);
 
-    jogarBackground.lineStyle(
-      3,
-      0xffffff,
-      1
-    );
-
-    jogarBackground.strokeRoundedRect(
-      -100,
-      -40,
-      200,
-      80,
-      8
-    );
-
-    const jogarText =
-      this.add.text(
-        0,
-        0,
-        'JOGAR',
-        {
-          fontFamily: 'Determination',
-          fontSize: 44,
-          fontStyle: 'bold',
-          color: '#ffffff',
-        }
-      ).setOrigin(0.5);
-
-    jogarVisual.add([
-      jogarBackground,
-      jogarText,
-    ]);
-
-    const jogarZone =
-      this.add.zone(
-        330,
-        380,
-        200,
-        80
-      );
+    const jogarZone = this.add.zone(330, 380, 200, 80);
 
     jogarZone.setInteractive({
       useHandCursor: true,
     });
 
-    jogarZone.on(
-      'pointerover',
-      () => {
-        jogarVisual.setScale(1.08);
-      }
-    );
+    jogarZone.on("pointerover", () => {
+      jogarVisual.setScale(1.08);
+    });
 
-    jogarZone.on(
-      'pointerout',
-      () => {
-        jogarVisual.setScale(1);
-      }
-    );
+    jogarZone.on("pointerout", () => {
+      jogarVisual.setScale(1);
+    });
 
-    jogarZone.on('pointerdown', () => {
-      this.scene.start('CharacterSelectScene')
+    jogarZone.on("pointerdown", () => {
+      this.mouseClickSound.play();
+      this.scene.start("CharacterSelectScene");
     });
 
     const aboutVisual = this.add.container(330, 485);
-
     const aboutBackground = this.add.graphics();
 
     aboutBackground.fillStyle(0x7b4ab5, 1);
+    aboutBackground.fillRoundedRect(-100, -35, 200, 70, 8);
+    aboutBackground.lineStyle(3, 0xffffff, 1);
+    aboutBackground.strokeRoundedRect(-100, -35, 200, 70, 8);
 
-    aboutBackground.fillRoundedRect(
-      -100,
-      -35,
-      200,
-      70,
-      8
-    );
+    const aboutText = this.add
+      .text(0, 0, "SOBRE", {
+        fontFamily: "Determination",
+        fontSize: 34,
+        fontStyle: "bold",
+        color: "#ffffff",
+      })
+      .setOrigin(0.5);
 
-    aboutBackground.lineStyle(
-      3,
-      0xffffff,
-      1
-    );
+    aboutVisual.add([aboutBackground, aboutText]);
 
-    aboutBackground.strokeRoundedRect(
-      -100,
-      -35,
-      200,
-      70,
-      8
-    );
-
-    const aboutText =
-      this.add.text(
-        0,
-        0,
-        'SOBRE',
-        {
-          fontFamily: 'Determination',
-          fontSize: 34,
-          fontStyle: 'bold',
-          color: '#ffffff',
-        }
-      ).setOrigin(0.5);
-
-    aboutVisual.add([
-      aboutBackground,
-      aboutText,
-    ]);
-
-    const aboutZone =
-      this.add.zone(
-        330,
-        485,
-        200,
-        70
-      );
+    const aboutZone = this.add.zone(330, 485, 200, 70);
 
     aboutZone.setInteractive({
       useHandCursor: true,
     });
 
-    aboutZone.on(
-      'pointerover',
-      () => {
-        aboutVisual.setScale(1.08);
-      }
-    );
+    aboutZone.on("pointerover", () => {
+      aboutVisual.setScale(1.08);
+    });
 
-    aboutZone.on(
-      'pointerout',
-      () => {
-        aboutVisual.setScale(1);
-      }
-    );
+    aboutZone.on("pointerout", () => {
+      aboutVisual.setScale(1);
+    });
 
-    aboutZone.on('pointerdown', () => {
-      this.scene.start('AboutScene')
+    aboutZone.on("pointerdown", () => {
+      this.mouseClickSound.play();
+      this.scene.start("AboutScene");
     });
   }
 }

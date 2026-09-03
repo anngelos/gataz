@@ -1,11 +1,15 @@
 import Phaser from "phaser";
 
 export class CharacterSelectScene extends Phaser.Scene {
+  private mouseClickSound!: Phaser.Sound.BaseSound;
+
   constructor() {
     super("CharacterSelectScene");
   }
 
   preload() {
+    this.load.audio("mouse-click", "/assets/audio/mouse-click.mp3");
+
     this.load.image(
       "character-select-background",
       "/assets/menu/character-select-background.png",
@@ -20,6 +24,10 @@ export class CharacterSelectScene extends Phaser.Scene {
   }
 
   create() {
+    this.mouseClickSound = this.sound.add("mouse-click", {
+      volume: 0.7,
+    });
+
     const background = this.add.image(640, 360, "character-select-background");
 
     background.setDisplaySize(1280, 720);
@@ -204,6 +212,7 @@ export class CharacterSelectScene extends Phaser.Scene {
     });
 
     voltarZone.on("pointerdown", () => {
+      this.mouseClickSound.play();
       this.scene.start("MenuScene");
     });
   }
