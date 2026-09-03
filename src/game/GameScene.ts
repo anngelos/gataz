@@ -9,6 +9,7 @@ export class GameScene extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite;
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private jumpKey!: Phaser.Input.Keyboard.Key;
+  private jumpSound!: Phaser.Sound.BaseSound;
   private playerState: PlayerState = "idle";
   private character: Character = "madeline";
   private level = 1;
@@ -44,6 +45,7 @@ export class GameScene extends Phaser.Scene {
     this.load.image(`level-background-${this.level}`, levelConfig.background);
     this.load.image(`level-platform-${this.level}`, levelConfig.platformTexture);
     this.load.image(`level-ground-${this.level}`, levelConfig.groundTexture);
+    this.load.audio("cat-jump", "/assets/audio/cat-jump.mp3");
 
     this.load.spritesheet("coin", "/assets/collectible/coin.png", {
       frameWidth: 48,
@@ -169,6 +171,7 @@ export class GameScene extends Phaser.Scene {
 
   create() {
     AudioManager.stopMusic();
+    this.jumpSound = this.sound.add("cat-jump", { volume: 0.7 });
 
     const levelConfig = levels[this.level];
 
@@ -644,6 +647,7 @@ export class GameScene extends Phaser.Scene {
       this.player.body!.blocked.down
     ) {
       this.player.setVelocityY(-550);
+      this.jumpSound.play();
     }
 
     this.updatePlayerState();
