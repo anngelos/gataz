@@ -806,4 +806,345 @@ export const levels: Record<number, LevelConfig> = {
       },
     ],
   },
+
+  4: {
+    id: 4,
+  
+    width: 6000,
+  
+    background: "/assets/levels/level-4/level-4-background.png",
+  
+    platformTexture: "/assets/levels/level-4/level-4-platform.png",
+  
+    groundTexture: "/assets/levels/level-4/level-4-ground.png",
+  
+    playerStart: {
+      x: 130,
+      y: 500,
+    },
+  
+    finish: {
+      type: "morciga",
+      x: 5900,
+      y: 550,
+    },
+  
+    ground: [
+      {
+        x: 500,
+        y: 680,
+        width: 1000,
+        height: 80,
+      },
+  
+      {
+        x: 2400,
+        y: 680,
+        width: 850,
+        height: 80,
+      },
+  
+      {
+        x: 4300,
+        y: 680,
+        width: 850,
+        height: 80,
+      },
+  
+      {
+        x: 5350,
+        y: 680,
+        width: 650,
+        height: 80,
+      },
+    ],
+  
+    platforms: [
+      {
+        x: 830,
+        y: 550,
+        width: 120,
+        height: 40,
+      },
+  
+      {
+        x: 1090,
+        y: 440,
+        width: 250,
+        height: 40,
+      },
+  
+      {
+        x: 1450,
+        y: 520,
+        width: 250,
+        height: 40,
+      },
+  
+      {
+        x: 1800,
+        y: 450,
+        width: 250,
+        height: 40,
+      },
+  
+      {
+        x: 2150,
+        y: 360,
+        width: 250,
+        height: 40,
+      },
+
+      {
+        x: 2350,
+        y: 450,
+        width: 50,
+        height: 40,
+      },
+  
+      {
+        x: 2550,
+        y: 550,
+        width: 250,
+        height: 40,
+      },
+  
+      {
+        x: 2900,
+        y: 450,
+        width: 250,
+        height: 40,
+      },
+  
+      {
+        x: 3250,
+        y: 520,
+        width: 250,
+        height: 40,
+      },
+  
+      {
+        x: 3650,
+        y: 430,
+        width: 250,
+        height: 40,
+      },
+  
+      {
+        x: 4000,
+        y: 350,
+        width: 250,
+        height: 40,
+      },
+
+      {
+        x: 4200,
+        y: 450,
+        width: 80,
+        height: 40,
+      },
+
+      {
+        x: 4080,
+        y: 550,
+        width: 80,
+        height: 40,
+      },
+  
+      {
+        x: 4450,
+        y: 500,
+        width: 250,
+        height: 40,
+      },
+  
+      {
+        x: 4800,
+        y: 420,
+        width: 250,
+        height: 40,
+      },
+  
+      {
+        x: 5200,
+        y: 350,
+        width: 250,
+        height: 40,
+      },
+  
+      {
+        x: 5550,
+        y: 500,
+        width: 250,
+        height: 40,
+      },
+    ],
+  
+    enemies: [
+      {
+        type: "pirate",
+        x: 550,
+        y: 630,
+      },
+  
+      {
+        type: "pirate",
+        x: 855,
+        y: 515,
+      },
+  
+      {
+        type: "pirate",
+        x: 1540,
+        y: 485,
+      },
+  
+      {
+        type: "pirate",
+        x: 1900,
+        y: 415,
+      },
+  
+      {
+        type: "pirate",
+        x: 2650,
+        y: 515,
+      },
+  
+      {
+        type: "pirate",
+        x: 2780,
+        y: 630,
+      },
+  
+      {
+        type: "pirate",
+        x: 3700,
+        y: 395,
+      },
+  
+      {
+        type: "pirate",
+        x: 4400,
+        y: 630,
+      },
+  
+      {
+        type: "pirate",
+        x: 4550,
+        y: 465,
+      },
+  
+      
+      {
+        type: "pirate",
+        x: 5300,
+        y: 315,
+      },
+    ],
+  
+    collectibles: [
+      {
+        type: "coin",
+        x: 925,
+        y: 360,
+      },
+  
+      {
+        type: "coin",
+        x: 925,
+        y: 420,
+      },
+  
+      {
+        type: "coin",
+        x: 925,
+        y: 480,
+      },
+  
+      {
+        type: "coin",
+        x: 1450,
+        y: 440,
+      },
+  
+      {
+        type: "coin",
+        x: 1800,
+        y: 370,
+      },
+  
+      {
+        type: "coin",
+        x: 2150,
+        y: 280,
+      },
+      
+      {
+        type: "coin",
+        x: 2550,
+        y: 400,
+      },
+  
+      {
+        type: "coin",
+        x: 2550,
+        y: 465,
+      },
+
+      {
+        type: "coin",
+        x: 2900,
+        y: 300,
+      },
+  
+      {
+        type: "coin",
+        x: 2900,
+        y: 350,
+      },
+  
+      {
+        type: "coin",
+        x: 3250,
+        y: 440,
+      },
+  
+      {
+        type: "coin",
+        x: 3600,
+        y: 350,
+      },
+  
+      {
+        type: "coin",
+        x: 4000,
+        y: 270,
+      },
+  
+      {
+        type: "coin",
+        x: 4450,
+        y: 420,
+      },
+  
+      {
+        type: "coin",
+        x: 4800,
+        y: 340,
+      },
+  
+      {
+        type: "coin",
+        x: 5200,
+        y: 270,
+      },
+  
+      {
+        type: "coin",
+        x: 5550,
+        y: 420,
+      },
+    ],
+  },
 };

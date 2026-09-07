@@ -169,6 +169,17 @@ export class GameScene extends Phaser.Scene {
           );
           break;
 
+        case "pirate":
+          this.load.spritesheet(
+            "enemy-pirate-idle-sheet",
+            "/assets/characters/enemies/pirate/pirate.png",
+            {
+              frameWidth: 48,
+              frameHeight: 48,
+            },
+          );
+          break;
+
         default:
           console.warn(`⚠️ Tipo de inimigo desconhecido: ${type}`);
       }
@@ -222,17 +233,14 @@ export class GameScene extends Phaser.Scene {
             repeat: -1,
           });
           break;
-    
+
         case "rato":
           this.anims.create({
             key: "enemy-rato-idle",
-            frames: this.anims.generateFrameNumbers(
-              "enemy-rato-idle-sheet",
-              {
-                start: 0,
-                end: 3,
-              },
-            ),
+            frames: this.anims.generateFrameNumbers("enemy-rato-idle-sheet", {
+              start: 0,
+              end: 3,
+            }),
             frameRate: 2,
             repeat: -1,
           });
@@ -248,6 +256,18 @@ export class GameScene extends Phaser.Scene {
                 end: 3,
               },
             ),
+            frameRate: 4,
+            repeat: -1,
+          });
+          break;
+
+        case "pirate":
+          this.anims.create({
+            key: "enemy-pirate-idle",
+            frames: this.anims.generateFrameNumbers("enemy-pirate-idle-sheet", {
+              start: 0,
+              end: 3,
+            }),
             frameRate: 4,
             repeat: -1,
           });
@@ -538,6 +558,18 @@ export class GameScene extends Phaser.Scene {
 
         enemy.play("enemy-sick-cat-idle");
         enemy.setFlipX(true);
+        return enemy;
+      }
+
+      case "pirate": {
+        const enemy = enemies.create(
+          x,
+          y,
+          "enemy-pirate-idle-sheet",
+          0,
+        ) as Phaser.Physics.Arcade.Sprite;
+
+        enemy.play("enemy-pirate-idle");
         return enemy;
       }
 
