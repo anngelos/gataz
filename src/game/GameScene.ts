@@ -696,7 +696,10 @@ export class GameScene extends Phaser.Scene {
     }
 
     if (
-      (this.jumpKey.isDown || isGamepadButtonDown(actionButton) || this.touchJump) &&
+      (this.jumpKey.isDown ||
+        this.cursors.up.isDown ||
+        isGamepadButtonDown(actionButton) ||
+        this.touchJump) &&
       this.player.body!.blocked.down
     ) {
       this.player.setVelocityY(-550);
