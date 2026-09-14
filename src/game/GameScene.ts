@@ -617,7 +617,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private createScore() {
-    this.scoreText = this.add.text(1080, 10, `PONTOS: ${this.score}`, {
+    this.scoreText = this.add.text(600, 10, `PONTOS: ${this.score}`, {
       fontSize: "24px",
       fontFamily: "Determination",
       color: "#ffffff",

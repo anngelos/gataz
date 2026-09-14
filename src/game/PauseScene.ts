@@ -100,7 +100,7 @@ export class PauseScene extends Phaser.Scene {
   }
 
   private openSettings() {
-    console.log("Configurações ainda não implementadas.");
+    window.alert("Calma, Lantejolo(a)! As configurações ainda não estão disponíveis.");
   }
 
   private goToMainMenu() {
