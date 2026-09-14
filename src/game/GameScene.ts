@@ -30,6 +30,7 @@ export class GameScene extends Phaser.Scene {
   private touchLeft = false;
   private touchRight = false;
   private touchJump = false;
+  private pauseButton!: Phaser.GameObjects.Text;
 
   constructor() {
     super("GameScene");
@@ -442,6 +443,7 @@ export class GameScene extends Phaser.Scene {
 
     this.cameras.main.startFollow(this.player, true, 0.08, 0.08);
     this.createTouchControls();
+    this.createPauseButton();
   }
 
   private createGround(
@@ -1058,5 +1060,54 @@ export class GameScene extends Phaser.Scene {
     if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
       this.touchControls.setVisible(true);
     }
+  }
+
+  private createPauseButton() {
+    this.pauseButton = this.add
+      .text(1230, 28, "II", {
+        fontFamily: "Arial",
+        fontSize: "28px",
+        color: "#ffffff",
+        backgroundColor: "#000000",
+        padding: {
+          x: 10,
+          y: 6,
+        },
+      })
+      .setOrigin(0.5)
+      .setScrollFactor(0)
+      .setDepth(2000)
+      .setInteractive({ useHandCursor: true });
+  
+    this.pauseButton.on("pointerover", () => {
+      this.pauseButton.setAlpha(0.7);
+    });
+  
+    this.pauseButton.on("pointerout", () => {
+      this.pauseButton.setAlpha(1);
+    });
+  
+    this.pauseButton.on("pointerdown", () => {
+      this.openPauseMenu();
+    });
+  }
+
+  private openPauseMenu() {
+    if (this.levelCompleted) {
+      return;
+    }
+  
+    this.touchLeft = false;
+    this.touchRight = false;
+    this.touchJump = false;
+  
+    this.scene.pause("GameScene");
+  
+    this.scene.launch("PauseScene", {
+      character: this.character,
+      level: this.level,
+      score: this.score,
+      hearts: this.hearts,
+    });
   }
 }
