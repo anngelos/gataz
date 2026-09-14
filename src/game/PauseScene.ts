@@ -4,24 +4,13 @@ type Character = "madeline" | "makena";
 
 export class PauseScene extends Phaser.Scene {
   private character: Character = "madeline";
-  private level = 1;
-  private score = 0;
-  private hearts = 3;
 
   constructor() {
     super("PauseScene");
   }
 
-  init(data: {
-    character?: Character;
-    level?: number;
-    score?: number;
-    hearts?: number;
-  }) {
+  init(data: { character?: Character}) {
     this.character = data.character ?? "madeline";
-    this.level = data.level ?? 1;
-    this.score = data.score ?? 0;
-    this.hearts = data.hearts ?? 3;
   }
 
   create() {
@@ -90,6 +79,8 @@ export class PauseScene extends Phaser.Scene {
     });
 
     button.on("pointerdown", callback);
+
+    return this.add.container(0, 0, [button, text]).setDepth(2);
   }
 
   private continueGame() {
