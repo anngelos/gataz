@@ -7,8 +7,8 @@ type Character = "madeline" | "makena";
 export class WordSearchScene extends Phaser.Scene {
   private character: Character = "madeline";
   private targetWord = "";
-  private readonly gridSize = 10;
-  private readonly cellSize = 48;
+  private readonly gridSize = 5;
+  private readonly cellSize = 72;
   private grid: string[][] = [];
   private selectedCells: { row: number; col: number }[] = [];
   private gridCells: Phaser.GameObjects.Rectangle[][] = [];
@@ -262,7 +262,7 @@ export class WordSearchScene extends Phaser.Scene {
 
   private createTimer() {
     this.timerText = this.add
-      .text(900, 170, `TEMPO: ${this.timer}`, {
+      .text(640, 690, `TEMPO: ${this.timer}`, {
         fontFamily: "Determination",
         fontSize: "26px",
         color: "#ffffff",

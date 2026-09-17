@@ -897,18 +897,22 @@ export class GameScene extends Phaser.Scene {
     this.player.setVelocity(0, 0);
     this.player.setTint(0xff0000);
   
-    this.time.delayedCall(500, () => {
-      if (this.level === 1) {
+    // Fase 1 continua reiniciando normalmente.
+    if (this.level === 1) {
+      this.time.delayedCall(500, () => {
         this.scene.restart({
           character: this.character,
           level: 1,
           score: 0,
           hearts: this.maxHearts,
         });
+      });
   
-        return;
-      }
+      return;
+    }
   
+    // Fases 2+ → abre o caça-palavras.
+    this.time.delayedCall(500, () => {
       this.scene.pause("GameScene");
   
       this.scene.launch("WordSearchScene", {
