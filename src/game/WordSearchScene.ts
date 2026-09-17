@@ -7,12 +7,11 @@ type Character = "madeline" | "makena";
 export class WordSearchScene extends Phaser.Scene {
   private character: Character = "madeline";
   private targetWord = "";
-
   private readonly gridSize = 10;
   private readonly cellSize = 48;
-
   private grid: string[][] = [];
   private selectedCells: { row: number; col: number }[] = [];
+  private gridCells: Phaser.GameObjects.Rectangle[][] = [];
   private isSelecting = false;
   private timer = 60;
   private timerEvent!: Phaser.Time.TimerEvent;
@@ -22,7 +21,12 @@ export class WordSearchScene extends Phaser.Scene {
     super("WordSearchScene");
   }
 
-  init(data: { character?: Character; level?: number; score?: number; hearts?: number }) {
+  init(data: {
+    character?: Character;
+    level?: number;
+    score?: number;
+    hearts?: number;
+  }) {
     this.character = data.character ?? "madeline";
   }
 
@@ -79,7 +83,10 @@ export class WordSearchScene extends Phaser.Scene {
 
   private generateGrid() {
     this.grid = Array.from({ length: this.gridSize }, () =>
-      Array.from({ length: this.gridSize }, () => this.getRandomLetter()),
+      Array.from(
+        { length: this.gridSize },
+        () => this.getRandomLetter(),
+      ),
     );
 
     const horizontal = Phaser.Math.Between(0, 1) === 0;
@@ -121,14 +128,27 @@ export class WordSearchScene extends Phaser.Scene {
     const startX = 640 - gridWidth / 2 + this.cellSize / 2;
     const startY = 245;
 
+    this.gridCells = [];
+
     for (let row = 0; row < this.gridSize; row++) {
+      this.gridCells[row] = [];
+
       for (let col = 0; col < this.gridSize; col++) {
         const x = startX + col * this.cellSize;
         const y = startY + row * this.cellSize;
 
         const cell = this.add
-          .rectangle(x, y, this.cellSize - 2, this.cellSize - 2, 0x3a315c, 1)
+          .rectangle(
+            x,
+            y,
+            this.cellSize - 2,
+            this.cellSize - 2,
+            0x3a315c,
+            1,
+          )
           .setInteractive();
+
+        this.gridCells[row][col] = cell;
 
         const letter = this.add
           .text(x, y, this.grid[row][col], {
@@ -178,6 +198,7 @@ export class WordSearchScene extends Phaser.Scene {
   }
 
   private startSelection(row: number, col: number) {
+    this.clearSelectionVisuals();
     this.isSelecting = true;
     this.selectedCells = [];
     this.addSelectedCell(row, col);
@@ -196,33 +217,45 @@ export class WordSearchScene extends Phaser.Scene {
       row,
       col,
     });
+
+    const cell = this.gridCells[row][col];
+    cell.setFillStyle(0x8f7ac4, 1);
+  }
+
+  private clearSelectionVisuals() {
+    for (const selectedCell of this.selectedCells) {
+      const cell = this.gridCells[selectedCell.row][selectedCell.col];
+      cell.setFillStyle(0x3a315c, 1);
+    }
   }
 
   private finishSelection() {
     if (!this.isSelecting) {
       return;
     }
-  
+
     this.isSelecting = false;
-  
+
     const selectedWord = this.selectedCells
       .map((cell) => this.grid[cell.row][cell.col])
       .join("");
-  
+
     if (selectedWord === this.targetWord) {
       this.wordFound();
+      return;
     }
-  
+
+    this.clearSelectionVisuals();
     this.selectedCells = [];
   }
 
   private wordFound() {
     this.timerEvent.remove(false);
-  
+
     const gameScene = this.scene.get("GameScene") as GameScene;
-  
+
     gameScene.resetAfterWordSearch();
-  
+
     this.scene.stop("WordSearchScene");
     this.scene.resume("GameScene");
   }
@@ -242,6 +275,7 @@ export class WordSearchScene extends Phaser.Scene {
       delay: 1000,
       callback: () => {
         this.timer--;
+
         this.timerText.setText(`TEMPO: ${this.timer}`);
 
         if (this.timer <= 0) {
@@ -257,6 +291,7 @@ export class WordSearchScene extends Phaser.Scene {
     this.timerEvent.remove(false);
     this.scene.stop("WordSearchScene");
     this.scene.stop("GameScene");
+
     this.scene.start("GameScene", {
       character: this.character,
       level: 1,
