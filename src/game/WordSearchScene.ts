@@ -262,7 +262,7 @@ export class WordSearchScene extends Phaser.Scene {
 
   private createTimer() {
     this.timerText = this.add
-      .text(640, 705, "TEMPO: 60", {
+      .text(900, 170, `TEMPO: ${this.timer}`, {
         fontFamily: "Determination",
         fontSize: "26px",
         color: "#ffffff",
