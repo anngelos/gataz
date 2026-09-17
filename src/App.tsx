@@ -6,6 +6,7 @@ import { CharacterSelectScene } from "./game/CharacterSelectScene";
 import { AboutScene } from "./game/AboutScene";
 import { LevelCompleteScene } from "./game/LevelCompleteScene";
 import { PauseScene } from "./game/PauseScene";
+import { WordSearchScene } from "./game/WordSearchScene";
 
 function App() {
   const gameRef = useRef<HTMLDivElement>(null);
@@ -50,6 +51,7 @@ function App() {
         GameScene,
         LevelCompleteScene,
         PauseScene,
+        WordSearchScene,
       ],
     });
 

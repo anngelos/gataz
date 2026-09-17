@@ -6,6 +6,7 @@ type Character = "madeline" | "makena";
 type PlayerState = "idle" | "walk" | "jump" | "fall";
 
 export class GameScene extends Phaser.Scene {
+  private isDying = false;
   private player!: Phaser.Physics.Arcade.Sprite;
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private jumpKey!: Phaser.Input.Keyboard.Key;
@@ -888,15 +889,32 @@ export class GameScene extends Phaser.Scene {
   }
 
   private playerDeath() {
+    if (this.isDying) {
+      return;
+    }
+  
+    this.isDying = true;
     this.player.setVelocity(0, 0);
     this.player.setTint(0xff0000);
-
+  
     this.time.delayedCall(500, () => {
-      this.scene.restart({
+      if (this.level === 1) {
+        this.scene.restart({
+          character: this.character,
+          level: 1,
+          score: 0,
+          hearts: this.maxHearts,
+        });
+  
+        return;
+      }
+  
+      this.scene.pause("GameScene");
+  
+      this.scene.launch("WordSearchScene", {
         character: this.character,
-        level: 1,
-        score: 0,
-        hearts: this.maxHearts,
+        level: this.level,
+        score: this.score,
       });
     });
   }
@@ -1060,6 +1078,29 @@ export class GameScene extends Phaser.Scene {
     if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
       this.touchControls.setVisible(true);
     }
+  }
+
+  public resetAfterWordSearch() {
+    this.hearts = this.maxHearts;
+    this.updateHeartsDisplay();
+    this.player.clearTint();
+    this.player.setAlpha(1);
+  
+    const levelConfig = levels[this.level];
+  
+    this.player.setPosition(
+      levelConfig.playerStart.x,
+      levelConfig.playerStart.y,
+    );
+  
+    this.player.setVelocity(0, 0);
+    this.player.play(this.getIdleAnimation());
+    this.isDying = false;
+    this.isInvulnerable = true;
+  
+    this.time.delayedCall(1500, () => {
+      this.isInvulnerable = false;
+    });
   }
 
   private createPauseButton() {
