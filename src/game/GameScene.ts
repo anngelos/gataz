@@ -20,6 +20,7 @@ export class GameScene extends Phaser.Scene {
   private level = 1;
   private maxHearts = 3;
   private hearts = 3;
+  private wordSearchTime = 60;
   private heartSprites: Phaser.GameObjects.Sprite[] = [];
   private isInvulnerable = false;
   private score = 0;
@@ -27,7 +28,6 @@ export class GameScene extends Phaser.Scene {
   private collectibles!: Phaser.Physics.Arcade.StaticGroup;
   private collectibleScore = 100;
   private levelCompleted = false;
-
   private touchControls!: Phaser.GameObjects.Container;
   private touchLeft = false;
   private touchRight = false;
@@ -43,14 +43,13 @@ export class GameScene extends Phaser.Scene {
     level?: number;
     score?: number;
     hearts?: number;
+    wordSearchTime?: number;
   }) {
     this.character = data.character ?? "madeline";
     this.level = data.level ?? 1;
     this.score = data.score ?? 0;
     this.hearts = data.hearts ?? this.maxHearts;
-    this.isDying = false;
-    this.isInvulnerable = false;
-    this.levelCompleted = false;
+    this.wordSearchTime = data.wordSearchTime ?? 60;
   }
 
   preload() {
@@ -62,7 +61,10 @@ export class GameScene extends Phaser.Scene {
     }
 
     this.load.image(`level-background-${this.level}`, levelConfig.background);
-    this.load.image(`level-platform-${this.level}`, levelConfig.platformTexture);
+    this.load.image(
+      `level-platform-${this.level}`,
+      levelConfig.platformTexture,
+    );
     this.load.image(`level-ground-${this.level}`, levelConfig.groundTexture);
     this.load.audio("cat-jump", "/assets/audio/cat-jump.mp3");
     this.load.audio("enemy-impact", "/assets/audio/enemy-impact.mp3");
@@ -144,7 +146,7 @@ export class GameScene extends Phaser.Scene {
     const enemyTypes = [
       ...new Set(levelConfig.enemies.map((enemy) => enemy.type)),
     ];
-    
+
     enemyTypes.forEach((type) => {
       switch (type) {
         case "esporotricose":
@@ -230,7 +232,7 @@ export class GameScene extends Phaser.Scene {
     const enemyTypes = [
       ...new Set(levelConfig.enemies.map((enemy) => enemy.type)),
     ];
-    
+
     enemyTypes.forEach((type) => {
       switch (type) {
         case "esporotricose":
@@ -320,7 +322,7 @@ export class GameScene extends Phaser.Scene {
       720,
       `level-background-${this.level}`,
     );
-    
+
     background.setDepth(-100);
 
     this.physics.world.setBounds(0, 0, levelConfig.width, 900);
@@ -460,17 +462,14 @@ export class GameScene extends Phaser.Scene {
   }
 
   private createTouchControlsIfEnabled() {
-    const savedValue = sessionStorage.getItem(
-      TOUCH_CONTROLS_STORAGE_KEY,
-    );
-  
-    const showTouchControls =
-      savedValue !== "false";
-  
+    const savedValue = sessionStorage.getItem(TOUCH_CONTROLS_STORAGE_KEY);
+
+    const showTouchControls = savedValue !== "false";
+
     if (!showTouchControls) {
       return;
     }
-  
+
     this.createTouchControls();
   }
 
@@ -517,11 +516,11 @@ export class GameScene extends Phaser.Scene {
     ) as Phaser.Physics.Arcade.Sprite;
 
     physicsPlatform.setVisible(false);
-    
+
     const body = physicsPlatform.body as Phaser.Physics.Arcade.StaticBody;
-    
+
     body.setSize(width, height, true);
-    
+
     const platformVisual = this.add.tileSprite(
       x,
       y,
@@ -609,11 +608,7 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
-  private createCollectible(
-    type: string,
-    x: number,
-    y: number,
-  ) {
+  private createCollectible(type: string, x: number, y: number) {
     switch (type) {
       case "coin": {
         const coin = this.collectibles.create(
@@ -709,15 +704,23 @@ export class GameScene extends Phaser.Scene {
     const isGamepadButtonDown = (buttonIndex: number) =>
       Boolean(
         phaserGamepad?.buttons[buttonIndex]?.pressed ||
-          nativeGamepad?.buttons[buttonIndex]?.pressed ||
-          (nativeGamepad?.buttons[buttonIndex]?.value ?? 0) > 0.5,
+        nativeGamepad?.buttons[buttonIndex]?.pressed ||
+        (nativeGamepad?.buttons[buttonIndex]?.value ?? 0) > 0.5,
       );
 
-    if (this.cursors.left.isDown || isGamepadButtonDown(leftButton) || this.touchLeft) {
+    if (
+      this.cursors.left.isDown ||
+      isGamepadButtonDown(leftButton) ||
+      this.touchLeft
+    ) {
       this.player.setVelocityX(-speed);
 
       this.player.setFlipX(true);
-    } else if (this.cursors.right.isDown || isGamepadButtonDown(rightButton) || this.touchRight) {
+    } else if (
+      this.cursors.right.isDown ||
+      isGamepadButtonDown(rightButton) ||
+      this.touchRight
+    ) {
       this.player.setVelocityX(speed);
 
       this.player.setFlipX(false);
@@ -741,7 +744,6 @@ export class GameScene extends Phaser.Scene {
   }
 
   private createPlayerAnimations() {
-
     if (this.character === "madeline") {
       this.anims.create({
         key: "madeline-idle",
@@ -919,11 +921,11 @@ export class GameScene extends Phaser.Scene {
     if (this.isDying) {
       return;
     }
-  
+
     this.isDying = true;
     this.player.setVelocity(0, 0);
     this.player.setTint(0xff0000);
-  
+
     if (this.level === 1) {
       this.time.delayedCall(500, () => {
         this.scene.restart({
@@ -933,17 +935,18 @@ export class GameScene extends Phaser.Scene {
           hearts: this.maxHearts,
         });
       });
-  
+
       return;
     }
-  
+
     this.time.delayedCall(500, () => {
       this.scene.pause("GameScene");
-  
+
       this.scene.launch("WordSearchScene", {
         character: this.character,
         level: this.level,
         score: this.score,
+        wordSearchTime: this.wordSearchTime,
       });
     });
   }
@@ -1002,12 +1005,12 @@ export class GameScene extends Phaser.Scene {
 
   private createTouchControls() {
     this.touchControls = this.add.container(0, 0);
-  
+
     const leftButton = this.add
       .circle(80, 620, 45, 0xffffff, 0.25)
       .setScrollFactor(0)
       .setInteractive();
-  
+
     const leftText = this.add
       .text(80, 620, "◀", {
         fontFamily: "Arial",
@@ -1016,12 +1019,12 @@ export class GameScene extends Phaser.Scene {
       })
       .setOrigin(0.5)
       .setScrollFactor(0);
-    
+
     const rightButton = this.add
       .circle(190, 620, 45, 0xffffff, 0.25)
       .setScrollFactor(0)
       .setInteractive();
-  
+
     const rightText = this.add
       .text(190, 620, "▶", {
         fontFamily: "Arial",
@@ -1030,12 +1033,12 @@ export class GameScene extends Phaser.Scene {
       })
       .setOrigin(0.5)
       .setScrollFactor(0);
-    
+
     const jumpButton = this.add
       .circle(1200, 620, 50, 0xffffff, 0.25)
       .setScrollFactor(0)
       .setInteractive();
-  
+
     const jumpText = this.add
       .text(1200, 620, "↑", {
         fontFamily: "Arial",
@@ -1044,55 +1047,55 @@ export class GameScene extends Phaser.Scene {
       })
       .setOrigin(0.5)
       .setScrollFactor(0);
-    
+
     leftButton.on("pointerdown", () => {
       this.touchLeft = true;
     });
-    
+
     leftButton.on("pointerup", () => {
       this.touchLeft = false;
     });
-    
+
     leftButton.on("pointerout", () => {
       this.touchLeft = false;
     });
-    
+
     leftButton.on("pointercancel", () => {
       this.touchLeft = false;
     });
-    
+
     rightButton.on("pointerdown", () => {
       this.touchRight = true;
     });
-    
+
     rightButton.on("pointerup", () => {
       this.touchRight = false;
     });
-    
+
     rightButton.on("pointerout", () => {
       this.touchRight = false;
     });
-    
+
     rightButton.on("pointercancel", () => {
       this.touchRight = false;
     });
-    
+
     jumpButton.on("pointerdown", () => {
       this.touchJump = true;
     });
-    
+
     jumpButton.on("pointerup", () => {
       this.touchJump = false;
     });
-    
+
     jumpButton.on("pointerout", () => {
       this.touchJump = false;
     });
-    
+
     jumpButton.on("pointercancel", () => {
       this.touchJump = false;
     });
-  
+
     this.touchControls.add([
       leftButton,
       leftText,
@@ -1101,9 +1104,9 @@ export class GameScene extends Phaser.Scene {
       jumpButton,
       jumpText,
     ]);
-  
+
     this.touchControls.setVisible(false);
-  
+
     if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
       this.touchControls.setVisible(true);
     }
@@ -1114,22 +1117,26 @@ export class GameScene extends Phaser.Scene {
     this.updateHeartsDisplay();
     this.player.clearTint();
     this.player.setAlpha(1);
-  
+
     const levelConfig = levels[this.level];
-  
+
     this.player.setPosition(
       levelConfig.playerStart.x,
       levelConfig.playerStart.y,
     );
-  
+
     this.player.setVelocity(0, 0);
     this.player.play(this.getIdleAnimation());
     this.isDying = false;
     this.isInvulnerable = true;
-  
+
     this.time.delayedCall(1500, () => {
       this.isInvulnerable = false;
     });
+  }
+
+  public setWordSearchTime(time: number) {
+    this.wordSearchTime = Math.max(0, Math.floor(time));
   }
 
   private createPauseButton() {
@@ -1148,15 +1155,15 @@ export class GameScene extends Phaser.Scene {
       .setScrollFactor(0)
       .setDepth(2000)
       .setInteractive({ useHandCursor: true });
-  
+
     this.pauseButton.on("pointerover", () => {
       this.pauseButton.setAlpha(0.7);
     });
-  
+
     this.pauseButton.on("pointerout", () => {
       this.pauseButton.setAlpha(1);
     });
-  
+
     this.pauseButton.on("pointerdown", () => {
       this.openPauseMenu();
     });
@@ -1166,13 +1173,13 @@ export class GameScene extends Phaser.Scene {
     if (this.levelCompleted) {
       return;
     }
-  
+
     this.touchLeft = false;
     this.touchRight = false;
     this.touchJump = false;
-  
+
     this.scene.pause("GameScene");
-  
+
     this.scene.launch("PauseScene", {
       character: this.character,
       level: this.level,

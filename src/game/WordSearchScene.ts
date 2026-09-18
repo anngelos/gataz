@@ -28,15 +28,13 @@ export class WordSearchScene extends Phaser.Scene {
     level?: number;
     score?: number;
     hearts?: number;
+    wordSearchTime?: number;
   }) {
     this.character = data.character ?? "madeline";
-    this.timer = 60;
-    this.isSelecting = false;
-    this.selectedCells = [];
+    this.timer = data.wordSearchTime ?? 60;
   }
 
   create() {
-    this.timer = 60;
     this.isSelecting = false;
     this.selectedCells = [];
     this.targetWord = this.getRandomWord();
@@ -251,11 +249,9 @@ export class WordSearchScene extends Phaser.Scene {
 
   private wordFound() {
     this.timerEvent.remove(false);
-
     const gameScene = this.scene.get("GameScene") as GameScene;
-
+    gameScene.setWordSearchTime(this.timer);
     gameScene.resetAfterWordSearch();
-
     this.scene.stop("WordSearchScene");
     this.scene.resume("GameScene");
   }
@@ -279,7 +275,6 @@ export class WordSearchScene extends Phaser.Scene {
       delay: 1000,
       callback: () => {
         this.timer--;
-
         this.timerText.setText(`TEMPO: ${this.timer}`);
 
         if (this.timer <= 0) {
