@@ -100,7 +100,10 @@ export class PauseScene extends Phaser.Scene {
   }
 
   private openSettings() {
-    window.alert("Calma, Lantejolo(a)! As configurações ainda não estão disponíveis.");
+    this.scene.pause("PauseScene");
+    this.scene.launch("SettingsScene", {
+      character: this.character,
+    });
   }
 
   private goToMainMenu() {

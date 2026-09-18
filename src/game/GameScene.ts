@@ -4,6 +4,7 @@ import { AudioManager } from "./AudioManager";
 
 type Character = "madeline" | "makena";
 type PlayerState = "idle" | "walk" | "jump" | "fall";
+const TOUCH_CONTROLS_STORAGE_KEY = "gataz_show_touch_controls";
 
 export class GameScene extends Phaser.Scene {
   private isDying = false;
@@ -443,8 +444,24 @@ export class GameScene extends Phaser.Scene {
     }
 
     this.cameras.main.startFollow(this.player, true, 0.08, 0.08);
-    this.createTouchControls();
+    // this.createTouchControls();
+    this.createTouchControlsIfEnabled();
     this.createPauseButton();
+  }
+
+  private createTouchControlsIfEnabled() {
+    const savedValue = sessionStorage.getItem(
+      TOUCH_CONTROLS_STORAGE_KEY,
+    );
+  
+    const showTouchControls =
+      savedValue !== "false";
+  
+    if (!showTouchControls) {
+      return;
+    }
+  
+    this.createTouchControls();
   }
 
   private createGround(
