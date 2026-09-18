@@ -30,9 +30,15 @@ export class WordSearchScene extends Phaser.Scene {
     hearts?: number;
   }) {
     this.character = data.character ?? "madeline";
+    this.timer = 60;
+    this.isSelecting = false;
+    this.selectedCells = [];
   }
 
   create() {
+    this.timer = 60;
+    this.isSelecting = false;
+    this.selectedCells = [];
     this.targetWord = this.getRandomWord();
     this.createBackground();
     this.createTitle();
@@ -255,6 +261,10 @@ export class WordSearchScene extends Phaser.Scene {
   }
 
   private createTimer() {
+    if (this.timerEvent) {
+      this.timerEvent.remove(false);
+    }
+
     this.timerText = this.add
       .text(640, 690, `TEMPO: ${this.timer}`, {
         fontFamily: "Determination",

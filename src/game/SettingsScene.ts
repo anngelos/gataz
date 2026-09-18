@@ -49,7 +49,6 @@ export class SettingsScene extends Phaser.Scene {
     const onColor = 0x8066c7;
     const offColor = 0x302942;
 
-    // Texto da configuração
     const label = this.add
       .text(400, switchY, "MOSTRAR CONTROLES TOUCH", {
         fontFamily: "Determination",
@@ -61,10 +60,8 @@ export class SettingsScene extends Phaser.Scene {
         useHandCursor: true,
       });
 
-    // Fundo do switch
     const background = this.add.graphics();
 
-    // Bolinha
     const switchKnob = this.add.circle(
       this.showTouchControls ? switchX + 25 : switchX - 25,
       switchY,
@@ -72,7 +69,6 @@ export class SettingsScene extends Phaser.Scene {
       0xffffff,
     );
 
-    // Estado da animação
     const animationState = {
       progress: this.showTouchControls ? 1 : 0,
     };
@@ -81,17 +77,12 @@ export class SettingsScene extends Phaser.Scene {
       const fromR = (from >> 16) & 0xff;
       const fromG = (from >> 8) & 0xff;
       const fromB = from & 0xff;
-
       const toR = (to >> 16) & 0xff;
       const toG = (to >> 8) & 0xff;
       const toB = to & 0xff;
-
       const r = Math.round(fromR + (toR - fromR) * progress);
-
       const g = Math.round(fromG + (toG - fromG) * progress);
-
       const b = Math.round(fromB + (toB - fromB) * progress);
-
       return (r << 16) | (g << 8) | b;
     };
 
@@ -124,7 +115,6 @@ export class SettingsScene extends Phaser.Scene {
 
     drawSwitch(animationState.progress);
 
-    // Área clicável do switch
     const hitArea = this.add
       .rectangle(
         switchX,

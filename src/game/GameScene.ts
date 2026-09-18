@@ -38,11 +38,19 @@ export class GameScene extends Phaser.Scene {
     super("GameScene");
   }
 
-  init(data: { character?: Character; level?: number, score?: number, hearts?: number }) {
+  init(data: {
+    character?: Character;
+    level?: number;
+    score?: number;
+    hearts?: number;
+  }) {
     this.character = data.character ?? "madeline";
     this.level = data.level ?? 1;
     this.score = data.score ?? 0;
     this.hearts = data.hearts ?? this.maxHearts;
+    this.isDying = false;
+    this.isInvulnerable = false;
+    this.levelCompleted = false;
   }
 
   preload() {
@@ -195,6 +203,9 @@ export class GameScene extends Phaser.Scene {
   }
 
   create() {
+    this.isDying = false;
+    this.isInvulnerable = false;
+    this.levelCompleted = false;
     this.touchLeft = false;
     this.touchRight = false;
     this.touchJump = false;
@@ -444,7 +455,6 @@ export class GameScene extends Phaser.Scene {
     }
 
     this.cameras.main.startFollow(this.player, true, 0.08, 0.08);
-    // this.createTouchControls();
     this.createTouchControlsIfEnabled();
     this.createPauseButton();
   }
@@ -876,7 +886,6 @@ export class GameScene extends Phaser.Scene {
 
     if (this.hearts <= 0) {
       this.playerDeath();
-
       return;
     }
 
@@ -906,6 +915,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private playerDeath() {
+    console.log("playerDeath");
     if (this.isDying) {
       return;
     }
@@ -914,7 +924,6 @@ export class GameScene extends Phaser.Scene {
     this.player.setVelocity(0, 0);
     this.player.setTint(0xff0000);
   
-    // Fase 1 continua reiniciando normalmente.
     if (this.level === 1) {
       this.time.delayedCall(500, () => {
         this.scene.restart({
@@ -928,7 +937,6 @@ export class GameScene extends Phaser.Scene {
       return;
     }
   
-    // Fases 2+ → abre o caça-palavras.
     this.time.delayedCall(500, () => {
       this.scene.pause("GameScene");
   
