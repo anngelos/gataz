@@ -8,6 +8,7 @@ export class LevelCompleteScene extends Phaser.Scene {
   private character: Character = "madeline";
   private isLeaving = false;
   private hearts = 3;
+  private clickSound!: Phaser.Sound.BaseSound;
 
   constructor() {
     super("LevelCompleteScene");
@@ -28,10 +29,12 @@ export class LevelCompleteScene extends Phaser.Scene {
 
   preload() {
     this.load.text("determination-font", "/fonts/Determination.ttf");
+    this.load.audio("button-click", "/assets/audio/mouse-click.mp3");
   }
 
   create() {
     document.fonts.load('400 25px "Determination"');
+    this.clickSound = this.sound.add("button-click", { volume: 0.7 });
 
     this.cameras.main.setBackgroundColor("#241936");
 
@@ -87,10 +90,12 @@ export class LevelCompleteScene extends Phaser.Scene {
       .setOrigin(0.5);
 
     this.createButton(455, 625, 260, 70, "CONTINUAR", () => {
+      this.clickSound.play();
       this.continueGame();
     });
 
     this.createButton(825, 625, 300, 70, "MENU PRINCIPAL", () => {
+      this.clickSound.play();
       this.goToMainMenu();
     });
 
