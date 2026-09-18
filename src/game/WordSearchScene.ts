@@ -12,6 +12,8 @@ export class WordSearchScene extends Phaser.Scene {
   private grid: string[][] = [];
   private selectedCells: { row: number; col: number }[] = [];
   private gridCells: Phaser.GameObjects.Rectangle[][] = [];
+  private gridStartX = 0;
+  private gridStartY = 245;
   private isSelecting = false;
   private timer = 60;
   private timerEvent!: Phaser.Time.TimerEvent;
@@ -83,10 +85,7 @@ export class WordSearchScene extends Phaser.Scene {
 
   private generateGrid() {
     this.grid = Array.from({ length: this.gridSize }, () =>
-      Array.from(
-        { length: this.gridSize },
-        () => this.getRandomLetter(),
-      ),
+      Array.from({ length: this.gridSize }, () => this.getRandomLetter()),
     );
 
     const horizontal = Phaser.Math.Between(0, 1) === 0;
@@ -128,6 +127,8 @@ export class WordSearchScene extends Phaser.Scene {
     const startX = 640 - gridWidth / 2 + this.cellSize / 2;
     const startY = 245;
 
+    this.gridStartX = startX;
+    this.gridStartY = startY;
     this.gridCells = [];
 
     for (let row = 0; row < this.gridSize; row++) {
@@ -138,14 +139,7 @@ export class WordSearchScene extends Phaser.Scene {
         const y = startY + row * this.cellSize;
 
         const cell = this.add
-          .rectangle(
-            x,
-            y,
-            this.cellSize - 2,
-            this.cellSize - 2,
-            0x3a315c,
-            1,
-          )
+          .rectangle(x, y, this.cellSize - 2, this.cellSize - 2, 0x3a315c, 1)
           .setInteractive();
 
         this.gridCells[row][col] = cell;
@@ -153,7 +147,7 @@ export class WordSearchScene extends Phaser.Scene {
         const letter = this.add
           .text(x, y, this.grid[row][col], {
             fontFamily: "Determination",
-            fontSize: "26px",
+            fontSize: "32px",
             color: "#ffffff",
           })
           .setOrigin(0.5);
@@ -162,33 +156,33 @@ export class WordSearchScene extends Phaser.Scene {
           this.startSelection(row, col);
         });
 
-        cell.on("pointerover", () => {
-          if (this.isSelecting) {
-            this.addSelectedCell(row, col);
-          }
-        });
-
-        cell.on("pointerup", () => {
-          this.finishSelection();
-        });
-
         letter.setInteractive();
 
         letter.on("pointerdown", () => {
           this.startSelection(row, col);
         });
-
-        letter.on("pointerover", () => {
-          if (this.isSelecting) {
-            this.addSelectedCell(row, col);
-          }
-        });
-
-        letter.on("pointerup", () => {
-          this.finishSelection();
-        });
       }
     }
+
+    this.input.on("pointermove", (pointer: Phaser.Input.Pointer) => {
+      if (!this.isSelecting || !pointer.isDown) {
+        return;
+      }
+
+      const col = Math.floor(
+        (pointer.worldX - this.gridStartX + this.cellSize / 2) / this.cellSize,
+      );
+
+      const row = Math.floor(
+        (pointer.worldY - this.gridStartY + this.cellSize / 2) / this.cellSize,
+      );
+
+      if (row < 0 || row >= this.gridSize || col < 0 || col >= this.gridSize) {
+        return;
+      }
+
+      this.addSelectedCell(row, col);
+    });
 
     this.input.on("pointerup", () => {
       if (this.isSelecting) {
