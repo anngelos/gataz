@@ -463,7 +463,6 @@ export class GameScene extends Phaser.Scene {
 
   private createTouchControlsIfEnabled() {
     const savedValue = sessionStorage.getItem(TOUCH_CONTROLS_STORAGE_KEY);
-
     const showTouchControls = savedValue !== "false";
 
     if (!showTouchControls) {
@@ -1001,6 +1000,23 @@ export class GameScene extends Phaser.Scene {
     if (this.player.anims.currentAnim?.key !== animationKey) {
       this.player.play(animationKey);
     }
+  }
+
+  public setTouchControlsVisible(visible: boolean) {
+    this.touchLeft = false;
+    this.touchRight = false;
+    this.touchJump = false;
+  
+    if (!visible) {
+      this.touchControls?.setVisible(false);
+      return;
+    }
+  
+    if (!this.touchControls) {
+      this.createTouchControls();
+    }
+  
+    this.touchControls.setVisible(true);
   }
 
   private createTouchControls() {

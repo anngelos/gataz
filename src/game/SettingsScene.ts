@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import type { GameScene } from "./GameScene";
 
 const TOUCH_CONTROLS_STORAGE_KEY = "gataz_show_touch_controls";
 
@@ -159,10 +160,16 @@ export class SettingsScene extends Phaser.Scene {
 
         onComplete: () => {
           isAnimating = false;
-
+        
           sessionStorage.setItem(
             TOUCH_CONTROLS_STORAGE_KEY,
             String(this.showTouchControls),
+          );
+        
+          const gameScene = this.scene.get("GameScene") as GameScene;
+        
+          gameScene.setTouchControlsVisible(
+            this.showTouchControls,
           );
         },
       });
