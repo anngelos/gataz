@@ -101,9 +101,7 @@ export class PauseScene extends Phaser.Scene {
 
   private openSettings() {
     this.scene.pause("PauseScene");
-    this.scene.launch("SettingsScene", {
-      character: this.character,
-    });
+    this.scene.launch("SettingsScene");
   }
 
   private goToMainMenu() {
